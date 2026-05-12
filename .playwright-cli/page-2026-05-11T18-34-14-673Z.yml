@@ -1,0 +1,288 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "IMPLANTIUM" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "IMPLANTIUM" [ref=e7]
+      - navigation [ref=e8]:
+        - link "Услуги" [ref=e9] [cursor=pointer]:
+          - /url: /#services
+        - link "Врачи" [ref=e10] [cursor=pointer]:
+          - /url: /#doctors
+        - link "О клинике" [ref=e11] [cursor=pointer]:
+          - /url: /#about
+        - link "Локация" [ref=e12] [cursor=pointer]:
+          - /url: /#location
+        - link "Отзывы" [ref=e13] [cursor=pointer]:
+          - /url: /#reviews
+        - link "Контакты" [ref=e14] [cursor=pointer]:
+          - /url: /#booking
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - button "Рус" [ref=e17] [cursor=pointer]
+          - generic [ref=e18]: /
+          - button "Қаз" [ref=e19] [cursor=pointer]
+        - button "Телефон будет добавлен" [disabled] [ref=e20]:
+          - img [ref=e21]
+        - link "Записаться на прием" [ref=e23] [cursor=pointer]:
+          - /url: /#booking
+  - main [ref=e24]:
+    - generic [ref=e26]:
+      - navigation [ref=e27]:
+        - link "Главная" [ref=e28] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e29]: /
+        - link "Услуги" [ref=e30] [cursor=pointer]:
+          - /url: /#services
+        - generic [ref=e31]: /
+        - generic [ref=e32]: Имплантация
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - heading "Имплантация зубов" [level=1] [ref=e35]:
+            - text: Имплантация
+            - generic [ref=e36]: зубов
+          - paragraph [ref=e37]: Восстановление утраченных зубов с помощью надежных имплантов. Имплант — это искусственный корень зуба, который устанавливается в челюсть. После приживления на него фиксируется коронка, и получается полноценный новый зуб.
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e41]
+              - generic [ref=e44]:
+                - heading "Премиум-импланты" [level=3] [ref=e45]
+                - paragraph [ref=e46]: Подбор системы под клиническую ситуацию
+            - generic [ref=e47]:
+              - img [ref=e49]
+              - generic [ref=e52]:
+                - heading "Бережная хирургия" [level=3] [ref=e53]
+                - paragraph [ref=e54]: Минимальная травматичность и контроль боли
+            - generic [ref=e55]:
+              - img [ref=e57]
+              - generic [ref=e60]:
+                - heading "Гарантия до 10 лет" [level=3] [ref=e61]
+                - paragraph [ref=e62]: При соблюдении рекомендаций врача
+            - generic [ref=e63]:
+              - img [ref=e65]
+              - generic [ref=e68]:
+                - heading "Естественный вид" [level=3] [ref=e69]
+                - paragraph [ref=e70]: Коронка выглядит как свой зуб
+          - generic [ref=e71]:
+            - link "Записаться" [ref=e72] [cursor=pointer]:
+              - /url: /#booking
+              - text: Записаться
+              - img
+            - link "Узнать больше" [ref=e73] [cursor=pointer]:
+              - /url: "#service-process"
+              - text: Узнать больше
+              - img
+          - paragraph [ref=e74]:
+            - img [ref=e75]
+            - text: Бесплатная консультация и 3D-диагностика
+        - generic [ref=e77]:
+          - img "Имплантация" [ref=e79]
+          - generic [ref=e81]:
+            - img [ref=e83]
+            - generic [ref=e86]:
+              - heading "Естественный результат" [level=2] [ref=e87]
+              - paragraph [ref=e88]: Прогнозируемый и безопасный результат на долгие годы.
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - heading "Кому подходит услуга" [level=2] [ref=e92]
+        - generic [ref=e93]:
+          - generic [ref=e94]:
+            - img [ref=e96]
+            - generic [ref=e98]: При отсутствии одного, нескольких или всех зубов
+          - generic [ref=e99]:
+            - img [ref=e101]
+            - generic [ref=e103]: При неудобном съемном протезе
+          - generic [ref=e104]:
+            - img [ref=e106]
+            - generic [ref=e108]: При нарушении жевательной функции
+          - generic [ref=e109]:
+            - img [ref=e111]
+            - generic [ref=e113]: Если важны эстетика и уверенность в улыбке
+      - generic [ref=e114]:
+        - heading "Как проходит лечение" [level=2] [ref=e115]
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - img [ref=e119]
+            - paragraph [ref=e122]: 1. Диагностика
+            - paragraph [ref=e123]: Осмотр, снимок и расчет плана лечения.
+          - generic [ref=e124]:
+            - img [ref=e126]
+            - paragraph [ref=e129]: 2. Установка импланта
+            - paragraph [ref=e130]: Безопасная установка под местной анестезией.
+          - generic [ref=e131]:
+            - img [ref=e133]
+            - paragraph [ref=e136]: 3. Остеоинтеграция
+            - paragraph [ref=e137]: Имплант приживается и формирует прочную основу.
+          - generic [ref=e138]:
+            - img [ref=e140]
+            - paragraph [ref=e143]: 4. Коронка
+            - paragraph [ref=e144]: Финальная коронка по форме и оттенку зуба.
+    - generic [ref=e146]:
+      - heading "Преимущества" [level=2] [ref=e147]
+      - generic [ref=e148]:
+        - generic [ref=e150]:
+          - img [ref=e152]
+          - heading "Долговечность" [level=3] [ref=e155]
+          - paragraph [ref=e156]: Служит десятилетиями при правильном уходе.
+        - generic [ref=e158]:
+          - img [ref=e160]
+          - heading "Комфорт" [level=3] [ref=e163]
+          - paragraph [ref=e164]: Ощущается как собственный зуб.
+        - generic [ref=e166]:
+          - img [ref=e168]
+          - heading "Соседние зубы сохранены" [level=3] [ref=e171]
+          - paragraph [ref=e172]: Не требуется обтачивать здоровые зубы.
+        - generic [ref=e174]:
+          - img [ref=e176]
+          - heading "Прогнозируемость" [level=3] [ref=e179]
+          - paragraph [ref=e180]: План строится по диагностике и снимкам.
+        - generic [ref=e182]:
+          - img [ref=e184]
+          - heading "Эстетика улыбки" [level=3] [ref=e187]
+          - paragraph [ref=e188]: Восстанавливает уверенность в общении.
+    - generic [ref=e190]:
+      - generic [ref=e191]:
+        - heading "Наши специалисты" [level=2] [ref=e192]
+        - link "Смотреть всех врачей" [ref=e193] [cursor=pointer]:
+          - /url: /#doctors
+          - text: Смотреть всех врачей
+          - img [ref=e194]
+      - generic [ref=e196]:
+        - generic [ref=e198]:
+          - generic [ref=e200]:
+            - generic [ref=e201]: ЖБ
+            - generic [ref=e202]: Фото скоро
+          - generic [ref=e203]:
+            - heading "Жаксыбаев Бауыржан Советханович" [level=3] [ref=e204]
+            - paragraph [ref=e205]: ЧЛХ, хирург-имплантолог
+            - paragraph [ref=e206]: "Стаж работы: 15 лет."
+        - generic [ref=e208]:
+          - generic [ref=e210]:
+            - generic [ref=e211]: БД
+            - generic [ref=e212]: Фото скоро
+          - generic [ref=e213]:
+            - heading "Бурабай Дастан Бекболатович" [level=3] [ref=e214]
+            - paragraph [ref=e215]: Стоматолог-терапевт · Ортопед · Хирург · Имплантолог
+            - paragraph [ref=e216]: "Опыт работы: 7 лет."
+    - generic [ref=e218]:
+      - generic [ref=e219]:
+        - heading "Частые вопросы" [level=2] [ref=e220]
+        - generic [ref=e221]:
+          - heading "Больно ли устанавливать имплант?" [level=3] [ref=e223]:
+            - button "Больно ли устанавливать имплант?" [ref=e224] [cursor=pointer]:
+              - text: Больно ли устанавливать имплант?
+              - img [ref=e225]
+          - heading "Сколько стоит имплантация?" [level=3] [ref=e228]:
+            - button "Сколько стоит имплантация?" [ref=e229] [cursor=pointer]:
+              - text: Сколько стоит имплантация?
+              - img [ref=e230]
+          - heading "Сколько длится приживление импланта?" [level=3] [ref=e233]:
+            - button "Сколько длится приживление импланта?" [ref=e234] [cursor=pointer]:
+              - text: Сколько длится приживление импланта?
+              - img [ref=e235]
+          - heading "Какие импланты используются?" [level=3] [ref=e238]:
+            - button "Какие импланты используются?" [ref=e239] [cursor=pointer]:
+              - text: Какие импланты используются?
+              - img [ref=e240]
+      - generic [ref=e242]:
+        - generic [ref=e243]:
+          - heading "До и после" [level=2] [ref=e244]
+          - link "Смотреть больше" [ref=e245] [cursor=pointer]:
+            - /url: /#reviews
+            - text: Смотреть больше
+            - img [ref=e246]
+        - generic [ref=e249]:
+          - generic [ref=e250]:
+            - generic [ref=e251]:
+              - img "До и после" [ref=e252]
+              - generic [ref=e253]: До
+            - generic [ref=e254]:
+              - img "Восстановление жевательных зубов" [ref=e255]
+              - generic [ref=e256]: После
+          - paragraph [ref=e257]: Восстановление жевательных зубов
+    - generic [ref=e259]:
+      - generic [ref=e260]:
+        - generic [ref=e261]:
+          - img [ref=e263]
+          - generic [ref=e265]:
+            - heading "Готовы восстановить уверенность в своей улыбке?" [level=2] [ref=e266]
+            - paragraph [ref=e267]: Запишитесь на бесплатную консультацию и получите персональный план лечения.
+        - generic [ref=e268]:
+          - button "Телефон скоро появится Позвоните нам" [disabled] [ref=e269]:
+            - img [ref=e271]
+            - generic [ref=e273]:
+              - generic [ref=e274]: Телефон скоро появится
+              - generic [ref=e275]: Позвоните нам
+          - button "WhatsApp скоро появится Ответим быстро" [disabled] [ref=e276]:
+            - img [ref=e278]
+            - generic [ref=e280]:
+              - generic [ref=e281]: WhatsApp скоро появится
+              - generic [ref=e282]: Ответим быстро
+          - link "Записаться" [ref=e283] [cursor=pointer]:
+            - /url: /#booking
+            - text: Записаться
+            - img
+      - paragraph [ref=e284]:
+        - img [ref=e285]
+        - text: Бесплатная консультация и 3D-диагностика
+  - contentinfo [ref=e287]:
+    - generic [ref=e288]:
+      - generic [ref=e289]:
+        - generic [ref=e290]:
+          - link "IMPLANTIUM" [ref=e291] [cursor=pointer]:
+            - /url: /
+            - img "Логотип IMPLANTIUM" [ref=e292]
+          - paragraph [ref=e293]: Здоровая улыбка - наша работа и ваша уверенность.
+          - generic [ref=e294]:
+            - button "Instagram" [disabled] [ref=e295]:
+              - img [ref=e296]
+            - button "WhatsApp" [disabled] [ref=e298]:
+              - img [ref=e299]
+        - generic [ref=e301]:
+          - heading "Клиника" [level=3] [ref=e302]
+          - navigation [ref=e303]:
+            - link "О клинике" [ref=e304] [cursor=pointer]:
+              - /url: /#about
+            - link "Врачи" [ref=e305] [cursor=pointer]:
+              - /url: /#doctors
+            - link "Услуги" [ref=e306] [cursor=pointer]:
+              - /url: /#services
+            - link "Отзывы" [ref=e307] [cursor=pointer]:
+              - /url: /#reviews
+            - link "Контакты" [ref=e308] [cursor=pointer]:
+              - /url: /#location
+        - generic [ref=e309]:
+          - heading "Услуги" [level=3] [ref=e310]
+          - navigation [ref=e311]:
+            - link "Имплантация" [ref=e312] [cursor=pointer]:
+              - /url: /services/implants
+            - link "Протезирование" [ref=e313] [cursor=pointer]:
+              - /url: /services/crowns
+            - link "Лечение зубов" [ref=e314] [cursor=pointer]:
+              - /url: /services/treatment
+            - link "Удаление" [ref=e315] [cursor=pointer]:
+              - /url: /services/tooth-extraction
+            - link "Чистка" [ref=e316] [cursor=pointer]:
+              - /url: /services/cleaning
+            - link "Брекеты" [ref=e317] [cursor=pointer]:
+              - /url: /services/braces
+        - generic [ref=e318]:
+          - heading "Контакты" [level=3] [ref=e319]
+          - list [ref=e320]:
+            - listitem [ref=e321]:
+              - img [ref=e322]
+              - generic [ref=e324]: 13 мкр., дом 39, стоматологическая клиника IMPLANTIUM
+            - listitem [ref=e325]:
+              - img [ref=e326]
+              - generic [ref=e328]: Телефон будет добавлен
+            - listitem [ref=e329]:
+              - img [ref=e330]
+              - generic [ref=e332]: WhatsApp будет добавлен
+            - listitem [ref=e333]:
+              - img [ref=e334]
+              - generic [ref=e336]:
+                - text: "Понедельник - суббота: 10:00 - 22:00"
+                - text: "Воскресенье: 10:00 - 14:00"
+      - generic [ref=e337]:
+        - paragraph [ref=e338]: © 2026 IMPLANTIUM. Все права защищены.
+        - generic [ref=e339]: Политика конфиденциальности
