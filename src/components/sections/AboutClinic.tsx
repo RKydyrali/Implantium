@@ -1,22 +1,11 @@
-import {
-  ClipboardText,
-  Heartbeat,
-  Microscope,
-  ShieldCheck,
-  Sparkle,
-  type IconProps,
-} from "@phosphor-icons/react";
-import type { ComponentType } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
 
 const aboutCards: {
-  icon: ComponentType<IconProps>;
   title: { ru: string; kk: string };
   text: { ru: string; kk: string };
 }[] = [
   {
-    icon: Microscope,
     title: { ru: "Современные технологии", kk: "Заманауи технологиялар" },
     text: {
       ru: "Диагностика и лечение строятся на точной картине, понятных этапах и аккуратной работе с тканями.",
@@ -24,7 +13,6 @@ const aboutCards: {
     },
   },
   {
-    icon: ShieldCheck,
     title: { ru: "Стерильность и безопасность", kk: "Стерильдік және қауіпсіздік" },
     text: {
       ru: "Инструменты проходят обработку по протоколам, а лечение проводится с заботой о комфорте пациента.",
@@ -32,7 +20,6 @@ const aboutCards: {
     },
   },
   {
-    icon: ClipboardText,
     title: { ru: "Точная диагностика", kk: "Нақты диагностика" },
     text: {
       ru: "Врач объясняет ситуацию, варианты лечения, сроки и ориентир по стоимости до начала процедур.",
@@ -40,7 +27,6 @@ const aboutCards: {
     },
   },
   {
-    icon: Heartbeat,
     title: { ru: "Комфорт и забота", kk: "Жайлылық және қамқорлық" },
     text: {
       ru: "Спокойная атмосфера, внимательная коммуникация и бережные процедуры для взрослых пациентов.",
@@ -70,7 +56,6 @@ export function AboutClinic() {
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {aboutCards.map((card) => {
-            const Icon = card.icon;
             return (
               <article
                 key={card.title.ru}

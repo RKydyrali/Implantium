@@ -1,25 +1,10 @@
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  ClipboardText,
-  ShieldCheck,
-  Tooth,
-  UserCircle,
-  type IconProps,
-} from "@phosphor-icons/react";
-import type { ComponentType } from "react";
+import { ArrowRight } from "@phosphor-icons/react";
 import heroClinicalImplant from "@/assets/hero-clinical-implant.png";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/sections/BookingModal";
-
-const trustIcons: ComponentType<IconProps>[] = [
-  ShieldCheck,
-  UserCircle,
-  Tooth,
-  ClipboardText,
-];
 
 export function Hero() {
   const { language } = useLanguage();

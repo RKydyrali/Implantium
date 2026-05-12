@@ -126,14 +126,26 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
   const t = content[language];
   const copy = detailCopy[language];
   const serviceFaq = getFaqItems(service, language);
-  const IconComponent = IconMap[service.iconName] ?? Tooth;
   const hasPhone = hasContactValue(clinicContact.phoneHref);
   const hasWhatsapp = hasContactValue(clinicContact.whatsappUrl);
 
   return (
     <main className="flex-1 overflow-hidden bg-[#fdfaf7]">
-      <section className="relative border-b border-border/70 bg-[radial-gradient(circle_at_16%_18%,rgba(164,58,40,0.08),transparent_30%),linear-gradient(180deg,#fffdfb_0%,#fdf8f4_72%,#fff_100%)] px-4 pt-24 pb-10 md:px-8 md:pt-32 md:pb-16">
-        <div className="mx-auto max-w-[1360px]">
+      <section className="relative isolate overflow-hidden border-b border-border/70 bg-[#f6f9fb] px-4 pt-24 pb-10 md:px-8 md:pt-32 md:pb-16 lg:min-h-[720px]">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={service.heroImage}
+            alt=""
+            aria-hidden="true"
+            className="size-full object-cover object-[66%_center] opacity-55 md:object-[72%_center] md:opacity-100"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,#f8fbfd_0%,#f8fbfd_32%,rgba(248,251,253,0.92)_48%,rgba(248,251,253,0.54)_66%,rgba(248,251,253,0.12)_84%,rgba(248,251,253,0)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.42)_46%,#f6f9fb_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(164,58,40,0.08),transparent_32%)]" />
+        </div>
+        <div className="relative z-10 mx-auto max-w-[1360px]">
           <nav className="mb-8 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground md:mb-10">
             <Link to="/" className="transition-colors hover:text-primary">
               {copy.home}
@@ -146,8 +158,8 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
             <span className="text-foreground/70">{service.title[language]}</span>
           </nav>
 
-          <div className="grid items-center gap-10 lg:grid-cols-[0.94fr_1.06fr] lg:gap-16">
-            <div className="max-w-3xl">
+          <div className="grid min-h-[520px] items-center gap-10 lg:grid-cols-[0.56fr_0.44fr] lg:gap-16">
+            <div className="max-w-3xl py-2 md:py-6">
               <h1 className="font-display max-w-[10ch] text-5xl font-normal leading-[0.95] text-[#23201f] sm:text-6xl lg:text-7xl">
                 {service.title[language]}
                 <span className="mt-1 block text-primary">{service.heroAccent[language]}</span>
@@ -162,14 +174,14 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
                 <BookingModal>
-                  <Button size="lg" className="h-14 rounded-full bg-primary px-8 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px]">
+                  <Button size="lg" className="h-12 shrink-0 rounded-full bg-primary px-5 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] sm:h-14 sm:px-8">
                     {t.common.bookConsultation}
                     <ArrowRight weight="bold" className="size-4 ml-2" />
                   </Button>
                 </BookingModal>
-                <Button asChild variant="outline" size="lg" className="h-14 rounded-full border-primary/15 bg-white px-8 text-sm font-bold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-secondary active:translate-y-[1px]">
+                <Button asChild variant="outline" size="lg" className="h-12 shrink-0 rounded-full border-primary/15 bg-white px-5 text-sm font-bold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-secondary active:translate-y-[1px] sm:h-14 sm:px-8">
                   <a href="#service-process">
                     {copy.learnMore}
                     <ArrowRight weight="fill" className="size-4 text-primary" />
@@ -183,28 +195,7 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
               </p>
             </div>
 
-            <div className="relative">
-              <div className="overflow-hidden rounded-[1.85rem] border border-border/70 bg-white shadow-[0_28px_90px_rgba(68,45,34,0.13)]">
-                <img
-                  src={service.heroImage}
-                  alt={service.title[language]}
-                  className="aspect-[1.06/1] size-full object-cover"
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-              <div className="mx-auto -mt-20 w-[88%] rounded-[1.25rem] border border-primary/10 bg-white/92 p-4 shadow-[0_18px_54px_rgba(68,45,34,0.14)] backdrop-blur md:absolute md:right-7 md:bottom-10 md:m-0 md:w-[23rem]">
-                <div className="flex items-center gap-4">
-                  <span className="flex size-16 shrink-0 items-center justify-center rounded-2xl border border-primary/10 bg-[#fff8f3] text-primary">
-                    <IconComponent weight="duotone" className="size-8" />
-                  </span>
-                  <div>
-                    <h2 className="text-base font-bold leading-snug text-foreground">{copy.naturalResultTitle}</h2>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{copy.naturalResultText}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div aria-hidden="true" className="hidden lg:block" />
           </div>
         </div>
       </section>
