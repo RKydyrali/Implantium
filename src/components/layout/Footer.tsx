@@ -78,7 +78,7 @@ export function Footer() {
                 <WhatsappLogo weight="fill" className="mt-0.5 size-5 shrink-0 text-primary" />
                 {hasContactValue(clinicContact.whatsappUrl) ? (
                   <a href={clinicContact.whatsappUrl} className="transition-colors hover:text-primary">
-                    WhatsApp
+                    {clinicContact.phoneDisplay}
                   </a>
                 ) : (
                   <span>{landing.contact.whatsappPending}</span>

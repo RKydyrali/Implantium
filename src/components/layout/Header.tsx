@@ -9,6 +9,7 @@ import { landingCopy } from "@/data/landing";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { BookingModal } from "@/components/sections/BookingModal";
 
 export function Header() {
   const { language, setLanguage } = useLanguage();
@@ -112,21 +113,23 @@ export function Header() {
             </button>
           )}
 
-          <Button
-            asChild
-            className="accent-button-shadow h-12 rounded-full bg-primary px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
-          >
-            <a href="/#booking">{landing.hero.primaryCta}</a>
-          </Button>
+          <BookingModal>
+            <Button
+              className="accent-button-shadow h-12 rounded-full bg-primary px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
+            >
+              {landing.hero.primaryCta}
+            </Button>
+          </BookingModal>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <a
-            href="/#booking"
-            className="hidden h-10 items-center rounded-full bg-primary px-4 text-xs font-bold text-white shadow-[0_12px_28px_rgba(166,58,45,0.18)] sm:inline-flex"
-          >
-            {language === "ru" ? "Запись" : "Жазылу"}
-          </a>
+          <BookingModal>
+            <button
+              className="hidden h-10 items-center rounded-full bg-primary px-4 text-xs font-bold text-white shadow-[0_12px_28px_rgba(166,58,45,0.18)] sm:inline-flex"
+            >
+              {language === "ru" ? "Запись" : "Жазылу"}
+            </button>
+          </BookingModal>
           <div className="flex items-center rounded-full border border-[#DDE3E7] bg-white/85 p-0.5 text-xs font-bold shadow-sm">
             <button
               type="button"
@@ -203,11 +206,11 @@ export function Header() {
                 <p className="mb-4 text-sm font-semibold leading-relaxed text-[#606A70]">
                   {landing.contact.address}
                 </p>
-                <Button asChild className="h-12 w-full rounded-2xl bg-primary text-sm font-bold text-white hover:bg-[#8F2F25]">
-                  <a href="/#booking" onClick={() => setMobileMenuOpen(false)}>
+                <BookingModal>
+                  <Button className="h-12 w-full rounded-2xl bg-primary text-sm font-bold text-white hover:bg-[#8F2F25]">
                     {landing.hero.primaryCta}
-                  </a>
-                </Button>
+                  </Button>
+                </BookingModal>
               </div>
             </div>
           </motion.div>

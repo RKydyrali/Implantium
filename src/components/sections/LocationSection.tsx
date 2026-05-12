@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import map2gis from "@/assets/map-2gis.png";
 
 export function LocationSection() {
   const { language } = useLanguage();
@@ -22,7 +23,7 @@ export function LocationSection() {
           <div className="grid gap-4">
             <InfoLine icon={<MapPin weight="fill" className="size-5" />} label={t.contact.address} />
             <InfoLine icon={<Phone weight="fill" className="size-5" />} label={clinicContact.phoneDisplay ?? t.contact.phonePending} muted={!clinicContact.phoneDisplay} />
-            <InfoLine icon={<WhatsappLogo weight="fill" className="size-5" />} label={t.contact.whatsappPending} muted={!hasContactValue(clinicContact.whatsappUrl)} />
+            <InfoLine icon={<WhatsappLogo weight="fill" className="size-5" />} label={hasContactValue(clinicContact.whatsappUrl) ? (clinicContact.phoneDisplay ?? "") : t.contact.whatsappPending} muted={!hasContactValue(clinicContact.whatsappUrl)} />
             <InfoLine icon={<Clock weight="fill" className="size-5" />} label={t.contact.hoursWeek} />
             <InfoLine icon={<Clock weight="fill" className="size-5" />} label={t.contact.hoursSunday} />
             <InfoLine icon={<Clock weight="fill" className="size-5" />} label={t.contact.hoursDoctors} />
@@ -30,29 +31,20 @@ export function LocationSection() {
         </div>
 
         <div className="relative min-h-[21rem] overflow-hidden border-t border-[#DDE3E7] bg-[#EEF2F4] lg:min-h-[26rem] lg:border-l lg:border-t-0">
-          {hasContactValue(clinicContact.mapEmbedUrl) ? (
-            <iframe
-              src={clinicContact.mapEmbedUrl}
-              title={t.contact.mapLabel}
-              className="absolute inset-0 size-full border-0 grayscale"
+          <a
+            href="https://go.2gis.com/kQV98"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0 block size-full transition-opacity hover:opacity-90"
+            title="Открыть в 2GIS"
+          >
+            <img
+              src={map2gis}
+              alt="Карта 2GIS"
+              className="size-full object-cover"
               loading="lazy"
             />
-          ) : (
-            <div className="absolute inset-0 overflow-hidden bg-[linear-gradient(135deg,#EEF2F4,#FAFBFC)]">
-              <div className="cool-grid absolute inset-0 opacity-90" />
-              <div className="absolute left-[10%] top-[28%] h-px w-[80%] rotate-[-8deg] bg-[#AEBBC2]/60" />
-              <div className="absolute left-[6%] top-[58%] h-px w-[88%] rotate-[7deg] bg-[#AEBBC2]/60" />
-              <div className="absolute left-[52%] top-[-10%] h-[120%] w-px rotate-[14deg] bg-[#AEBBC2]/55" />
-              <div className="absolute left-1/2 top-1/2 flex max-w-[18rem] -translate-x-1/2 -translate-y-1/2 items-center gap-3 rounded-2xl border border-white/90 bg-white/[0.88] px-4 py-3 shadow-[0_24px_70px_rgba(31,37,40,0.10)] backdrop-blur">
-                <span className="flex size-12 items-center justify-center rounded-2xl bg-primary text-white shadow-[0_16px_32px_rgba(166,58,45,0.18)]">
-                  <MapPin weight="fill" className="size-6" />
-                </span>
-                <span className="text-sm font-bold leading-snug text-[#1F2528]">
-                  {t.contact.mapLabel}
-                </span>
-              </div>
-            </div>
-          )}
+          </a>
         </div>
       </motion.div>
     </section>

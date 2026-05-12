@@ -27,6 +27,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookingModal } from "@/components/sections/BookingModal";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   Tooth,
@@ -56,9 +57,7 @@ export function ServicesPreview() {
       <div className="mx-auto max-w-[1320px]">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-primary">
-              IMPLANTIUM
-            </p>
+
             <h2 className="font-display text-3xl font-normal text-[#1F2528] md:text-4xl">
               {t.services.title}
             </h2>
@@ -161,15 +160,14 @@ export function ServicesPreview() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row">
-                <Button
-                  asChild
-                  className="accent-button-shadow h-14 rounded-2xl bg-primary px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
-                >
-                  <a href="/#booking">
+                <BookingModal>
+                  <Button
+                    className="accent-button-shadow h-14 rounded-2xl bg-primary px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
+                  >
                     {t.services.book}
-                    <ArrowRight data-icon="inline-end" className="size-4" />
-                  </a>
-                </Button>
+                    <ArrowRight data-icon="inline-end" className="size-4 ml-2" />
+                  </Button>
+                </BookingModal>
                 <Button
                   asChild
                   variant="outline"

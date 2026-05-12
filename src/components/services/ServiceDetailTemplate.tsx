@@ -27,6 +27,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { BookingModal } from "@/components/sections/BookingModal";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   CalendarCheck,
@@ -162,12 +163,12 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
               </div>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <Button asChild size="lg" className="h-14 rounded-full bg-primary px-8 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px]">
-                  <a href="/#booking">
+                <BookingModal>
+                  <Button size="lg" className="h-14 rounded-full bg-primary px-8 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px]">
                     {t.common.bookConsultation}
-                    <ArrowRight weight="bold" className="size-4" />
-                  </a>
-                </Button>
+                    <ArrowRight weight="bold" className="size-4 ml-2" />
+                  </Button>
+                </BookingModal>
                 <Button asChild variant="outline" size="lg" className="h-14 rounded-full border-primary/15 bg-white px-8 text-sm font-bold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-secondary active:translate-y-[1px]">
                   <a href="#service-process">
                     {copy.learnMore}
@@ -345,12 +346,12 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
                 caption={copy.whatsappCaption}
                 disabled={!hasWhatsapp}
               />
-              <Button asChild size="lg" className="h-14 rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px]">
-                <a href="/#booking">
+              <BookingModal>
+                <Button size="lg" className="h-14 rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px]">
                   {t.common.bookConsultation}
-                  <ArrowRight weight="bold" className="size-4" />
-                </a>
-              </Button>
+                  <ArrowRight weight="bold" className="size-4 ml-2" />
+                </Button>
+              </BookingModal>
             </div>
           </div>
           <p className="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-muted-foreground">

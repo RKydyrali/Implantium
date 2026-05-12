@@ -58,10 +58,7 @@ export function AboutClinic() {
       <div className="mx-auto max-w-[1320px]">
         <div className="mb-8 flex flex-col gap-4 md:mb-10 md:flex-row md:items-end md:justify-between">
           <div>
-            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#DDE3E7] bg-[#FAFBFC] px-4 py-2 text-sm font-semibold text-primary">
-              <Sparkle weight="fill" className="size-4" />
-              IMPLANTIUM
-            </span>
+
             <h2 className="font-display text-3xl font-normal text-[#1F2528] md:text-4xl">
               {language === "ru" ? "О клинике IMPLANTIUM" : "IMPLANTIUM клиникасы туралы"}
             </h2>
@@ -79,11 +76,7 @@ export function AboutClinic() {
                 key={card.title.ru}
                 className="clinical-card-soft clinical-lift overflow-hidden rounded-[1.6rem] p-5 md:p-6"
               >
-                <div className="mb-5 flex h-32 items-end rounded-[1.2rem] border border-[#E8EDF0] bg-[radial-gradient(circle_at_30%_18%,rgba(217,225,229,0.86),transparent_44%),linear-gradient(135deg,#FAFBFC,#EEF2F4)] p-4">
-                  <span className="flex size-12 items-center justify-center rounded-2xl border border-white bg-white/85 text-primary shadow-[0_14px_36px_rgba(31,37,40,0.06)]">
-                    <Icon weight="duotone" className="size-6" />
-                  </span>
-                </div>
+
                 <h3 className="mb-3 text-lg font-bold text-[#1F2528]">{card.title[language]}</h3>
                 <p className="text-sm leading-7 text-[#606A70]">{card.text[language]}</p>
               </article>
