@@ -4,6 +4,7 @@ import { content } from "@/data/content";
 import { doctors } from "@/data/doctors";
 import { Button } from "@/components/ui/button";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
+import type { Language } from "@/types";
 
 export function DoctorsSection() {
   const { language } = useLanguage();
@@ -43,7 +44,7 @@ export function DoctorsSection() {
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <span className="mb-3 w-fit rounded-full border border-[#DDE3E7] bg-[#FAFBFC] px-3 py-1 text-xs font-bold text-primary">
-                  {getDoctorExperience(doctor.description[language])}
+                  {getDoctorExperience(doctor.description[language], language)}
                 </span>
                 <h3 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
                   {doctor.name[language]}
@@ -73,7 +74,7 @@ export function DoctorsSection() {
   );
 }
 
-function getDoctorExperience(description: string) {
+function getDoctorExperience(description: string, language: Language) {
   const match = description.match(/(?:Стаж работы|Опыт работы|Жұмыс тәжірибесі):?\s*([^..]+[.)]?)/i);
-  return match?.[1]?.replace(/\.$/, "") ?? "Специалист";
+  return match?.[1]?.replace(/\.$/, "") ?? (language === "ru" ? "Специалист" : "Маман");
 }

@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
 import { ImageSlider } from "@/components/ui/image-slider";
+import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 import {
   Accordion,
   AccordionContent,
@@ -202,8 +203,9 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
         </div>
       </section>
 
-      <section id="service-process" className="bg-white px-4 py-10 md:px-8 md:py-14">
-        <div className="mx-auto grid max-w-[1360px] gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-12">
+      <section id="service-process" className="relative isolate overflow-hidden bg-white px-4 py-10 md:px-8 md:py-14">
+        <DentalParallaxBackground surface="service-process" />
+        <div className="relative z-10 mx-auto grid max-w-[1360px] gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-12">
           <div>
             <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.suitableTitle}</h2>
             <div className="mt-6 grid gap-4">
@@ -229,8 +231,9 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
         </div>
       </section>
 
-      <section className="bg-white px-4 py-8 md:px-8 md:py-12">
-        <div className="mx-auto max-w-[1360px] border-t border-border/70 pt-10">
+      <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
+        <DentalParallaxBackground surface="service-advantages" />
+        <div className="relative z-10 mx-auto max-w-[1360px] border-t border-border/70 pt-10">
           <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.advantagesTitle}</h2>
           <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {service.advantages.map((item) => (
@@ -241,8 +244,9 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
       </section>
 
       {doctors.length > 0 && (
-        <section className="bg-white px-4 py-8 md:px-8 md:py-12">
-          <div className="mx-auto max-w-[1360px]">
+        <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
+          <DentalParallaxBackground surface="service-doctors" />
+          <div className="relative z-10 mx-auto max-w-[1360px]">
             <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.doctorsTitle}</h2>
               <a href="/doctors" className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
@@ -270,8 +274,9 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
         </section>
       )}
 
-      <section className="bg-white px-4 py-8 md:px-8 md:py-14">
-        <div className="mx-auto grid max-w-[1360px] gap-10 border-t border-border/70 pt-10 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-14">
+        <DentalParallaxBackground surface="service-faq" />
+        <div className="relative z-10 mx-auto grid max-w-[1360px] gap-10 border-t border-border/70 pt-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <h2 className="font-display mb-6 text-3xl font-normal text-foreground md:text-4xl">{copy.faqTitle}</h2>
             <Accordion type="single" collapsible className="grid gap-3">
@@ -316,10 +321,11 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
         </div>
       </section>
 
-      <section className="bg-white px-4 pb-12 md:px-8 md:pb-16">
-        <div className="mx-auto max-w-[1360px]">
-          <div className="grid gap-5 rounded-[1.7rem] border border-primary/10 bg-[linear-gradient(135deg,#fff8f3,#fffdfb)] p-5 shadow-[0_18px_55px_rgba(68,45,34,0.08)] md:p-7 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div className="flex items-center gap-5">
+      <section className="relative isolate overflow-hidden bg-white px-4 pb-12 md:px-8 md:pb-16">
+        <DentalParallaxBackground surface="service-cta" />
+        <div className="relative z-10 mx-auto max-w-[1360px]">
+          <div className="grid min-w-0 gap-5 overflow-hidden rounded-[1.7rem] border border-primary/10 bg-[linear-gradient(135deg,#fff8f3,#fffdfb)] p-5 shadow-[0_18px_55px_rgba(68,45,34,0.08)] md:p-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="flex min-w-0 items-center gap-5">
               <span className="hidden size-20 shrink-0 items-center justify-center rounded-full border border-primary/10 bg-white text-primary shadow-sm sm:flex">
                 <Phone weight="fill" className="size-8" />
               </span>
@@ -329,7 +335,7 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
               </div>
             </div>
 
-            <div className="grid gap-3 lg:grid-cols-[auto_auto_auto] lg:items-center">
+            <div className="grid min-w-0 gap-3 lg:grid-cols-[auto_auto_auto] lg:items-center">
               <ContactPill
                 icon={<Phone weight="fill" className="size-5" />}
                 href={clinicContact.phoneHref}
@@ -345,7 +351,7 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
                 disabled={!hasWhatsapp}
               />
               <BookingModal>
-                <Button size="lg" className="h-14 rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px]">
+                <Button size="lg" className="h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] lg:w-auto">
                   {t.common.bookConsultation}
                   <ArrowRight weight="bold" className="size-4 ml-2" />
                 </Button>
@@ -446,14 +452,14 @@ function ContactPill({
 
   if (!disabled && href) {
     return (
-      <a href={href} className="flex h-14 items-center gap-3 rounded-full border border-border/70 bg-white px-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/20 active:translate-y-[1px]">
+      <a href={href} className="flex h-14 w-full min-w-0 items-center gap-3 rounded-full border border-border/70 bg-white px-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/20 active:translate-y-[1px] lg:w-auto">
         {contentNode}
       </a>
     );
   }
 
   return (
-    <button type="button" disabled className="flex h-14 cursor-not-allowed items-center gap-3 rounded-full border border-border/70 bg-white/75 px-4 opacity-80 shadow-sm">
+    <button type="button" disabled className="flex h-14 w-full min-w-0 cursor-not-allowed items-center gap-3 rounded-full border border-border/70 bg-white/75 px-4 opacity-80 shadow-sm lg:w-auto">
       {contentNode}
     </button>
   );

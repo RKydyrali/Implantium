@@ -4,6 +4,7 @@ import { landingCopy } from "@/data/landing";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { patientReviews, type PatientReview } from "@/data/reviews";
 import { cn } from "@/lib/utils";
+import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 
 type ReviewsSectionProps = {
   id?: string;
@@ -23,11 +24,12 @@ export function ReviewsSection({ id, title, variant = "home" }: ReviewsSectionPr
     <section
       id={sectionId}
       className={cn(
-        "overflow-hidden px-4 md:px-8",
+        "relative isolate overflow-hidden px-4 md:px-8",
         isDoctorsVariant ? "bg-[#F4F8FB] py-12 md:py-16" : "bg-white py-14 md:py-20"
       )}
     >
-      <div className="mx-auto max-w-[1320px]">
+      <DentalParallaxBackground surface={isDoctorsVariant ? "doctors-reviews" : "home-reviews"} />
+      <div className="relative z-10 mx-auto max-w-[1320px]">
         <div className="grid gap-7 lg:grid-cols-[0.34fr_0.66fr] lg:items-start">
           <div className="lg:pr-4">
             <span className="mb-3 block text-sm font-semibold uppercase tracking-[0.16em] text-primary">

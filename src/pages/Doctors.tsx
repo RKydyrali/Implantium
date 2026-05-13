@@ -15,6 +15,7 @@ import { DoctorPhoto } from "@/components/common/DoctorPhoto";
 import { BookingModal } from "@/components/sections/BookingModal";
 import { Button } from "@/components/ui/button";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
+import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 import { useLanguage } from "@/hooks/useLanguage";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { doctors } from "@/data/doctors";
@@ -28,9 +29,9 @@ const doctorPageCopy = {
     breadcrumbHome: "Главная",
     breadcrumbCurrent: "Врачи",
     intro:
-      "В команде IMPLANTIUM работают стоматологи разных направлений. На странице собраны специалисты клиники, их опыт, профиль и услуги, с которыми они связаны.",
+      "На этой странице представлены специалисты клиники, их опыт, специализация и оказываемые услуги.",
     specialistsLabel: "специалистов",
-    experienceLabel: "максимальный стаж",
+    experienceLabel: "клинический опыт",
     directionsLabel: "направлений лечения",
     appointmentLabel: "прием по записи",
     appointmentValue: "по записи",
@@ -39,7 +40,7 @@ const doctorPageCopy = {
     competenceTitle: "Связанные направления",
     allDoctorsTitle: "Команда врачей",
     allDoctorsText:
-      "Карточки используют данные из профилей специалистов. Когда появятся реальные фотосессии врачей, их можно будет подключить без изменения структуры страницы.",
+      "В клинике IMPLANTIUM работают опытные специалисты по всем основным направлениям. В этом разделе указаны их квалификация, стаж и ключевые услуги.",
     chooseDoctor: "Записаться к специалисту",
     trustTitle: "Почему нам доверяют",
     reviewsTitle: "Отзывы о наших врачах",
@@ -80,9 +81,9 @@ const doctorPageCopy = {
     breadcrumbHome: "Басты бет",
     breadcrumbCurrent: "Дәрігерлер",
     intro:
-      "IMPLANTIUM командасында әртүрлі бағыттағы стоматологтар жұмыс істейді. Бұл бетте клиника мамандары, тәжірибесі, профилі және байланысты қызметтері көрсетілген.",
+      "Бұл бетте клиника мамандары, олардың тәжірибесі, бағыты және көрсететін қызметтері берілген.",
     specialistsLabel: "маман",
-    experienceLabel: "ең жоғары тәжірибе",
+    experienceLabel: "клиникалық тәжірибе",
     directionsLabel: "емдеу бағыты",
     appointmentLabel: "қабылдау жазылу арқылы",
     appointmentValue: "жазылу арқылы",
@@ -91,7 +92,7 @@ const doctorPageCopy = {
     competenceTitle: "Байланысты бағыттар",
     allDoctorsTitle: "Дәрігерлер командасы",
     allDoctorsText:
-      "Карточкалар маман профильдеріндегі деректерге сүйенеді. Нақты фотосессиялар дайын болғанда, оларды бет құрылымын өзгертпей қосуға болады.",
+      "IMPLANTIUM клиникасында әр бағыт бойынша тәжірибелі мамандар жұмыс істейді. Бұл бөлімде дәрігерлердің кәсіби бағыты, тәжірибесі және көрсететін негізгі қызметтері көрсетілген",
     chooseDoctor: "Маманға жазылу",
     trustTitle: "Неліктен бізге сенеді",
     reviewsTitle: "Дәрігерлер туралы пікірлер",
@@ -216,14 +217,16 @@ export default function Doctors() {
         </div>
       </section>
 
-      <section className="px-4 py-10 md:px-8 md:py-14">
-        <div className="mx-auto max-w-[1360px]">
+      <section className="relative isolate overflow-hidden px-4 py-10 md:px-8 md:py-14">
+        <DentalParallaxBackground surface="doctors-featured" />
+        <div className="relative z-10 mx-auto max-w-[1360px]">
           <FeaturedDoctor doctor={featuredDoctor} language={language} copy={copy} />
         </div>
       </section>
 
-      <section className="px-4 pb-10 md:px-8 md:pb-14">
-        <div className="mx-auto max-w-[1360px]">
+      <section className="relative isolate overflow-hidden px-4 pb-10 md:px-8 md:pb-14">
+        <DentalParallaxBackground surface="doctors-list" />
+        <div className="relative z-10 mx-auto max-w-[1360px]">
           <div className="mb-7 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <h2 className="text-3xl font-bold tracking-tight text-[#15233A] md:text-4xl">
@@ -243,8 +246,9 @@ export default function Doctors() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-12 md:px-8 md:py-16">
-        <div className="mx-auto max-w-[1360px]">
+      <section className="relative isolate overflow-hidden bg-white px-4 py-12 md:px-8 md:py-16">
+        <DentalParallaxBackground surface="doctors-trust" />
+        <div className="relative z-10 mx-auto max-w-[1360px]">
           <h2 className="text-3xl font-bold tracking-tight text-[#15233A] md:text-4xl">
             {copy.trustTitle}
           </h2>
@@ -258,10 +262,11 @@ export default function Doctors() {
 
       <ReviewsSection title={copy.reviewsTitle} variant="doctors" />
 
-      <section className="px-4 pb-14 md:px-8 md:pb-20">
-        <div className="mx-auto max-w-[1360px]">
-          <div className="grid gap-6 rounded-[1.7rem] border border-[#D8E2EA] bg-white p-5 shadow-[0_24px_80px_rgba(39,64,95,0.07)] md:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+      <section className="relative isolate overflow-hidden px-4 pb-14 md:px-8 md:pb-20">
+        <DentalParallaxBackground surface="doctors-cta" />
+        <div className="relative z-10 mx-auto max-w-[1360px]">
+          <div className="grid min-w-0 gap-6 overflow-hidden rounded-[1.7rem] border border-[#D8E2EA] bg-white p-5 shadow-[0_24px_80px_rgba(39,64,95,0.07)] md:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+            <div className="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
               <span className="flex size-16 shrink-0 items-center justify-center rounded-full border border-[#D8E2EA] bg-[#F4F8FB] text-primary md:size-20">
                 <Tooth weight="duotone" className="size-8" />
               </span>
@@ -275,24 +280,28 @@ export default function Doctors() {
               </div>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
+            <div className="grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
               {hasContactValue(clinicContact.phoneHref) && (
                 <a
                   href={clinicContact.phoneHref}
-                  className="flex min-h-14 items-center gap-3 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-4 text-[#15233A] transition-all hover:-translate-y-0.5 hover:border-[#C3D2DF] active:translate-y-[1px]"
+                  className="flex min-h-14 min-w-0 items-center gap-3 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-4 text-[#15233A] transition-all hover:-translate-y-0.5 hover:border-[#C3D2DF] active:translate-y-[1px]"
                 >
                   <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
                     <Phone weight="fill" className="size-5" />
                   </span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-bold">{clinicContact.phoneDisplay}</span>
-                    <span className="block truncate text-xs font-medium text-[#6B7C90]">{copy.phoneCaption}</span>
+                  <span className="flex flex-col gap-0.5 min-w-0">
+                    {clinicContact.phoneDisplay?.split(',').map((phone, i) => (
+                      <span key={i} className="block truncate text-[13px] font-bold leading-tight">
+                        {phone.trim()}
+                      </span>
+                    ))}
+                    <span className="block truncate text-[11px] font-medium text-[#6B7C90]">{copy.phoneCaption}</span>
                   </span>
                 </a>
               )}
 
               <BookingModal>
-                <Button className="h-14 rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(166,58,45,0.18)] transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]">
+                <Button className="h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(166,58,45,0.18)] transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px] sm:w-auto">
                   {copy.chooseDoctor}
                   <ArrowRight weight="bold" className="size-4" />
                 </Button>

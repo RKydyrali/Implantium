@@ -3,19 +3,23 @@ import { Clock, MapPin, Phone, WhatsappLogo } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
+import { content } from "@/data/content";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import map2gis from "@/assets/map-2gis.png";
+import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 
 export function LocationSection() {
   const { language } = useLanguage();
   const t = landingCopy[language];
+  const labels = content[language];
 
   return (
-    <section id="location" className="bg-[#F5F7F8] px-4 py-14 md:px-8 md:py-20">
-      <motion.div className="clinical-card mx-auto grid max-w-[1320px] overflow-hidden rounded-[2rem] lg:grid-cols-[0.72fr_1.28fr]">
+    <section id="location" className="relative isolate overflow-hidden bg-[#F5F7F8] px-4 py-14 md:px-8 md:py-20">
+      <DentalParallaxBackground surface="home-location" />
+      <motion.div className="clinical-card relative z-10 mx-auto grid max-w-[1320px] overflow-hidden rounded-[2rem] lg:grid-cols-[0.72fr_1.28fr]">
         <div className="p-6 md:p-8 lg:p-10">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-primary">
-            Aktau
+            {language === "ru" ? "Актау" : "Ақтау"}
           </p>
           <h2 className="font-display mb-6 text-3xl font-normal text-[#1F2528] md:text-4xl">
             {t.contact.title}
@@ -36,11 +40,11 @@ export function LocationSection() {
             target="_blank"
             rel="noopener noreferrer"
             className="absolute inset-0 block size-full transition-opacity hover:opacity-90"
-            title="Открыть в 2GIS"
+            title={labels.location.open2gis}
           >
             <img
               src={map2gis}
-              alt="Карта 2GIS"
+              alt={t.contact.mapLabel}
               className="size-full object-cover"
               loading="lazy"
             />

@@ -4,33 +4,48 @@ import { Phone, WhatsappLogo } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { clinicContact } from "@/data/clinicContact";
 
-export function BookingModal({ children }: { children: ReactNode }) {
+type BookingModalProps = {
+  children: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
+
+export function BookingModal({ children, open, onOpenChange }: BookingModalProps) {
   const { language } = useLanguage();
   const copy = {
     ru: {
+      title: "Записаться на прием",
+      description: "Выберите удобный способ связи, и мы ответим вам в ближайшее время.",
       whatsapp: "Написать в WhatsApp",
+      close: "Закрыть окно записи",
     },
     kk: {
+      title: "Қабылдауға жазылу",
+      description: "Өзіңізге ыңғайлы байланыс тәсілін таңдаңыз, біз сізге жақын арада жауап береміз.",
       whatsapp: "WhatsApp-қа жазу",
+      close: "Жазылу терезесін жабу",
     },
   }[language];
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent
+        motionPreset="booking"
+        overlayClassName="bg-[#1F2528]/45 backdrop-blur-[2px]"
+        className="rounded-t-[1.75rem] rounded-b-none sm:rounded-[1.5rem]"
+        closeLabel={copy.close}
+      >
         <DialogHeader>
           <DialogTitle className="font-display text-2xl text-center">
-            {language === "ru" ? "Записаться на прием" : "Қабылдауға жазылу"}
+            {copy.title}
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3 py-4">
           <p className="mb-2 text-center text-sm text-[#606A70]">
-            {language === "ru"
-              ? "Выберите удобный способ связи, и мы ответим вам в ближайшее время."
-              : "Өзіңізге ыңғайлы байланыс тәсілін таңдаңыз, біз сізге жақын арада жауап береміз."}
+            {copy.description}
           </p>
           
           <a

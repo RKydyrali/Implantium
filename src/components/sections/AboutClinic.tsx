@@ -1,5 +1,6 @@
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
+import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 
 const aboutCards: {
   title: { ru: string; kk: string };
@@ -40,8 +41,9 @@ export function AboutClinic() {
   const t = content[language];
 
   return (
-    <section id="about" className="bg-white px-4 py-14 md:px-8 md:py-20">
-      <div className="mx-auto max-w-[1320px]">
+    <section id="about" className="relative isolate overflow-hidden bg-white px-4 py-14 md:px-8 md:py-20">
+      <DentalParallaxBackground surface="home-about" />
+      <div className="relative z-10 mx-auto max-w-[1320px]">
         <div className="mb-8 flex flex-col gap-4 md:mb-10 md:flex-row md:items-end md:justify-between">
           <div>
 

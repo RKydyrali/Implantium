@@ -90,7 +90,7 @@ export function ImageSlider({
       {/* After Image (Background) */}
       <img
         src={afterImage}
-        alt="After"
+        alt={afterLabel}
         className="absolute inset-0 size-full object-cover object-[center_42%]"
         draggable={false}
       />
@@ -102,11 +102,20 @@ export function ImageSlider({
       >
         <img
           src={beforeImage}
-          alt="Before"
+          alt={beforeLabel}
           className="absolute inset-0 h-full object-cover object-center"
           style={{ width: `${10000 / sliderPosition}%`, maxWidth: "none" }}
           draggable={false}
         />
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between gap-3">
+        <span className="rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-primary shadow-sm backdrop-blur">
+          {beforeLabel}
+        </span>
+        <span className="rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-primary shadow-sm backdrop-blur">
+          {afterLabel}
+        </span>
       </div>
 
       {/* Slider Handle */}
@@ -124,4 +133,3 @@ export function ImageSlider({
     </div>
   );
 }
-

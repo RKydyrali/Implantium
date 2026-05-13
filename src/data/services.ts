@@ -1,6 +1,4 @@
 import implantsHero from "@/assets/services/implants-hero.webp";
-import implantsBefore from "@/assets/services/implants-before.webp";
-import implantsAfter from "@/assets/services/implants-after.webp";
 import implantNewBefore from "@/assets/before-after/implants-all-on-4-before.jpg";
 import implantNewAfter from "@/assets/before-after/implants-all-on-4-after.jpg";
 import boneAugmentationHero from "@/assets/services/bone-augmentation-hero.webp";
@@ -16,8 +14,6 @@ import wisdomToothRemovalHero from "@/assets/services/wisdom-tooth-removal-hero.
 import wisdomToothRemovalBefore from "@/assets/services/wisdom-tooth-removal-before.webp";
 import wisdomToothRemovalAfter from "@/assets/services/wisdom-tooth-removal-after.webp";
 import crownsHero from "@/assets/services/crowns-hero.webp";
-import crownsBefore from "@/assets/services/crowns-before.webp";
-import crownsAfter from "@/assets/services/crowns-after.webp";
 import crownsNewBefore from "@/assets/before-after/crowns-new-before.jpg";
 import crownsNewAfter from "@/assets/before-after/crowns-new-after.jpg";
 import denturesHero from "@/assets/services/dentures-hero.webp";
@@ -30,8 +26,8 @@ import treatmentHero from "@/assets/services/treatment-hero.webp";
 import treatmentNewBefore from "@/assets/before-after/treatment-before.png";
 import treatmentNewAfter from "@/assets/before-after/treatment-after.png";
 import cleaningHero from "@/assets/services/cleaning-hero.webp";
-import cleaningBefore from "@/assets/services/cleaning-before.webp";
-import cleaningAfter from "@/assets/services/cleaning-after.webp";
+import cleaningNewBefore from "@/assets/before-after/cleaning-before.png";
+import cleaningNewAfter from "@/assets/before-after/cleaning-after.png";
 import type { BilingualText, ServiceData } from "@/types";
 
 type ServiceDetailFields = Pick<
@@ -99,7 +95,7 @@ const baseServices: BaseServiceData[] = [
     },
     priceNote: {
       ru: "Имплантация от 89 000 ₸. Скидки от 15% до 40%. Возможна необходимость костной пластики.",
-      kk: "Имплантация 89 000 ₸ бастап. 15–40% дейін жеңілдік. Сүйек өсіру қажет болуы мүмкін."
+      kk: "Имплантация 89 000 ₸ бастап. 15–40% дейін жеңілдік. Сүйек пластикасы қажет болуы мүмкін."
     },
     faq: [
       {
@@ -124,15 +120,15 @@ const baseServices: BaseServiceData[] = [
   {
     id: "bone-augmentation",
     iconName: "ShieldCheck",
-    title: { ru: "Наращивание кости", kk: "Сүйек өсіру" },
+    title: { ru: "Костная пластика", kk: "Сүйек пластикасы" },
     shortDescription: { ru: "Создание надежной опоры для импланта.", kk: "Имплант үшін сенімді тірек жасау." },
     benefits: {
       ru: ["Помогает импланту держаться надёжно", "Материалы совместимы с организмом", "Врач оценивает ситуацию по 3D-снимку"],
       kk: ["Импланттың мықты бекітілуіне көмектеседі", "Материалдар ағзаға үйлесімді", "Дәрігер 3D рентген арқылы жоспар жасайды"]
     },
     explanation: {
-      ru: "Наращивание кости проводится, если костной ткани недостаточно для надёжной установки импланта.",
-      kk: "Сүйек өсіру имплантты сенімді орнатуға сүйек тіні жеткіліксіз болған жағдайда жасалады."
+      ru: "Костная пластика проводится, если костной ткани недостаточно для надёжной установки импланта.",
+      kk: "Сүйек пластикасы имплантты сенімді орнатуға сүйек тіні жеткіліксіз болған жағдайда жасалады."
     },
     steps: {
       ru: ["3D-диагностика", "Процедура костной пластики", "Период восстановления"],
@@ -145,15 +141,15 @@ const baseServices: BaseServiceData[] = [
   {
     id: "frenectomy",
     iconName: "Smiley",
-    title: { ru: "Подрезание уздечки", kk: "Шылбырды кесу" },
+    title: { ru: "Пластика уздечки", kk: "Жүгеншені кесу" },
     shortDescription: { ru: "Быстрая процедура для здоровья десен и речи.", kk: "Қызыл иек пен сөйлеу саулығына арналған жылдам процедура." },
     benefits: {
       ru: ["Местная анестезия", "Несколько минут", "Безболезненно", "Быстрое возвращение к обычной жизни"],
       kk: ["Жергілікті анестезия", "Бірнеше минут", "Ауыртпалықсыз", "Күнделікті өмірге тез оралуға болады"]
     },
     explanation: {
-      ru: "Подрезание уздечки — небольшая процедура, если уздечка мешает речи, прикусу или движению губы/языка.",
-      kk: "Шылбырды кесу — шылбыр сөйлеуге, тістемге немесе тіл/ерін қозғалысына кедергі келтірсе жасалатын шағын процедура."
+      ru: "Пластика уздечки — небольшая процедура, если уздечка мешает речи, прикусу или движению губы/языка.",
+      kk: "Жүгеншені кесу — жүгенше сөйлеуге, тістемге немесе тіл/ерін қозғалысына кедергі келтірсе жасалатын шағын процедура."
     },
     steps: {
       ru: ["Консультация", "Анестезия", "Подрезание", "Заживление"],
@@ -187,7 +183,7 @@ const baseServices: BaseServiceData[] = [
   {
     id: "wisdom-tooth-removal",
     iconName: "FirstAidKit",
-    title: { ru: "Удаление зуба мудрости", kk: "Ақыл тісті жұлу" },
+    title: { ru: "Удаление зуба мудрости", kk: "Ақыл тісін жұлу" },
     shortDescription: { ru: "Сложные удаления с минимальным дискомфортом.", kk: "Минималды ыңғайсыздықпен күрделі жұлу." },
     benefits: {
       ru: ["Под анестезией", "Предотвращает смещение других зубов", "Избавляет от боли и воспаления"],
@@ -669,7 +665,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("30 000 ₸", "30 000 ₸"),
     priceCaption: text("Комплекс из 3 этапов", "3 кезеңдік кешен"),
-    beforeAfterCases: [{ title: text("Профессиональная гигиена улыбки", "Күлкінің кәсіби гигиенасы"), beforeImage: cleaningBefore, afterImage: cleaningAfter }],
+    beforeAfterCases: [
+      {
+        title: text("Профессиональная чистка улыбки", "Күлкіні кәсіби тазалау"),
+        beforeImage: cleaningNewBefore,
+        afterImage: cleaningNewAfter,
+        useSlider: true,
+      },
+    ],
   },
 };
 

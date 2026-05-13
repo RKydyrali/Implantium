@@ -16,6 +16,7 @@ import type { ComponentType } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy, landingServices } from "@/data/landing";
 import { doctors } from "@/data/doctors";
+import type { Language } from "@/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,8 @@ import {
 } from "@/components/ui/accordion";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookingModal } from "@/components/sections/BookingModal";
+import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
+import { ServicesConsultationPrompt } from "@/components/sections/ServicesConsultationPrompt";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   Tooth,
@@ -53,8 +56,9 @@ export function ServicesPreview() {
   const ActiveIcon = IconMap[activeService.iconName] ?? Tooth;
 
   return (
-    <section id="services" className="clinical-section px-4 py-12 md:px-8 md:py-16">
-      <div className="mx-auto max-w-[1320px]">
+    <section id="services" className="clinical-section relative isolate overflow-hidden px-4 py-12 md:px-8 md:py-16">
+      <DentalParallaxBackground surface="home-services" />
+      <div className="relative z-10 mx-auto max-w-[1320px]">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
 
@@ -188,7 +192,7 @@ export function ServicesPreview() {
                       </div>
                       <div className="p-5">
                         <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary">
-                          {getDoctorExperience(doctor.description[language])}
+                          {getDoctorExperience(doctor.description[language], language)}
                         </p>
                         <h5 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
                           {doctor.name[language]}
@@ -228,12 +232,13 @@ export function ServicesPreview() {
             </div>
           </motion.div>
         </AnimatePresence>
+        <ServicesConsultationPrompt />
       </div>
     </section>
   );
 }
 
-function getDoctorExperience(description: string) {
+function getDoctorExperience(description: string, language: Language) {
   const match = description.match(/(?:Стаж работы|Опыт работы|Жұмыс тәжірибесі):?\s*([^..]+[.)]?)/i);
-  return match?.[1]?.replace(/\.$/, "") ?? "Опытный специалист";
+  return match?.[1]?.replace(/\.$/, "") ?? (language === "ru" ? "Опытный специалист" : "Тәжірибелі маман");
 }
