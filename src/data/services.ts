@@ -10,8 +10,8 @@ import frenectomyHero from "@/assets/services/frenectomy-hero.webp";
 import frenectomyBefore from "@/assets/services/frenectomy-before.webp";
 import frenectomyAfter from "@/assets/services/frenectomy-after.webp";
 import toothExtractionHero from "@/assets/services/tooth-extraction-hero.webp";
-import toothExtractionBefore from "@/assets/services/tooth-extraction-before.webp";
-import toothExtractionAfter from "@/assets/services/tooth-extraction-after.webp";
+import extractionBefore from "@/assets/before-after/extraction-before.png";
+import extractionAfter from "@/assets/before-after/extraction-after.png";
 import wisdomToothRemovalHero from "@/assets/services/wisdom-tooth-removal-hero.webp";
 import wisdomToothRemovalBefore from "@/assets/services/wisdom-tooth-removal-before.webp";
 import wisdomToothRemovalAfter from "@/assets/services/wisdom-tooth-removal-after.webp";
@@ -27,8 +27,8 @@ import bracesHero from "@/assets/services/braces-hero.webp";
 import bracesBefore from "@/assets/services/braces-before.webp";
 import bracesAfter from "@/assets/services/braces-after.webp";
 import treatmentHero from "@/assets/services/treatment-hero.webp";
-import treatmentBefore from "@/assets/services/treatment-before.webp";
-import treatmentAfter from "@/assets/services/treatment-after.webp";
+import treatmentNewBefore from "@/assets/before-after/treatment-before.png";
+import treatmentNewAfter from "@/assets/before-after/treatment-after.png";
 import cleaningHero from "@/assets/services/cleaning-hero.webp";
 import cleaningBefore from "@/assets/services/cleaning-before.webp";
 import cleaningAfter from "@/assets/services/cleaning-after.webp";
@@ -468,7 +468,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("от 18 000 ₸", "18 000 ₸ бастап"),
     priceCaption: text("Зависит от сложности удаления", "Баға жұлу күрделілігіне байланысты"),
-    beforeAfterCases: [{ title: text("Спокойное заживление после удаления", "Жұлудан кейін жайлы жазылу"), beforeImage: toothExtractionBefore, afterImage: toothExtractionAfter }],
+    beforeAfterCases: [
+      {
+        title: text("Бережное удаление и заживление", "Ұқыпты жұлу және жазылу"),
+        beforeImage: extractionBefore,
+        afterImage: extractionAfter,
+        useSlider: true,
+      },
+    ],
   },
   "wisdom-tooth-removal": {
     heroAccent: text("бережно", "ұқыпты"),
@@ -625,7 +632,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("Определяется врачом", "Дәрігер анықтайды"),
     priceCaption: text("Стоимость после осмотра", "Баға тексеруден кейін"),
-    beforeAfterCases: [{ title: text("Восстановление формы и цвета", "Пішін мен түсті қалпына келтіру"), beforeImage: treatmentBefore, afterImage: treatmentAfter }],
+    beforeAfterCases: [
+      {
+        title: text("Реставрация жевательного зуба", "Тісті қалпына келтіру"),
+        beforeImage: treatmentNewBefore,
+        afterImage: treatmentNewAfter,
+        useSlider: true,
+      },
+    ],
   },
   cleaning: {
     heroAccent: text("и свежесть", "және сергектік"),
