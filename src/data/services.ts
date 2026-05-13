@@ -1,6 +1,8 @@
 import implantsHero from "@/assets/services/implants-hero.webp";
 import implantsBefore from "@/assets/services/implants-before.webp";
 import implantsAfter from "@/assets/services/implants-after.webp";
+import implantNewBefore from "@/assets/before-after/implants-all-on-4-before.jpg";
+import implantNewAfter from "@/assets/before-after/implants-all-on-4-after.jpg";
 import boneAugmentationHero from "@/assets/services/bone-augmentation-hero.webp";
 import boneAugmentationBefore from "@/assets/services/bone-augmentation-before.webp";
 import boneAugmentationAfter from "@/assets/services/bone-augmentation-after.webp";
@@ -16,6 +18,8 @@ import wisdomToothRemovalAfter from "@/assets/services/wisdom-tooth-removal-afte
 import crownsHero from "@/assets/services/crowns-hero.webp";
 import crownsBefore from "@/assets/services/crowns-before.webp";
 import crownsAfter from "@/assets/services/crowns-after.webp";
+import crownsNewBefore from "@/assets/before-after/crowns-new-before.jpg";
+import crownsNewAfter from "@/assets/before-after/crowns-new-after.jpg";
 import denturesHero from "@/assets/services/dentures-hero.webp";
 import denturesBefore from "@/assets/services/dentures-before.webp";
 import denturesAfter from "@/assets/services/dentures-after.webp";
@@ -367,7 +371,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("от 89 000 до 500 000 ₸", "89 000-нан 500 000 ₸ дейін"),
     priceCaption: text("Установка импланта под ключ", "Имплантты толық орнату"),
-    beforeAfterCases: [{ title: text("Восстановление жевательных зубов", "Шайнау тістерін қалпына келтіру"), beforeImage: implantsBefore, afterImage: implantsAfter }],
+    beforeAfterCases: [
+      {
+        title: text("Полное восстановление улыбки", "Күлкіні толық қалпына келтіру"),
+        beforeImage: implantNewBefore,
+        afterImage: implantNewAfter,
+        useSlider: true,
+      },
+    ],
   },
   "bone-augmentation": {
     heroAccent: text("для импланта", "имплантқа"),
@@ -517,7 +528,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("от 45 000 ₸", "45 000 ₸ бастап"),
     priceCaption: text("Цена зависит от материала коронки", "Баға қаптама материалына байланысты"),
-    beforeAfterCases: [{ title: text("Восстановление формы зуба", "Тіс пішінін қалпына келтіру"), beforeImage: crownsBefore, afterImage: crownsAfter }],
+    beforeAfterCases: [
+      {
+        title: text("Восстановление формы зуба", "Тіс пішінін қалпына келтіру"),
+        beforeImage: crownsNewBefore,
+        afterImage: crownsNewAfter,
+        useSlider: true,
+      },
+    ],
   },
   dentures: {
     heroAccent: text("для улыбки", "күлкі үшін"),

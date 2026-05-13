@@ -17,10 +17,12 @@ import {
 import type { ComponentType, ReactNode } from "react";
 import type { Doctor, FAQItem, Language, ServiceData } from "@/types";
 import { content } from "@/data/content";
+import { cn } from "@/lib/utils";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
+import { ImageSlider } from "@/components/ui/image-slider";
 import {
   Accordion,
   AccordionContent,
@@ -287,20 +289,25 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
           </div>
 
           <div>
-            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-6">
               <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.beforeAfterTitle}</h2>
-              <a href="/#reviews" className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
-                {copy.moreCases}
-                <ArrowRight weight="bold" className="size-4" />
-              </a>
             </div>
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className={cn("grid gap-5", (service.beforeAfterCases ?? []).some(c => c.useSlider) ? "grid-cols-1" : "sm:grid-cols-2")}>
               {(service.beforeAfterCases ?? []).map((caseItem) => (
                 <Card key={caseItem.title.ru} className="overflow-hidden rounded-[1.2rem] border-border/70 bg-white p-3 shadow-[0_16px_42px_rgba(68,45,34,0.06)]">
-                  <div className="grid gap-1 overflow-hidden rounded-xl sm:grid-cols-2">
-                    <ResultImage src={caseItem.beforeImage} alt={copy.beforeAfterTitle} label={language === "ru" ? "До" : "Дейін"} />
-                    <ResultImage src={caseItem.afterImage} alt={caseItem.title[language]} label={language === "ru" ? "После" : "Кейін"} />
-                  </div>
+                  {caseItem.useSlider ? (
+                    <ImageSlider
+                      beforeImage={caseItem.beforeImage}
+                      afterImage={caseItem.afterImage}
+                      beforeLabel={language === "ru" ? "До" : "Дейін"}
+                      afterLabel={language === "ru" ? "После" : "Кейін"}
+                    />
+                  ) : (
+                    <div className="grid gap-1 overflow-hidden rounded-xl sm:grid-cols-2">
+                      <ResultImage src={caseItem.beforeImage} alt={copy.beforeAfterTitle} label={language === "ru" ? "До" : "Дейін"} />
+                      <ResultImage src={caseItem.afterImage} alt={caseItem.title[language]} label={language === "ru" ? "После" : "Кейін"} />
+                    </div>
+                  )}
                   <p className="mt-4 text-center text-sm font-medium text-muted-foreground">{caseItem.title[language]}</p>
                 </Card>
               ))}

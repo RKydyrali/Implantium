@@ -31,6 +31,7 @@ export type ServiceBeforeAfterCase = {
   title: BilingualText;
   beforeImage: string;
   afterImage: string;
+  useSlider?: boolean;
 };
 
 export type ServiceData = {
