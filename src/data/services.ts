@@ -464,7 +464,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("от 18 000 ₸", "18 000 ₸ бастап"),
     priceCaption: text("Зависит от сложности удаления", "Баға жұлу күрделілігіне байланысты"),
-    beforeAfterCases: [],
+    beforeAfterCases: [
+      {
+        title: text("Бережное удаление зуба", "Тісті ұқыпты жұлу"),
+        beforeImage: extractionBefore,
+        afterImage: extractionAfter,
+        useSlider: true,
+      },
+    ],
   },
   "wisdom-tooth-removal": {
     heroAccent: text("бережно", "ұқыпты"),
