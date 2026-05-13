@@ -37,26 +37,70 @@ export function ServicesConsultationPrompt() {
 
     const servicesSection = document.getElementById("services");
 
-    if (!servicesSection || !("IntersectionObserver" in window)) {
-      showTimerRef.current = window.setTimeout(showPrompt, PROMPT_DELAY_MS);
-      return clearShowTimer;
+    if (!servicesSection) {
+      return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        clearShowTimer();
+    const isServicesReached = () => {
+      const rect = servicesSection.getBoundingClientRect();
+      return rect.top <= window.innerHeight * 0.65 && rect.bottom >= window.innerHeight * 0.25;
+    };
 
-        if (entry.isIntersecting) {
-          showTimerRef.current = window.setTimeout(showPrompt, PROMPT_DELAY_MS);
-        }
-      },
-      { threshold: 0.08 }
-    );
+    const schedulePrompt = () => {
+      if (showTimerRef.current) {
+        return;
+      }
+
+      showTimerRef.current = window.setTimeout(showPrompt, PROMPT_DELAY_MS);
+    };
+
+    const syncPromptTimer = () => {
+      if (isServicesReached()) {
+        schedulePrompt();
+        return;
+      }
+
+      clearShowTimer();
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      window.addEventListener("scroll", syncPromptTimer, { passive: true });
+      window.addEventListener("resize", syncPromptTimer);
+      syncPromptTimer();
+
+      return () => {
+        clearShowTimer();
+        window.removeEventListener("scroll", syncPromptTimer);
+        window.removeEventListener("resize", syncPromptTimer);
+      };
+    }
+
+    let isIntersecting = false;
+
+    const handleViewportChange = () => {
+      if (!isIntersecting) {
+        clearShowTimer();
+        return;
+      }
+
+      syncPromptTimer();
+    };
+
+    window.addEventListener("scroll", handleViewportChange, { passive: true });
+    window.addEventListener("resize", handleViewportChange);
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isIntersecting = entry.isIntersecting;
+      handleViewportChange();
+    });
 
     observer.observe(servicesSection);
+    handleViewportChange();
 
     return () => {
       clearShowTimer();
+      window.removeEventListener("scroll", handleViewportChange);
+      window.removeEventListener("resize", handleViewportChange);
       observer.disconnect();
     };
   }, [hasShown, isVisible]);

@@ -20,14 +20,14 @@ import denturesHero from "@/assets/services/dentures-hero.webp";
 import denturesBefore from "@/assets/services/dentures-before.webp";
 import denturesAfter from "@/assets/services/dentures-after.webp";
 import bracesHero from "@/assets/services/braces-hero.webp";
-import bracesBefore from "@/assets/services/braces-before.webp";
-import bracesAfter from "@/assets/services/braces-after.webp";
+import bracesNewBefore from "@/assets/before-after/braces-before.jpg";
+import bracesNewAfter from "@/assets/before-after/braces-after.jpg";
 import treatmentHero from "@/assets/services/treatment-hero.webp";
-import treatmentNewBefore from "@/assets/before-after/treatment-before.png";
-import treatmentNewAfter from "@/assets/before-after/treatment-after.png";
+import treatmentNewBefore from "@/assets/before-after/treatment-before.jpg";
+import treatmentNewAfter from "@/assets/before-after/treatment-after.jpg";
 import cleaningHero from "@/assets/services/cleaning-hero.webp";
-import cleaningNewBefore from "@/assets/before-after/cleaning-before.png";
-import cleaningNewAfter from "@/assets/before-after/cleaning-after.png";
+import cleaningNewBefore from "@/assets/before-after/cleaning-before.jpg";
+import cleaningNewAfter from "@/assets/before-after/cleaning-after.jpg";
 import type { BilingualText, ServiceData } from "@/types";
 
 type ServiceDetailFields = Pick<
@@ -464,14 +464,7 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("от 18 000 ₸", "18 000 ₸ бастап"),
     priceCaption: text("Зависит от сложности удаления", "Баға жұлу күрделілігіне байланысты"),
-    beforeAfterCases: [
-      {
-        title: text("Бережное удаление и заживление", "Ұқыпты жұлу және жазылу"),
-        beforeImage: extractionBefore,
-        afterImage: extractionAfter,
-        useSlider: true,
-      },
-    ],
+    beforeAfterCases: [],
   },
   "wisdom-tooth-removal": {
     heroAccent: text("бережно", "ұқыпты"),
@@ -598,7 +591,14 @@ const serviceDetails: Record<string, ServiceDetailFields> = {
     ],
     startingPrice: text("от 70 000 ₸", "70 000 ₸ бастап"),
     priceCaption: text("Доступна рассрочка, цена зависит от системы", "Бөліп төлеу бар, баға жүйеге байланысты"),
-    beforeAfterCases: [{ title: text("Выравнивание зубного ряда", "Тіс қатарын тегістеу"), beforeImage: bracesBefore, afterImage: bracesAfter }],
+    beforeAfterCases: [
+      {
+        title: text("Выравнивание зубного ряда", "Тіс қатарын тегістеу"),
+        beforeImage: bracesNewBefore,
+        afterImage: bracesNewAfter,
+        useSlider: true,
+      },
+    ],
   },
   treatment: {
     heroAccent: text("без боли", "ауырсынусыз"),

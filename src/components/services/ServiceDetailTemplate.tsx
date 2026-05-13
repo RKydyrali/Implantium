@@ -440,11 +440,16 @@ function ContactPill({
   caption: string;
   disabled: boolean;
 }) {
+  const titleLines = title.split(",").map((line) => line.trim()).filter(Boolean);
   const contentNode = (
     <>
       <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">{icon}</span>
       <span className="min-w-0">
-        <span className="block truncate text-sm font-bold text-foreground">{title}</span>
+        {titleLines.map((line) => (
+          <span key={line} className="block truncate text-[13px] font-bold leading-tight text-foreground">
+            {line}
+          </span>
+        ))}
         <span className="block truncate text-xs font-medium text-muted-foreground">{caption}</span>
       </span>
     </>
