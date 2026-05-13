@@ -153,4 +153,54 @@
   .footer-contact-line {
     @apply flex items-start gap-3 text-sm leading-relaxed text-[#606A70];
   }
+
+  .reviews-marquee {
+    max-width: 100%;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+
+  .reviews-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: reviews-marquee 58s linear infinite;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+
+  .reviews-marquee:hover .reviews-marquee-track,
+  .reviews-marquee:focus-within .reviews-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes reviews-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reviews-marquee {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .reviews-marquee-track {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    animation: none !important;
+    will-change: auto;
+  }
+
+  .reviews-marquee-duplicate {
+    display: none !important;
+  }
 }

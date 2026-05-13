@@ -6,6 +6,14 @@ import { clinicContact } from "@/data/clinicContact";
 
 export function BookingModal({ children }: { children: ReactNode }) {
   const { language } = useLanguage();
+  const copy = {
+    ru: {
+      whatsapp: "Написать в WhatsApp",
+    },
+    kk: {
+      whatsapp: "WhatsApp-қа жазу",
+    },
+  }[language];
 
   return (
     <Dialog>
@@ -32,7 +40,7 @@ export function BookingModal({ children }: { children: ReactNode }) {
             className="flex items-center justify-center gap-3 rounded-2xl bg-[#25D366] p-4 font-semibold text-white shadow-sm transition-colors hover:bg-[#20bd5a]"
           >
             <WhatsappLogo weight="fill" className="size-6" />
-            Написать в WhatsApp
+            {copy.whatsapp}
           </a>
 
           <a

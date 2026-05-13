@@ -62,13 +62,6 @@ export function ServicesPreview() {
               {t.services.title}
             </h2>
           </div>
-          <a
-            href="/#booking"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#606A70] transition-colors hover:text-primary"
-          >
-            {t.services.allServices}
-            <ArrowRight className="size-4" />
-          </a>
         </div>
 
         <Tabs value={activeId} onValueChange={setActiveId} className="w-full">

@@ -6,6 +6,7 @@ import { StickyCTA } from "@/components/layout/StickyCTA";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 
 import Home from "@/pages/Home";
+import Doctors from "@/pages/Doctors";
 import ServiceDetail from "@/pages/ServiceDetail";
 import NotFound from "@/pages/NotFound";
 
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="doctors" element={<Doctors />} />
             <Route path="services/:id" element={<ServiceDetail />} />
             <Route path="*" element={<NotFound />} />
           </Route>

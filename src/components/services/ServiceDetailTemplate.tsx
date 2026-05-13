@@ -243,7 +243,7 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
           <div className="mx-auto max-w-[1360px]">
             <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.doctorsTitle}</h2>
-              <a href="/#doctors" className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+              <a href="/doctors" className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
                 {copy.allDoctors}
                 <ArrowRight weight="bold" className="size-4" />
               </a>

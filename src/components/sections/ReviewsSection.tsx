@@ -1,67 +1,175 @@
-import { Quotes, Star } from "@phosphor-icons/react";
+import { ArrowRight, Quotes, Star } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import { patientReviews, type PatientReview } from "@/data/reviews";
+import { cn } from "@/lib/utils";
 
-const reviewerNames = {
-  ru: ["Айгерим Т.", "Ерлан К.", "Наталья С."],
-  kk: ["Айгерім Т.", "Ерлан К.", "Наталья С."],
+type ReviewsSectionProps = {
+  id?: string;
+  title?: string;
+  variant?: "home" | "doctors";
 };
 
-export function ReviewsSection() {
+const repeatedReviews = [...patientReviews, ...patientReviews];
+
+export function ReviewsSection({ id, title, variant = "home" }: ReviewsSectionProps) {
   const { language } = useLanguage();
-  const t = landingCopy[language];
+  const copy = landingCopy[language].reviews;
+  const isDoctorsVariant = variant === "doctors";
+  const sectionId = id ?? (isDoctorsVariant ? undefined : "reviews");
 
   return (
-    <section id="reviews" className="bg-white px-4 py-14 md:px-8 md:py-20">
+    <section
+      id={sectionId}
+      className={cn(
+        "overflow-hidden px-4 md:px-8",
+        isDoctorsVariant ? "bg-[#F4F8FB] py-12 md:py-16" : "bg-white py-14 md:py-20"
+      )}
+    >
       <div className="mx-auto max-w-[1320px]">
-        <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
+        <div className="grid gap-7 lg:grid-cols-[0.34fr_0.66fr] lg:items-start">
+          <div className="lg:pr-4">
             <span className="mb-3 block text-sm font-semibold uppercase tracking-[0.16em] text-primary">
-              {t.reviews.source}
+              {copy.source}
             </span>
-            <h2 className="font-display text-3xl font-normal text-[#1F2528] md:text-4xl">
-              {language === "ru" ? "Отзывы пациентов" : "Пациент пікірлері"}
+            <h2 className={cn("font-display font-normal text-[#1F2528]", isDoctorsVariant ? "text-3xl md:text-4xl" : "text-3xl md:text-5xl")}>
+              {title ?? (language === "ru" ? "Отзывы пациентов" : "Пациент пікірлері")}
             </h2>
-          </div>
-          <p className="max-w-xl text-sm leading-7 text-[#606A70]">{t.reviews.title}</p>
-        </div>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-[#606A70] md:text-base md:leading-8">
+              {copy.title}
+            </p>
 
-        <div className="grid gap-5 md:grid-cols-[0.62fr_1fr_1fr_1fr]">
-          <div className="clinical-card rounded-[1.5rem] p-6">
-            <p className="font-display text-6xl font-normal leading-none text-[#1F2528]">{t.reviews.rating}</p>
-            <div className="mt-4 flex gap-1 text-primary">
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <Star key={idx} weight="fill" className="size-4" />
-              ))}
+            <div className="clinical-card mt-6 rounded-[1.6rem] p-5 md:p-6">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-display text-6xl font-normal leading-none text-[#1F2528]">{copy.rating}</p>
+                  <p className="mt-3 text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                    {copy.selectedLabel}
+                  </p>
+                </div>
+                <div className="flex gap-1 text-primary" aria-label={copy.starsLabel}>
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <Star key={idx} weight="fill" className="size-4" />
+                  ))}
+                </div>
+              </div>
+              <p className="mt-5 text-sm leading-relaxed text-[#606A70]">{copy.basedOn}</p>
+              {hasContactValue(clinicContact.twoGisUrl) && (
+                <a
+                  href={clinicContact.twoGisUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-[#1F2528] transition-colors hover:text-primary"
+                >
+                  {copy.viewAll}
+                  <ArrowRight weight="bold" className="size-4" />
+                </a>
+              )}
             </div>
-            <p className="mt-5 text-sm leading-relaxed text-[#606A70]">{t.reviews.basedOn}</p>
-            <p className="mt-5 text-lg font-bold text-[#1F2528]">{t.reviews.source}</p>
           </div>
 
-          {t.reviews.cards.map((review, idx) => (
-            <article
-              key={review}
-              className="clinical-card-soft clinical-lift rounded-[1.5rem] p-6"
-            >
-              <Quotes weight="fill" className="mb-5 size-8 text-primary/80" />
-              <p className="min-h-[8rem] text-sm font-medium leading-7 text-[#1F2528]/80">{review}</p>
-              <p className="mt-5 text-sm font-bold text-[#1F2528]">{reviewerNames[language][idx]}</p>
-            </article>
-          ))}
+          <div className="min-w-0">
+            <ReviewsMarquee sourceLabel={copy.openSource} />
+          </div>
         </div>
 
-        {hasContactValue(clinicContact.twoGisUrl) && (
-          <div className="mt-6">
+        {!isDoctorsVariant && hasContactValue(clinicContact.twoGisUrl) && (
+          <div className="mt-7 flex justify-center lg:justify-end">
             <a
               href={clinicContact.twoGisUrl}
-              className="inline-flex h-12 items-center justify-center rounded-2xl border border-[#DDE3E7] bg-white px-6 text-sm font-bold text-[#1F2528] shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:text-primary"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#DDE3E7] bg-white px-6 py-3 text-sm font-bold text-[#1F2528] shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:text-primary active:translate-y-[1px]"
             >
-              {t.reviews.title}
+              {copy.viewAll}
+              <ArrowRight weight="bold" className="size-4" />
             </a>
           </div>
         )}
       </div>
     </section>
+  );
+}
+
+function ReviewsMarquee({ sourceLabel }: { sourceLabel: string }) {
+  const { language } = useLanguage();
+
+  return (
+    <div className="reviews-marquee" aria-label={language === "ru" ? "Реальные отзывы пациентов" : "Пациенттердің нақты пікірлері"}>
+      <div className="reviews-marquee-track gap-4 md:gap-5">
+        {repeatedReviews.map((review, index) => {
+          const isDuplicate = index >= patientReviews.length;
+
+          return (
+            <ReviewCard
+              key={`${review.id}-${index}`}
+              review={review}
+              sourceLabel={sourceLabel}
+              isDuplicate={isDuplicate}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ReviewCard({
+  review,
+  sourceLabel,
+  isDuplicate,
+}: {
+  review: PatientReview;
+  sourceLabel: string;
+  isDuplicate: boolean;
+}) {
+  const { language } = useLanguage();
+  const initials = review.author
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2);
+
+  return (
+    <article
+      aria-hidden={isDuplicate}
+      className={cn(
+        "clinical-card-soft clinical-lift flex min-h-[20rem] w-[min(82vw,23rem)] shrink-0 flex-col rounded-[1.6rem] p-5 md:w-[25rem] md:p-6",
+        isDuplicate && "reviews-marquee-duplicate"
+      )}
+    >
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#DDE3E7] bg-white text-sm font-bold text-primary shadow-sm">
+            {initials}
+          </span>
+          <span>
+            <span className="block text-sm font-bold leading-tight text-[#1F2528]">{review.author}</span>
+            <span className="mt-1 flex gap-0.5 text-primary">
+              {Array.from({ length: review.rating }).map((_, idx) => (
+                <Star key={idx} weight="fill" className="size-3.5" />
+              ))}
+            </span>
+          </span>
+        </div>
+        <Quotes weight="fill" className="size-7 shrink-0 text-primary/75" />
+      </div>
+
+      <p className="flex-1 text-sm font-medium leading-7 text-[#1F2528]/80">
+        {review.text[language]}
+      </p>
+
+      <a
+        href={review.sourceUrl}
+        target="_blank"
+        rel="noreferrer"
+        tabIndex={isDuplicate ? -1 : undefined}
+        className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#DDE3E7] bg-white px-4 py-2 text-xs font-bold text-[#1F2528] shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 active:translate-y-[1px]"
+      >
+        {sourceLabel}
+        <ArrowRight weight="bold" className="size-3.5" />
+      </a>
+    </article>
   );
 }

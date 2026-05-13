@@ -35,7 +35,7 @@ export function Footer() {
             <h3 className="font-display mb-4 text-xl font-normal text-[#1F2528]">{language === "ru" ? "Клиника" : "Клиника"}</h3>
             <nav className="grid gap-2.5">
               <a href="/#about" className="footer-link">{t.nav.about}</a>
-              <a href="/#doctors" className="footer-link">{t.nav.doctors}</a>
+              <a href="/doctors" className="footer-link">{t.nav.doctors}</a>
               <a href="/#services" className="footer-link">{t.nav.services}</a>
               <a href="/#reviews" className="footer-link">{t.nav.reviews}</a>
               <a href="/#location" className="footer-link">{t.nav.contact}</a>

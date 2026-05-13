@@ -13,6 +13,7 @@ export const clinicContact: ClinicContact = {
   phoneHref: "tel:+77027133939",
   whatsappUrl: "https://wa.me/77027133939",
   instagramUrl: "https://www.instagram.com/implantium.aktau",
+  twoGisUrl: "https://2gis.kz/aktau/firm/70000001038002984/tab/reviews",
 };
 
 export function hasContactValue(value?: string) {

@@ -28,11 +28,10 @@ export function Header() {
 
   const navLinks = [
     { name: t.nav.services, href: "/#services" },
-    { name: t.nav.doctors, href: "/#doctors" },
+    { name: t.nav.doctors, href: "/doctors" },
     { name: t.nav.about, href: "/#about" },
     { name: t.nav.reviews, href: "/#reviews" },
     { name: t.nav.location, href: "/#location" },
-    { name: t.nav.contact, href: "/#booking" },
   ];
 
   return (
@@ -150,7 +149,7 @@ export function Header() {
             type="button"
             onClick={() => setMobileMenuOpen(true)}
             className="flex size-11 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528] shadow-sm"
-            aria-label={t.nav.contact}
+            aria-label={t.common.openMenu}
           >
             <List className="size-6" />
           </button>
