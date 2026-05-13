@@ -60,7 +60,7 @@ const detailCopy = {
     whatsappPending: "WhatsApp скоро появится",
     readyTitle: "Готовы восстановить уверенность в своей улыбке?",
     readyText: "Запишитесь на бесплатную консультацию и получите персональный план лечения.",
-    consultationNote: "Бесплатная консультация и 3D-диагностика",
+    consultationNote: "Только консультация бесплатная, 3D рентген платный",
     naturalResultTitle: "Естественный результат",
     naturalResultText: "Прогнозируемый и безопасный результат на долгие годы.",
     fallbackFaq: [
@@ -96,7 +96,7 @@ const detailCopy = {
     whatsappPending: "WhatsApp кейін қосылады",
     readyTitle: "Күлкіңізге сенімділікті қайтаруға дайынсыз ба?",
     readyText: "Тегін консультацияға жазылып, жеке ем жоспарын алыңыз.",
-    consultationNote: "Тегін консультация және 3D диагностика",
+    consultationNote: "Тек кеңес алу тегін, 3D рентген ақылы",
     naturalResultTitle: "Табиғи нәтиже",
     naturalResultText: "Ұзақ жылдарға болжамды әрі қауіпсіз нәтиже.",
     fallbackFaq: [
@@ -206,8 +206,8 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
             <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.suitableTitle}</h2>
             <div className="mt-6 grid gap-4">
               {service.suitableFor[language].map((item) => (
-                <div key={item} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
-                  <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-primary/15 bg-[#fff8f3] text-primary">
+                <div key={item} className="flex items-center gap-3 text-sm leading-relaxed text-muted-foreground">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-primary/15 bg-[#fff8f3] text-primary">
                     <Check weight="bold" className="size-3.5" />
                   </span>
                   <span>{item}</span>
@@ -359,7 +359,7 @@ function MiniFeature({ item, language }: { item: ServiceData["heroHighlights"][n
   const Icon = IconMap[item.iconName] ?? Tooth;
 
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-center gap-3">
       <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-primary/10 bg-white text-primary shadow-sm">
         <Icon weight="duotone" className="size-5" />
       </span>

@@ -31,8 +31,6 @@ export function Hero() {
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 flex max-w-2xl flex-col items-start gap-5 sm:gap-6"
           >
-
-
             <h1 className="font-display max-w-[12ch] text-[2.4rem] font-normal leading-[1.05] text-[#1F2528] sm:text-[3.5rem] md:text-6xl lg:text-[5.2rem]">
               {t.hero.lineOne}
               <br />

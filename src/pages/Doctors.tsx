@@ -358,8 +358,8 @@ function FeaturedDoctor({
             <h3 className="text-sm font-bold text-[#15233A]">{copy.competenceTitle}</h3>
             <div className="mt-4 flex flex-col gap-3">
               {serviceTitles.map((title) => (
-                <div key={title} className="flex items-start gap-3 text-sm font-semibold leading-6 text-[#52657B]">
-                  <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
+                <div key={title} className="flex items-center gap-3 text-sm font-semibold leading-6 text-[#52657B]">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
                     <CheckCircle weight="fill" className="size-4" />
                   </span>
                   <span>{title}</span>

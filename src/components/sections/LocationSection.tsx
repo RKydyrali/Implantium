@@ -53,7 +53,7 @@ export function LocationSection() {
 
 function InfoLine({ icon, label, muted }: { icon: ReactNode; label: string; muted?: boolean }) {
   return (
-    <div className="flex items-start gap-3 text-sm">
+    <div className="flex items-center gap-3 text-sm">
       <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl border border-[#DDE3E7] bg-[#FAFBFC] text-primary">
         {icon}
       </span>

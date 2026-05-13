@@ -151,7 +151,7 @@
   }
 
   .footer-contact-line {
-    @apply flex items-start gap-3 text-sm leading-relaxed text-[#606A70];
+    @apply flex items-center gap-3 text-sm leading-relaxed text-[#606A70];
   }
 
   .reviews-marquee {

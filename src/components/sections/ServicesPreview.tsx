@@ -111,8 +111,8 @@ export function ServicesPreview() {
 
               <div className="grid gap-3">
                 {activeService.bullets[language].map((bullet) => (
-                  <div key={bullet} className="flex items-start gap-3">
-                    <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#DDE3E7] bg-[#FAFBFC] text-primary">
+                  <div key={bullet} className="flex items-center gap-3">
+                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-[#DDE3E7] bg-[#FAFBFC] text-primary">
                       <CheckCircle weight="fill" className="size-4" />
                     </span>
                     <span className="text-sm font-semibold leading-relaxed text-[#1F2528]/80">{bullet}</span>

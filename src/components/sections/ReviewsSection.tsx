@@ -41,20 +41,23 @@ export function ReviewsSection({ id, title, variant = "home" }: ReviewsSectionPr
             </p>
 
             <div className="clinical-card mt-6 rounded-[1.6rem] p-5 md:p-6">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-wrap items-center gap-5">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-5xl font-medium text-[#1F2528] tracking-tight">{copy.rating.replace('+', '')}</span>
+                  <span className="text-xl font-medium text-[#606A70]">/ 5</span>
+                </div>
+                <div className="hidden h-10 w-px bg-border/80 sm:block"></div>
                 <div>
-                  <p className="font-display text-6xl font-normal leading-none text-[#1F2528]">{copy.rating}</p>
-                  <p className="mt-3 text-xs font-bold uppercase tracking-[0.14em] text-primary">
+                  <div className="flex gap-1 text-primary" aria-label={copy.starsLabel}>
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <Star key={idx} weight="fill" className="size-5" />
+                    ))}
+                  </div>
+                  <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-primary">
                     {copy.selectedLabel}
                   </p>
                 </div>
-                <div className="flex gap-1 text-primary" aria-label={copy.starsLabel}>
-                  {Array.from({ length: 5 }).map((_, idx) => (
-                    <Star key={idx} weight="fill" className="size-4" />
-                  ))}
-                </div>
               </div>
-              <p className="mt-5 text-sm leading-relaxed text-[#606A70]">{copy.basedOn}</p>
               {hasContactValue(clinicContact.twoGisUrl) && (
                 <a
                   href={clinicContact.twoGisUrl}
