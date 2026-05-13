@@ -337,9 +337,7 @@ function FeaturedDoctor({
 
         <div className="grid gap-8 p-5 md:p-8 lg:grid-cols-[1fr_0.72fr] lg:p-10">
           <div className="flex min-w-0 flex-col justify-center">
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-primary">
-              {copy.featuredTitle}
-            </p>
+
             <h2 className="text-2xl font-bold leading-tight tracking-tight text-[#15233A] md:text-4xl">
               {doctor.name[language]}
             </h2>
@@ -356,7 +354,7 @@ function FeaturedDoctor({
             </div>
           </div>
 
-          <div className="rounded-[1.3rem] border border-[#D8E2EA] bg-[#F7FAFC] p-5">
+          <div className="flex flex-col">
             <h3 className="text-sm font-bold text-[#15233A]">{copy.competenceTitle}</h3>
             <div className="mt-4 flex flex-col gap-3">
               {serviceTitles.map((title) => (
@@ -426,7 +424,7 @@ function DoctorCard({
 
 function MetricTile({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-[1rem] border border-[#D8E2EA] bg-[#F7FAFC] p-4">
+    <div className="flex flex-col gap-1">
       <p className="text-xl font-bold tracking-tight text-[#15233A]">{value}</p>
       <p className="mt-1 text-xs font-semibold leading-snug text-[#6B7C90]">{label}</p>
     </div>
