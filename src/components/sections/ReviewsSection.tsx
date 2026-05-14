@@ -101,7 +101,7 @@ function ReviewsMarquee({ sourceLabel }: { sourceLabel: string }) {
   const { language } = useLanguage();
 
   return (
-    <div className="reviews-marquee" aria-label={language === "ru" ? "Реальные отзывы пациентов" : "Пациенттердің нақты пікірлері"}>
+    <div className="reviews-marquee pt-6 pb-8 -mt-6" aria-label={language === "ru" ? "Реальные отзывы пациентов" : "Пациенттердің нақты пікірлері"}>
       <div className="reviews-marquee-track gap-4 md:gap-5">
         {repeatedReviews.map((review, index) => {
           const isDuplicate = index >= patientReviews.length;

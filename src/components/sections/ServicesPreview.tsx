@@ -71,7 +71,7 @@ export function ServicesPreview() {
         </div>
 
         <Tabs value={activeId} onValueChange={setActiveId} className="w-full">
-          <div className="-mx-4 overflow-x-auto px-4 pb-5 md:mx-0 md:px-0">
+          <div className="-mx-4 overflow-x-auto px-4 pt-2 pb-5 md:mx-0 md:px-0 -mt-2">
             <TabsList className="flex h-auto min-w-max justify-start gap-3 rounded-none bg-transparent p-0 md:grid md:min-w-0 md:grid-cols-3 lg:grid-cols-6">
               {landingServices.map((service) => {
                 const Icon = IconMap[service.iconName] ?? Tooth;

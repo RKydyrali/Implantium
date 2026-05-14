@@ -136,40 +136,35 @@ export function ServicesConsultationPrompt() {
       {isVisible && (
         <motion.aside
           aria-live="polite"
-          initial={{ opacity: 0, y: 18, scale: 0.98 }}
+          initial={{ opacity: 0, y: 12, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 14, scale: 0.98 }}
-          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-[5.75rem] right-4 z-30 w-[calc(100%-2rem)] max-w-[22rem] rounded-[1.35rem] border border-primary/15 bg-white/95 p-4 shadow-[0_22px_58px_rgba(31,37,40,0.14)] backdrop-blur-xl md:bottom-6 md:right-6"
+          exit={{ opacity: 0, y: 8, scale: 0.97 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="fixed bottom-24 right-4 z-30 w-[calc(100%-2rem)] max-w-[18rem] rounded-2xl border border-primary/20 bg-white p-4 shadow-[0_12px_40px_rgba(166,58,45,0.12)] md:bottom-8 md:right-8"
         >
-          <div className="flex items-start gap-3">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-[#F4E7E4]/70 text-primary shadow-sm">
-              <ChatCircleText weight="duotone" className="size-6" />
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="text-base font-bold leading-snug text-[#1F2528]">{copy.promptTitle}</h3>
-                <button
-                  type="button"
-                  onClick={handleDismiss}
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full text-[#606A70] transition-colors hover:bg-[#EEF2F4] hover:text-[#1F2528] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                  aria-label={language === "ru" ? "Закрыть уведомление" : "Хабарламаны жабу"}
-                >
-                  <X weight="bold" className="size-4" />
-                </button>
-              </div>
-              <p className="mt-1.5 text-sm leading-relaxed text-[#606A70]">{copy.promptText}</p>
-              <BookingModal open={isBookingOpen} onOpenChange={handleBookingOpenChange}>
-                <Button
-                  type="button"
-                  onClick={() => setHideAfterBooking(true)}
-                  className="accent-button-shadow mt-4 h-11 rounded-full bg-primary px-5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
-                >
-                  {copy.book}
-                  <ArrowRight weight="bold" className="ml-1 size-4" />
-                </Button>
-              </BookingModal>
-            </div>
+          <button
+            type="button"
+            onClick={handleDismiss}
+            className="absolute right-2 top-2 flex size-7 items-center justify-center rounded-full text-[#8A949B] transition-colors hover:bg-[#F4F8FB] hover:text-[#1F2528]"
+            aria-label={language === "ru" ? "Закрыть" : "Жабу"}
+          >
+            <X weight="bold" className="size-3.5" />
+          </button>
+          
+          <div className="pr-4">
+            <h3 className="text-sm font-bold leading-tight text-[#1F2528]">{copy.promptTitle}</h3>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-[#606A70]">{copy.promptText}</p>
+            
+            <BookingModal open={isBookingOpen} onOpenChange={handleBookingOpenChange}>
+              <button
+                type="button"
+                onClick={() => setHideAfterBooking(true)}
+                className="mt-3.5 flex items-center gap-1.5 text-xs font-bold text-primary transition-colors hover:text-[#8F2F25]"
+              >
+                {copy.book}
+                <ArrowRight weight="bold" className="size-3" />
+              </button>
+            </BookingModal>
           </div>
         </motion.aside>
       )}
