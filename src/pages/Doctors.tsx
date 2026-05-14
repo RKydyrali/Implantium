@@ -18,8 +18,12 @@ import { ReviewsSection } from "@/components/sections/ReviewsSection";
 import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 import { useLanguage } from "@/hooks/useLanguage";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
-import { doctors } from "@/data/doctors";
+import { usePublicDoctors } from "@/hooks/useDoctors";
 import { services } from "@/data/services";
+import {
+  DoctorsGridCardSkeleton,
+  FeaturedDoctorSkeleton,
+} from "@/components/common/DoctorSkeletons";
 import type { Doctor, Language } from "@/types";
 
 const doctorPageCopy = {
@@ -166,6 +170,7 @@ const serviceMap = new Map(services.map((service) => [service.id, service]));
 
 export default function Doctors() {
   const { language } = useLanguage();
+  const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
   const copy = doctorPageCopy[language];
   const featuredDoctor = doctors[0];
 
@@ -220,7 +225,11 @@ export default function Doctors() {
       <section className="relative isolate overflow-hidden px-4 py-10 md:px-8 md:py-14">
         <DentalParallaxBackground surface="doctors-featured" />
         <div className="relative z-10 mx-auto max-w-[1360px]">
-          <FeaturedDoctor doctor={featuredDoctor} language={language} copy={copy} />
+          {doctorsLoading ? (
+            <FeaturedDoctorSkeleton />
+          ) : featuredDoctor ? (
+            <FeaturedDoctor doctor={featuredDoctor} language={language} copy={copy} />
+          ) : null}
         </div>
       </section>
 
@@ -239,6 +248,10 @@ export default function Doctors() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {doctorsLoading &&
+              Array.from({ length: 8 }).map((_, index) => (
+                <DoctorsGridCardSkeleton key={index} />
+              ))}
             {doctors.map((doctor) => (
               <DoctorCard key={doctor.id} doctor={doctor} language={language} copy={copy} />
             ))}
@@ -329,9 +342,9 @@ function FeaturedDoctor({
   const serviceTitles = getServiceTitles(doctor, language);
 
   return (
-    <article className="overflow-hidden rounded-[1.7rem] border border-[#D8E2EA] bg-white shadow-[0_24px_80px_rgba(39,64,95,0.08)]">
-      <div className="grid gap-0 lg:grid-cols-[0.36fr_0.64fr]">
-        <div className="relative min-h-[20rem] overflow-hidden bg-[#EFF5F9] lg:min-h-full">
+    <article className="overflow-hidden rounded-[1.5rem] border border-[#D8E2EA] bg-white shadow-[0_20px_60px_rgba(39,64,95,0.07)]">
+      <div className="grid gap-0 lg:grid-cols-[0.34fr_0.66fr]">
+        <div className="relative min-h-[16rem] overflow-hidden bg-[#EFF5F9] sm:min-h-[18rem] lg:min-h-[23rem]">
           <DoctorPhoto
             doctor={doctor}
             language={language}
@@ -344,39 +357,39 @@ function FeaturedDoctor({
           </span>
         </div>
 
-        <div className="grid gap-8 p-5 md:p-8 lg:grid-cols-[1fr_0.72fr] lg:p-10">
-          <div className="flex min-w-0 flex-col justify-center">
-
-            <h2 className="text-2xl font-bold leading-tight tracking-tight text-[#15233A] md:text-4xl">
+        <div className="flex min-w-0 flex-col justify-center gap-5 p-5 md:p-7 lg:p-8">
+          <div>
+            <h2 className="max-w-2xl text-2xl font-bold leading-tight tracking-tight text-[#15233A] md:text-3xl">
               {doctor.name[language]}
             </h2>
-            <p className="mt-3 text-sm font-bold uppercase tracking-[0.08em] text-primary">
+            <p className="mt-2 text-xs font-bold uppercase tracking-[0.08em] text-primary md:text-sm">
               {doctor.specialty[language]}
             </p>
-            <p className="mt-5 max-w-3xl text-sm leading-7 text-[#52657B] md:text-base">
+            <p className="mt-4 max-w-3xl text-sm leading-6 text-[#52657B] md:text-[15px] md:leading-7">
               {doctor.description[language]}
             </p>
 
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
+            <div className="mt-5 grid max-w-xl gap-3 sm:grid-cols-2">
               <MetricTile value={experience} label={copy.experienceLabel} />
               <MetricTile value={`${serviceTitles.length}`} label={copy.directionsLabel} />
             </div>
           </div>
 
-          <div className="flex flex-col">
+          <div className="border-t border-[#E4EBF1] pt-4">
             <h3 className="text-sm font-bold text-[#15233A]">{copy.competenceTitle}</h3>
-            <div className="mt-4 flex flex-col gap-3">
+            <div className="mt-3 flex flex-wrap gap-2">
               {serviceTitles.map((title) => (
-                <div key={title} className="flex items-center gap-3 text-sm font-semibold leading-6 text-[#52657B]">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
-                    <CheckCircle weight="fill" className="size-4" />
+                <div
+                  key={title}
+                  className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-3 py-2 text-xs font-semibold leading-none text-[#52657B]"
+                >
+                  <span className="flex size-4 shrink-0 items-center justify-center rounded-full text-primary">
+                    <CheckCircle weight="fill" className="size-3.5" />
                   </span>
-                  <span>{title}</span>
+                  <span className="truncate">{title}</span>
                 </div>
               ))}
             </div>
-
-
           </div>
         </div>
       </div>
@@ -469,6 +482,10 @@ function getServiceTitles(doctor: Doctor, language: Language) {
 }
 
 function getExperienceYears(doctor: Doctor) {
+  if (typeof doctor.experienceYears === "number") {
+    return doctor.experienceYears;
+  }
+
   const allDescriptions = `${doctor.description.ru} ${doctor.description.kk}`;
   const match = allDescriptions.match(/(\d+)\s*(?:лет|года|год|жыл)/i);
   return match ? Number(match[1]) : 0;

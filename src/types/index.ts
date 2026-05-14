@@ -1,3 +1,5 @@
+import type { Id } from "../../convex/_generated/dataModel";
+
 export type Language = "ru" | "kk";
 
 export type BilingualText = {
@@ -59,11 +61,16 @@ export type ServiceData = {
 
 export type Doctor = {
   id: string;
+  _id?: Id<"doctors">;
   name: BilingualText;
   specialty: BilingualText;
   description: BilingualText;
   photo: string;
+  photoStorageId?: Id<"_storage">;
+  experienceYears?: number;
   serviceIds: string[];
+  visible?: boolean;
+  sortOrder?: number;
 };
 
 export type LandingPriceRow = {

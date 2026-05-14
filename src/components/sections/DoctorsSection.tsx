@@ -1,13 +1,16 @@
 import { ArrowRight } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
-import { doctors } from "@/data/doctors";
+import { usePublicDoctors } from "@/hooks/useDoctors";
 import { Button } from "@/components/ui/button";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
+import { HomeDoctorCardSkeleton } from "@/components/common/DoctorSkeletons";
+import { BookingModal } from "@/components/sections/BookingModal";
 import type { Language } from "@/types";
 
 export function DoctorsSection() {
   const { language } = useLanguage();
+  const { doctors, isLoading } = usePublicDoctors();
   const t = content[language];
   const previewDoctors = doctors.slice(0, 4);
 
@@ -24,7 +27,7 @@ export function DoctorsSection() {
             </h2>
           </div>
           <a
-            href="/#booking"
+            href="/doctors"
             className="inline-flex items-center gap-2 text-sm font-bold text-[#606A70] transition-colors hover:text-primary"
           >
             {t.common.allDoctors}
@@ -33,6 +36,10 @@ export function DoctorsSection() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {isLoading &&
+            Array.from({ length: 4 }).map((_, index) => (
+              <HomeDoctorCardSkeleton key={index} />
+            ))}
           {previewDoctors.map((doctor) => (
             <article
               key={doctor.id}
@@ -44,7 +51,7 @@ export function DoctorsSection() {
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <span className="mb-3 w-fit rounded-full border border-[#DDE3E7] bg-[#FAFBFC] px-3 py-1 text-xs font-bold text-primary">
-                  {getDoctorExperience(doctor.description[language], language)}
+                  {getDoctorExperience(doctor, language)}
                 </span>
                 <h3 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
                   {doctor.name[language]}
@@ -55,16 +62,16 @@ export function DoctorsSection() {
                 <p className="mb-5 line-clamp-4 flex-1 text-sm leading-7 text-[#606A70]">
                   {doctor.description[language]}
                 </p>
-                <Button
-                  asChild
-                  variant="outline"
-                  className="h-11 rounded-2xl border-[#DDE3E7] bg-white text-sm font-bold text-[#1F2528] hover:border-primary/35 hover:bg-[#F4E7E4]/45 hover:text-primary"
-                >
-                  <a href="/#booking" className="group/cta">
+                <BookingModal>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="group/cta h-11 rounded-2xl border-[#DDE3E7] bg-white text-sm font-bold text-[#1F2528] hover:border-primary/35 hover:bg-[#F4E7E4]/45 hover:text-primary"
+                  >
                     {t.doctors.chooseDoctor}
                     <ArrowRight className="size-4 transition-transform group-hover/cta:translate-x-1" />
-                  </a>
-                </Button>
+                  </Button>
+                </BookingModal>
               </div>
             </article>
           ))}
@@ -74,7 +81,12 @@ export function DoctorsSection() {
   );
 }
 
-function getDoctorExperience(description: string, language: Language) {
+function getDoctorExperience(doctor: { description: Record<Language, string>; experienceYears?: number }, language: Language) {
+  if (typeof doctor.experienceYears === "number" && doctor.experienceYears > 0) {
+    return language === "ru" ? `${doctor.experienceYears} лет` : `${doctor.experienceYears} жыл`;
+  }
+
+  const description = doctor.description[language];
   const match = description.match(/(?:Стаж работы|Опыт работы|Жұмыс тәжірибесі):?\s*([^..]+[.)]?)/i);
   return match?.[1]?.replace(/\.$/, "") ?? (language === "ru" ? "Специалист" : "Маман");
 }

@@ -9,6 +9,7 @@ import Home from "@/pages/Home";
 import Doctors from "@/pages/Doctors";
 import ServiceDetail from "@/pages/ServiceDetail";
 import NotFound from "@/pages/NotFound";
+import Admin from "@/pages/Admin";
 
 function Layout() {
   return (
@@ -27,6 +28,7 @@ function App() {
     <LanguageProvider>
       <Router>
         <Routes>
+          <Route path="/admin" element={<Admin />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="doctors" element={<Doctors />} />

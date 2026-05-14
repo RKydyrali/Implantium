@@ -3,6 +3,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
 import { landingCopy } from "@/data/landing";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import { BookingModal } from "@/components/sections/BookingModal";
 
 export function StickyCTA() {
   const { language } = useLanguage();
@@ -13,12 +14,14 @@ export function StickyCTA() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-2 border-t border-border/80 bg-white/92 p-3 shadow-[0_-16px_45px_rgba(68,45,34,0.10)] backdrop-blur-xl md:hidden">
-      <a
-        href="/#booking"
-        className="flex h-12 flex-1 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(164,58,40,0.22)] transition-colors hover:bg-primary/90"
-      >
-        {t.common.bookConsultation}
-      </a>
+      <BookingModal>
+        <button
+          type="button"
+          className="flex h-12 flex-1 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(164,58,40,0.22)] transition-colors hover:bg-primary/90"
+        >
+          {t.common.bookConsultation}
+        </button>
+      </BookingModal>
       {hasWhatsapp ? (
         <a
           href={clinicContact.whatsappUrl}

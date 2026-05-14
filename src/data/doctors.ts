@@ -16,6 +16,7 @@ export const doctors: Doctor[] = [
       kk: "15 жылдық тәжірибесі бар. Имплантация, синус-лифтинг, қызыл иек пластикасы, сүйек пластикасы және күрделі тіс жұлу бағыттарында жұмыс істейді.",
     },
     photo: "",
+    experienceYears: 15,
     serviceIds: [
       "implants",
       "bone-augmentation",
@@ -39,6 +40,7 @@ export const doctors: Doctor[] = [
       kk: "15 жылдық тәжірибесі бар. Тіске және имплантқа қаптама, винир және протездеу жұмыстарын орындайды.",
     },
     photo: "",
+    experienceYears: 15,
     serviceIds: ["crowns", "dentures"],
   },
   {
@@ -56,6 +58,7 @@ export const doctors: Doctor[] = [
       kk: "13 жылдық тәжірибесі бар. Тістерді кешенді емдейді және заманауи брекет жүйелерімен жұмыс істейді.",
     },
     photo: "",
+    experienceYears: 13,
     serviceIds: ["treatment", "cleaning", "braces"],
   },
   {
@@ -73,6 +76,7 @@ export const doctors: Doctor[] = [
       kk: "7 жылдық тәжірибесі бар. Тіс емдеу, тістемді түзету және заманауи брекет жүйелерімен жұмыс жүргізеді.",
     },
     photo: "",
+    experienceYears: 7,
     serviceIds: ["treatment", "cleaning", "braces"],
   },
   {
@@ -90,6 +94,7 @@ export const doctors: Doctor[] = [
       kk: "7 жылдық тәжірибесі бар. Стоматологиялық қызметтердің толық спектрін орындайды.",
     },
     photo: "",
+    experienceYears: 7,
     serviceIds: [
       "implants",
       "bone-augmentation",
@@ -117,6 +122,7 @@ export const doctors: Doctor[] = [
       kk: "3 жылдық тәжірибесі бар. Тістемді түзету және брекет жүйелерімен айналысады.",
     },
     photo: "",
+    experienceYears: 3,
     serviceIds: ["braces"],
   },
   {
@@ -134,6 +140,7 @@ export const doctors: Doctor[] = [
       kk: "7 жылдық тәжірибесі бар. Қаптама, винир және протездеу жұмыстарын орындайды.",
     },
     photo: "",
+    experienceYears: 7,
     serviceIds: ["crowns", "dentures"],
   },
 ];

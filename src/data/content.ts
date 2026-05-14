@@ -5,7 +5,7 @@ export const content = {
       services: "Услуги",
       doctors: "Врачи",
       about: "О клинике",
-      location: "Локация",
+      location: "Адрес",
       reviews: "Отзывы",
       contact: "Контакты",
     },

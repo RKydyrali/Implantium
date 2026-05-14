@@ -15,12 +15,13 @@ import {
 import type { ComponentType } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy, landingServices } from "@/data/landing";
-import { doctors } from "@/data/doctors";
+import { usePublicDoctors } from "@/hooks/useDoctors";
 import type { Language } from "@/types";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
+import { CompactDoctorCardSkeleton } from "@/components/common/DoctorSkeletons";
 import {
   Accordion,
   AccordionContent,
@@ -43,6 +44,7 @@ const IconMap: Record<string, ComponentType<IconProps>> = {
 
 export function ServicesPreview() {
   const { language } = useLanguage();
+  const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
   const t = landingCopy[language];
   const [activeId, setActiveId] = useState(landingServices[0].id);
   const activeService = useMemo(
@@ -51,7 +53,7 @@ export function ServicesPreview() {
   );
   const serviceDoctors = useMemo(
     () => doctors.filter((doctor) => doctor.serviceIds.includes(activeService.serviceId)).slice(0, 2),
-    [activeService.serviceId]
+    [activeService.serviceId, doctors]
   );
   const ActiveIcon = IconMap[activeService.iconName] ?? Tooth;
 
@@ -180,19 +182,23 @@ export function ServicesPreview() {
                 <h4 id="landing-specialists-title" className="font-display mb-4 text-2xl font-normal text-[#1F2528]">
                   {t.services.specialistsTitle}
                 </h4>
-                <div className={cn("grid gap-4", serviceDoctors.length > 1 ? "sm:grid-cols-2" : "sm:grid-cols-1")}>
+                <div className={cn("grid gap-4", doctorsLoading || serviceDoctors.length > 1 ? "sm:grid-cols-2" : "sm:grid-cols-1")}>
+                  {doctorsLoading &&
+                    Array.from({ length: 2 }).map((_, index) => (
+                      <CompactDoctorCardSkeleton key={index} />
+                    ))}
                   {serviceDoctors.map((doctor) => (
                     <article
                       key={doctor.id}
                       data-doctor-card={doctor.id}
                       className="clinical-card-soft overflow-hidden rounded-[1.35rem]"
                     >
-                      <div className="h-32 bg-[#EEF2F4] md:h-36">
+                      <div className="aspect-square bg-[#EEF2F4]">
                         <DoctorPhoto doctor={doctor} language={language} initialsClassName="size-14 text-base" />
                       </div>
                       <div className="p-5">
                         <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary">
-                          {getDoctorExperience(doctor.description[language], language)}
+                          {getDoctorExperience(doctor, language)}
                         </p>
                         <h5 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
                           {doctor.name[language]}
@@ -238,7 +244,12 @@ export function ServicesPreview() {
   );
 }
 
-function getDoctorExperience(description: string, language: Language) {
+function getDoctorExperience(doctor: { description: Record<Language, string>; experienceYears?: number }, language: Language) {
+  if (typeof doctor.experienceYears === "number" && doctor.experienceYears > 0) {
+    return language === "ru" ? `${doctor.experienceYears} лет` : `${doctor.experienceYears} жыл`;
+  }
+
+  const description = doctor.description[language];
   const match = description.match(/(?:Стаж работы|Опыт работы|Жұмыс тәжірибесі):?\s*([^..]+[.)]?)/i);
   return match?.[1]?.replace(/\.$/, "") ?? (language === "ru" ? "Опытный специалист" : "Тәжірибелі маман");
 }

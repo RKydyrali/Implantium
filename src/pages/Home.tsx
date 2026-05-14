@@ -4,6 +4,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Hero } from "@/components/sections/Hero";
 import { ServicesPreview } from "@/components/sections/ServicesPreview";
 import { AboutClinic } from "@/components/sections/AboutClinic";
+import { DoctorsSection } from "@/components/sections/DoctorsSection";
 
 import { LocationSection } from "@/components/sections/LocationSection";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
@@ -24,6 +25,7 @@ export default function Home() {
       <Hero />
       <ServicesPreview />
       <AboutClinic />
+      <DoctorsSection />
 
       <ReviewsSection />
       <LocationSection />

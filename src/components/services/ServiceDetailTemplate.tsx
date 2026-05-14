@@ -22,6 +22,7 @@ import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
+import { CompactDoctorCardSkeleton } from "@/components/common/DoctorSkeletons";
 import { ImageSlider } from "@/components/ui/image-slider";
 import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 import {
@@ -122,10 +123,11 @@ const detailCopy = {
 type ServiceDetailTemplateProps = {
   service: ServiceData;
   doctors: Doctor[];
+  doctorsLoading: boolean;
   language: Language;
 };
 
-export function ServiceDetailTemplate({ service, doctors, language }: ServiceDetailTemplateProps) {
+export function ServiceDetailTemplate({ service, doctors, doctorsLoading, language }: ServiceDetailTemplateProps) {
   const t = content[language];
   const copy = detailCopy[language];
   const serviceFaq = getFaqItems(service, language);
@@ -243,7 +245,7 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
         </div>
       </section>
 
-      {doctors.length > 0 && (
+      {(doctorsLoading || doctors.length > 0) && (
         <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
           <DentalParallaxBackground surface="service-doctors" />
           <div className="relative z-10 mx-auto max-w-[1360px]">
@@ -255,6 +257,10 @@ export function ServiceDetailTemplate({ service, doctors, language }: ServiceDet
               </a>
             </div>
             <div className="grid gap-5 lg:grid-cols-3">
+              {doctorsLoading &&
+                Array.from({ length: 3 }).map((_, index) => (
+                  <CompactDoctorCardSkeleton key={index} />
+                ))}
               {doctors.slice(0, 3).map((doctor) => (
                 <Card key={doctor.id} className="overflow-hidden rounded-[1.2rem] border-border/70 bg-white shadow-[0_16px_42px_rgba(68,45,34,0.06)]">
                   <div className="grid min-h-[9.5rem] grid-cols-[9rem_1fr] items-stretch">
