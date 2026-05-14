@@ -99,7 +99,7 @@ export default function Admin() {
     Boolean(token) && (viewer.status === "pending" || doctorsResult.status === "pending");
 
   useEffect(() => {
-    document.title = "Admin - IMPLANTIUM";
+    document.title = "Управление врачами — IMPLANTIUM";
   }, []);
 
   useEffect(() => {
@@ -227,7 +227,7 @@ export default function Admin() {
       event.currentTarget.value = "";
       setPhotoFile(null);
       setSaveStatus("error");
-      setFormErrors(["Choose a JPG, PNG, or WEBP image."]);
+      setFormErrors(["Выберите изображение в формате JPG, PNG или WEBP."]);
       return;
     }
 
@@ -253,10 +253,12 @@ export default function Admin() {
     setFormErrors([]);
 
     try {
+      const finalSlug = editor.slug.trim() || slugify(editor.name.ru);
+      const editorWithSlug = { ...editor, slug: finalSlug };
       const photoStorageId = photoFile
         ? await uploadPhoto(photoFile, token, generateDoctorPhotoUploadUrl)
         : editor.photoStorageId;
-      const doctorPayload = buildDoctorPayload(editor, photoStorageId);
+      const doctorPayload = buildDoctorPayload(editorWithSlug, photoStorageId);
 
       if (editor.recordId) {
         await updateDoctor({
@@ -296,7 +298,7 @@ export default function Admin() {
   }
 
   async function handleDelete(doctor: AdminDoctor) {
-    const confirmed = window.confirm(`Удалить врача "${doctor.name.ru}"?`);
+    const confirmed = window.confirm(`Удалить врача «${doctor.name.ru}»?`);
 
     if (!confirmed) {
       return;
@@ -331,9 +333,9 @@ export default function Admin() {
     return (
       <AdminShell>
         <div className="rounded-[1.5rem] border border-[#D8E2EA] bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-[#15233A]">Convex is not configured</h1>
+          <h1 className="text-2xl font-bold text-[#15233A]">Convex не настроен</h1>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-[#52657B]">
-            Add `VITE_CONVEX_URL` for the frontend and configure a Convex deployment before using the admin editor.
+            Добавьте переменную `VITE_CONVEX_URL` и настройте Convex-проект, чтобы использовать редактор врачей.
           </p>
         </div>
       </AdminShell>
@@ -344,12 +346,12 @@ export default function Admin() {
     return (
       <AdminShell>
         <form onSubmit={handleLogin} className="mx-auto max-w-md rounded-[1.5rem] border border-[#D8E2EA] bg-white p-6 shadow-[0_20px_70px_rgba(39,64,95,0.08)]">
-          <h1 className="text-2xl font-bold text-[#15233A]">Admin login</h1>
+          <h1 className="text-2xl font-bold text-[#15233A]">Вход в панель управления</h1>
           <p className="mt-2 text-sm leading-6 text-[#52657B]">
-            Enter the clinic admin password to edit doctors.
+            Введите пароль администратора клиники для редактирования врачей.
           </p>
           <label className="mt-6 flex flex-col gap-2 text-sm font-bold text-[#15233A]">
-            Password
+            Пароль
             <Input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -364,7 +366,7 @@ export default function Admin() {
             </p>
           )}
           <Button type="submit" className="mt-5 h-12 w-full rounded-xl bg-primary font-bold text-white">
-            Sign in
+            Войти
           </Button>
         </form>
       </AdminShell>
@@ -375,8 +377,8 @@ export default function Admin() {
     <AdminShell>
       <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#15233A]">Doctors CMS</h1>
-          <p className="mt-2 text-sm text-[#52657B]">Manage doctors, photos, localization, ordering, and visibility.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-[#15233A]">Управление врачами</h1>
+          <p className="mt-2 text-sm text-[#52657B]">Фото, локализация, порядок и видимость профилей врачей.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button
@@ -385,11 +387,11 @@ export default function Admin() {
             className="rounded-xl bg-primary font-bold text-white"
           >
             <Plus weight="bold" className="size-4" />
-            Add doctor
+            Добавить врача
           </Button>
           <Button type="button" variant="outline" onClick={handleLogout} className="rounded-xl">
             <SignOut className="size-4" />
-            Logout
+            Выйти
           </Button>
         </div>
       </div>
@@ -403,7 +405,7 @@ export default function Admin() {
       <div className="grid gap-6 xl:grid-cols-[0.95fr_1.35fr]">
         <section className="min-w-0">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-[#15233A]">Doctors</h2>
+            <h2 className="text-lg font-bold text-[#15233A]">Врачи</h2>
             <Badge variant="secondary" className="rounded-full px-3 py-1">
               {doctors.length}
             </Badge>
@@ -430,8 +432,8 @@ export default function Admin() {
             </div>
           ) : (
             <div className="rounded-[1.5rem] border border-dashed border-[#C3D2DF] bg-white p-6 text-center">
-              <p className="font-bold text-[#15233A]">No doctors yet</p>
-              <p className="mt-2 text-sm text-[#52657B]">Add doctor to create the first public profile.</p>
+              <p className="font-bold text-[#15233A]">Врачей пока нет</p>
+              <p className="mt-2 text-sm text-[#52657B]">Добавьте врача, чтобы создать первый профиль.</p>
             </div>
           )}
         </section>
@@ -441,9 +443,9 @@ export default function Admin() {
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
                 <h2 className="text-xl font-bold text-[#15233A]">
-                  {editor.recordId ? "Edit doctor" : "New doctor"}
+                  {editor.recordId ? "Редактирование" : "Новый врач"}
                 </h2>
-                <p className="mt-1 text-sm text-[#52657B]">All public fields must be filled in Russian and Kazakh.</p>
+                <p className="mt-1 text-sm text-[#52657B]">Все поля необходимо заполнить на русском и казахском языках.</p>
               </div>
               <label className="flex items-center gap-2 text-sm font-bold text-[#15233A]">
                 <input
@@ -452,7 +454,7 @@ export default function Admin() {
                   type="checkbox"
                   className="size-4 accent-primary"
                 />
-                Visible
+                Видимый
               </label>
             </div>
 
@@ -461,18 +463,18 @@ export default function Admin() {
                 <div className="overflow-hidden rounded-[1.25rem] border border-[#D8E2EA] bg-[#F4F8FB]">
                   <div className="flex aspect-[4/3.5] items-center justify-center overflow-hidden">
                     {currentPhoto ? (
-                      <img src={currentPhoto} alt="" className="size-full object-cover" />
+                      <img src={currentPhoto} alt="Фото врача" className="size-full object-cover" />
                     ) : (
                       <div className="flex flex-col items-center gap-3 text-[#6B7C90]">
                         <ImageSquare className="size-12" />
-                        <span className="text-sm font-semibold">No photo</span>
+                        <span className="text-sm font-semibold">Нет фото</span>
                       </div>
                     )}
                   </div>
                 </div>
                 <label className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#D8E2EA] bg-white px-4 text-sm font-bold text-[#15233A] transition-colors hover:border-primary/30">
                   <UploadSimple className="size-4" />
-                  Choose photo
+                  Выбрать фото
                   <input
                     type="file"
                     accept="image/png,image/jpeg,image/jpg,image/webp,.png,.jpg,.jpeg,.webp"
@@ -482,7 +484,7 @@ export default function Admin() {
                 </label>
                 {photoFile && (
                   <p className="rounded-xl border border-primary/15 bg-primary/5 px-3 py-2 text-xs font-semibold leading-5 text-primary">
-                    Photo selected. It will be optimized and uploaded when you press Save doctor.
+                    Фото выбрано. Оно будет оптимизировано и загружено при сохранении.
                   </p>
                 )}
                 <Button
@@ -494,22 +496,15 @@ export default function Admin() {
                   }}
                   className="rounded-xl"
                 >
-                  Clear photo
+                  Удалить фото
                 </Button>
               </div>
 
               <div className="grid gap-4">
-                <Field label="Slug">
-                  <Input
-                    value={editor.slug}
-                    onChange={(event) => setEditor((current) => ({ ...current, slug: slugify(event.target.value) }))}
-                    className={inputClassName}
-                    placeholder="doctor-name"
-                  />
-                </Field>
+
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Experience years">
+                  <Field label="Стаж (лет)">
                     <Input
                       value={editor.experienceYears}
                       onChange={(event) => setEditor((current) => ({ ...current, experienceYears: Number(event.target.value) }))}
@@ -518,7 +513,7 @@ export default function Admin() {
                       className={inputClassName}
                     />
                   </Field>
-                  <Field label="Sort order">
+                  <Field label="Порядок">
                     <Input
                       value={editor.sortOrder}
                       onChange={(event) => setEditor((current) => ({ ...current, sortOrder: Number(event.target.value) }))}
@@ -542,7 +537,7 @@ export default function Admin() {
                   onChange={setEditor}
                 />
 
-                <Field label="Services">
+                <Field label="Услуги">
                   <div className="grid gap-2 sm:grid-cols-2">
                     {services.map((service) => (
                       <label
@@ -597,7 +592,7 @@ export default function Admin() {
               className="h-12 rounded-xl bg-primary font-bold text-white"
             >
               <FloppyDisk weight="bold" className="size-4" />
-              {saveStatus === "saving" ? "Saving..." : "Save doctor"}
+              {saveStatus === "saving" ? "Сохранение..." : "Сохранить врача"}
             </Button>
           </form>
         </section>
@@ -659,20 +654,20 @@ function DoctorListRow({
         <span className="block truncate text-sm font-bold text-[#15233A]">{doctor.name.ru}</span>
         <span className="mt-1 block truncate text-xs font-semibold text-[#52657B]">{doctor.specialty.ru}</span>
         <span className="mt-2 inline-flex rounded-full bg-[#F4F8FB] px-2.5 py-1 text-[11px] font-bold text-[#52657B]">
-          {doctor.visible ? "Visible" : "Hidden"}
+          {doctor.visible ? "Виден" : "Скрыт"}
         </span>
       </button>
       <div className="flex flex-wrap gap-2 sm:justify-end">
-        <IconButton label="Move up" onClick={onMoveUp} disabled={!canMoveUp}>
+        <IconButton label="Переместить вверх" onClick={onMoveUp} disabled={!canMoveUp}>
           <ArrowUp className="size-4" />
         </IconButton>
-        <IconButton label="Move down" onClick={onMoveDown} disabled={!canMoveDown}>
+        <IconButton label="Переместить вниз" onClick={onMoveDown} disabled={!canMoveDown}>
           <ArrowDown className="size-4" />
         </IconButton>
-        <IconButton label={doctor.visible ? "Hide" : "Show"} onClick={onVisibility}>
+        <IconButton label={doctor.visible ? "Скрыть" : "Показать"} onClick={onVisibility}>
           {doctor.visible ? <EyeSlash className="size-4" /> : <Eye className="size-4" />}
         </IconButton>
-        <IconButton label="Delete" onClick={onDelete}>
+        <IconButton label="Удалить" onClick={onDelete}>
           <Trash className="size-4" />
         </IconButton>
       </div>
@@ -725,21 +720,21 @@ function LocalizedFields({
 }) {
   return (
     <div className="grid gap-4">
-      <Field label={language === "ru" ? "Name RU" : "Аты KZ"}>
+      <Field label={language === "ru" ? "Имя (рус)" : "Аты (қаз)"}>
         <Input
           value={editor.name[language]}
           onChange={(event) => updateLocalized(onChange, "name", language, event.target.value)}
           className={inputClassName}
         />
       </Field>
-      <Field label={language === "ru" ? "Specialty RU" : "Мамандығы KZ"}>
+      <Field label={language === "ru" ? "Специальность (рус)" : "Мамандығы (қаз)"}>
         <Input
           value={editor.specialty[language]}
           onChange={(event) => updateLocalized(onChange, "specialty", language, event.target.value)}
           className={inputClassName}
         />
       </Field>
-      <Field label={language === "ru" ? "Description RU" : "Сипаттама KZ"}>
+      <Field label={language === "ru" ? "Описание (рус)" : "Сипаттама (қаз)"}>
         <Textarea
           value={editor.description[language]}
           onChange={(event) => updateLocalized(onChange, "description", language, event.target.value)}
@@ -800,11 +795,10 @@ function toEditorState(doctor: AdminDoctor): EditorState {
 function validateEditor(editor: EditorState) {
   const errors: string[] = [];
 
-  if (!editor.slug.trim()) errors.push("Slug is required.");
-  if (!editor.name.ru.trim() || !editor.name.kk.trim()) errors.push("Name is required in both languages.");
-  if (!editor.specialty.ru.trim() || !editor.specialty.kk.trim()) errors.push("Specialty is required in both languages.");
-  if (!editor.description.ru.trim() || !editor.description.kk.trim()) errors.push("Description is required in both languages.");
-  if (editor.serviceIds.length === 0) errors.push("Choose at least one service.");
+  if (!editor.name.ru.trim() || !editor.name.kk.trim()) errors.push("Имя обязательно на обоих языках.");
+  if (!editor.specialty.ru.trim() || !editor.specialty.kk.trim()) errors.push("Специальность обязательна на обоих языках.");
+  if (!editor.description.ru.trim() || !editor.description.kk.trim()) errors.push("Описание обязательно на обоих языках.");
+  if (editor.serviceIds.length === 0) errors.push("Выберите хотя бы одну услугу.");
 
   return errors;
 }
@@ -836,11 +830,25 @@ function toggleService(serviceIds: string[], serviceId: string) {
     : [...serviceIds, serviceId];
 }
 
+const cyrillicToLatin: Record<string, string> = {
+  а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ё: "yo", ж: "zh",
+  з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o",
+  п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "kh", ц: "ts",
+  ч: "ch", ш: "sh", щ: "shch", ъ: "", ы: "y", ь: "", э: "e", ю: "yu",
+  я: "ya",
+  // Kazakh-specific
+  ә: "a", ғ: "g", қ: "q", ң: "n", ө: "o", ұ: "u", ү: "u", і: "i", һ: "h",
+};
+
 function slugify(value: string) {
   return value
     .toLowerCase()
+    .split("")
+    .map((char) => cyrillicToLatin[char] ?? char)
+    .join("")
     .replace(/[^a-z0-9-]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/^-+|-+$/g, "")
+    .replace(/-{2,}/g, "-");
 }
 
 async function uploadPhoto(
@@ -873,7 +881,7 @@ function isSupportedImageFile(file: File) {
 
 async function prepareImageForUpload(file: File) {
   if (!isSupportedImageFile(file)) {
-    throw new Error("Choose a JPG, PNG, or WEBP image.");
+    throw new Error("Выберите изображение в формате JPG, PNG или WEBP.");
   }
 
   const image = await loadImage(file);
@@ -885,7 +893,7 @@ async function prepareImageForUpload(file: File) {
   const context = canvas.getContext("2d");
 
   if (!context) {
-    throw new Error("Could not prepare photo for upload.");
+    throw new Error("Не удалось подготовить фото для загрузки.");
   }
 
   canvas.width = width;
@@ -902,7 +910,7 @@ async function prepareImageForUpload(file: File) {
           return;
         }
 
-        reject(new Error("Could not prepare photo for upload."));
+        reject(new Error("Не удалось подготовить фото для загрузки."));
       },
       "image/jpeg",
       UPLOAD_JPEG_QUALITY
@@ -917,7 +925,7 @@ async function loadImage(file: File) {
   try {
     const loadedImage = await new Promise<HTMLImageElement>((resolve, reject) => {
       image.onload = () => resolve(image);
-      image.onerror = () => reject(new Error("Could not read this image file."));
+      image.onerror = () => reject(new Error("Не удалось прочитать файл изображения."));
       image.src = objectUrl;
     });
 
@@ -928,5 +936,5 @@ async function loadImage(file: File) {
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "Unexpected error";
+  return error instanceof Error ? error.message : "Непредвиденная ошибка";
 }

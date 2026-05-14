@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ChatCircleText, X } from "@phosphor-icons/react";
+import { ArrowRight, X } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
-import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/sections/BookingModal";
 
 const PROMPT_DELAY_MS = 3500;
