@@ -259,13 +259,17 @@ export default function Doctors() {
         </div>
       </section>
 
-      <section className="relative isolate overflow-hidden bg-white px-4 py-12 md:px-8 md:py-16">
+      <section className="relative isolate overflow-hidden bg-white px-4 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16">
         <DentalParallaxBackground surface="doctors-trust" />
         <div className="relative z-10 mx-auto max-w-[1360px]">
-          <h2 className="text-3xl font-bold tracking-tight text-[#15233A] md:text-4xl">
-            {copy.trustTitle}
-          </h2>
-          <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="mb-10 max-w-2xl">
+            <h2 className="text-3xl font-bold tracking-tight text-[#15233A] md:text-4xl">
+              {copy.trustTitle}
+            </h2>
+            <div className="mt-4 h-1 w-16 rounded-full bg-primary/20" />
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {copy.trustCards.map((card) => (
               <TrustCard key={card.title} {...card} />
             ))}
@@ -342,49 +346,52 @@ function FeaturedDoctor({
   const serviceTitles = getServiceTitles(doctor, language);
 
   return (
-    <article className="overflow-hidden rounded-[1.5rem] border border-[#D8E2EA] bg-white shadow-[0_20px_60px_rgba(39,64,95,0.07)]">
-      <div className="grid gap-0 lg:grid-cols-[0.34fr_0.66fr]">
-        <div className="relative min-h-[16rem] overflow-hidden bg-[#EFF5F9] sm:min-h-[18rem] lg:min-h-[20rem]">
+    <article className="overflow-hidden rounded-[2.5rem] border border-[#D8E2EA] bg-white shadow-[0_42px_120px_rgba(39,64,95,0.12)]">
+      <div className="grid gap-0 lg:grid-cols-[0.45fr_0.55fr]">
+        <div className="relative min-h-[26rem] overflow-hidden bg-[#EFF5F9] sm:min-h-[32rem] lg:min-h-[40rem]">
           <DoctorPhoto
             doctor={doctor}
             language={language}
-            className="absolute inset-0 bg-[linear-gradient(145deg,#F9FCFE,#E8F0F6)] text-[#27405F]"
-            initialsClassName="size-24 border-[#D8E2EA] text-2xl"
+            className="absolute inset-0 object-cover bg-[linear-gradient(145deg,#F9FCFE,#E8F0F6)] text-[#27405F]"
+            style={{ objectPosition: 'center 15%' }}
+            initialsClassName="size-28 border-[#D8E2EA] text-3xl"
             labelClassName="text-[#6B7C90]"
           />
-          <span className="absolute left-5 top-5 rounded-full border border-white/80 bg-white/90 px-4 py-2 text-xs font-bold text-[#27405F] shadow-sm">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#15233A]/10 to-transparent" />
+          <span className="absolute left-7 top-7 rounded-full border border-white/80 bg-white/95 px-6 py-3 text-[13px] font-bold text-[#27405F] shadow-sm backdrop-blur-sm">
             {copy.featuredKicker}
           </span>
         </div>
 
-        <div className="flex min-w-0 flex-col justify-center gap-5 p-5 md:p-7 lg:p-8">
+        <div className="flex min-w-0 flex-col justify-center gap-8 p-7 md:p-12 lg:p-16">
           <div>
-            <h2 className="max-w-2xl text-2xl font-bold leading-tight tracking-tight text-[#15233A] md:text-3xl">
+            <h2 className="max-w-2xl text-3xl font-bold leading-tight tracking-tight text-[#15233A] md:text-4xl lg:text-[2.75rem]">
               {doctor.name[language]}
             </h2>
-            <p className="mt-2 text-xs font-bold uppercase tracking-[0.08em] text-primary md:text-sm">
+            <p className="mt-3 text-sm font-bold uppercase tracking-[0.12em] text-primary md:text-base">
               {doctor.specialty[language]}
             </p>
-            <p className="mt-4 max-w-3xl text-sm leading-6 text-[#52657B] md:text-[15px] md:leading-7">
+            <div className="mt-7 h-1 w-20 rounded-full bg-primary/10" />
+            <p className="mt-7 max-w-3xl text-[15px] font-medium leading-relaxed text-[#52657B] md:text-lg md:leading-8">
               {doctor.description[language]}
             </p>
 
-            <div className="mt-5 grid max-w-xl gap-3 sm:grid-cols-2">
+            <div className="mt-8 grid max-w-xl gap-4 sm:grid-cols-2">
               <MetricTile value={experience} label={copy.experienceLabel} />
               <MetricTile value={`${serviceTitles.length}`} label={copy.directionsLabel} />
             </div>
           </div>
 
-          <div className="border-t border-[#E4EBF1] pt-4">
-            <h3 className="text-sm font-bold text-[#15233A]">{copy.competenceTitle}</h3>
-            <div className="mt-3 flex flex-wrap gap-2">
+          <div className="border-t border-[#E4EBF1] pt-6">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-[#15233A]">{copy.competenceTitle}</h3>
+            <div className="mt-4 flex flex-wrap gap-2.5">
               {serviceTitles.map((title) => (
                 <div
                   key={title}
-                  className="inline-flex max-w-full items-center gap-2 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-3 py-2 text-xs font-semibold leading-none text-[#52657B]"
+                  className="inline-flex max-w-full items-center gap-2.5 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-4 py-2.5 text-xs font-bold leading-none text-[#52657B] shadow-sm transition-colors hover:border-[#C3D2DF]"
                 >
-                  <span className="flex size-4 shrink-0 items-center justify-center rounded-full text-primary">
-                    <CheckCircle weight="fill" className="size-3.5" />
+                  <span className="flex size-4.5 shrink-0 items-center justify-center rounded-full text-primary">
+                    <CheckCircle weight="fill" className="size-4" />
                   </span>
                   <span className="truncate">{title}</span>
                 </div>
@@ -463,14 +470,16 @@ function TrustCard({
   icon: ComponentType<IconProps>;
 }) {
   return (
-    <article className="flex min-h-32 gap-4 rounded-[1.25rem] border border-[#D8E2EA] bg-[#F7FAFC] p-5">
-      <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white text-primary shadow-sm">
-        <Icon weight="duotone" className="size-6" />
-      </span>
-      <span>
-        <span className="block text-sm font-bold text-[#15233A]">{title}</span>
-        <span className="mt-2 block text-xs font-medium leading-6 text-[#52657B]">{text}</span>
-      </span>
+    <article className="group flex flex-col gap-5 rounded-[2rem] border border-[#D8E2EA] bg-white p-6 shadow-[0_12px_45px_rgba(39,64,95,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C3D2DF] hover:shadow-[0_20px_60px_rgba(39,64,95,0.07)] sm:p-7">
+      <div className="flex size-14 shrink-0 items-center justify-center rounded-full border border-primary/10 bg-[#F4E7E4] text-primary transition-transform duration-300 group-hover:scale-105">
+        <Icon weight="duotone" className="size-7" />
+      </div>
+      <div>
+        <h3 className="text-lg font-bold leading-tight text-[#15233A]">{title}</h3>
+        <p className="mt-3 text-[13px] font-medium leading-relaxed text-[#52657B] md:text-sm">
+          {text}
+        </p>
+      </div>
     </article>
   );
 }

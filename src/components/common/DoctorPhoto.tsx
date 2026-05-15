@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Doctor, Language } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -5,6 +6,7 @@ type DoctorPhotoProps = {
   doctor: Doctor;
   language: Language;
   className?: string;
+  style?: CSSProperties;
   initialsClassName?: string;
   labelClassName?: string;
 };
@@ -13,6 +15,7 @@ export function DoctorPhoto({
   doctor,
   language,
   className,
+  style,
   initialsClassName,
   labelClassName,
 }: DoctorPhotoProps) {
@@ -22,6 +25,7 @@ export function DoctorPhoto({
         src={doctor.photo}
         alt={doctor.name[language]}
         className={cn("size-full object-cover", className)}
+        style={style}
         loading="lazy"
         decoding="async"
       />
@@ -35,6 +39,7 @@ export function DoctorPhoto({
         "relative flex size-full flex-col items-center justify-center gap-3 overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(217,225,229,0.9),transparent_42%),linear-gradient(145deg,#FAFBFC,#EEF2F4)] text-primary",
         className
       )}
+      style={style}
     >
       <div className="absolute inset-x-8 top-8 h-px bg-white/80" />
       <div className="absolute bottom-0 h-20 w-40 rounded-t-full border border-white/80 bg-white/38 blur-sm" />
