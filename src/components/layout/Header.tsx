@@ -69,80 +69,60 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <div className="flex items-center rounded-full border border-[#DDE3E7] bg-[#FAFBFC] p-1 text-sm font-semibold">
+          <div className="flex items-center rounded-full border border-[#DDE3E7] bg-white p-1 text-[13px] font-bold">
             <button
               type="button"
               onClick={() => setLanguage("ru")}
               className={cn(
-                "rounded-full px-3 py-1.5 transition-colors",
-                language === "ru" ? "bg-white text-primary shadow-sm" : "text-[#6E7B83] hover:text-[#1F2528]"
+                "rounded-full px-4 py-1.5 transition-all duration-200",
+                language === "ru" ? "bg-primary text-white shadow-md" : "text-[#6E7B83] hover:text-[#1F2528]"
               )}
             >
-              {t.common.languageRu}
+              Рус
             </button>
             <button
               type="button"
               onClick={() => setLanguage("kk")}
               className={cn(
-                "rounded-full px-3 py-1.5 transition-colors",
-                language === "kk" ? "bg-white text-primary shadow-sm" : "text-[#6E7B83] hover:text-[#1F2528]"
+                "rounded-full px-4 py-1.5 transition-all duration-200",
+                language === "kk" ? "bg-primary text-white shadow-md" : "text-[#6E7B83] hover:text-[#1F2528]"
               )}
             >
-              {t.common.languageKk}
+              Қаз
             </button>
           </div>
 
-          {hasPhone ? (
-            <a
-              href={clinicContact.phoneHref}
-              className="flex size-12 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-primary shadow-[0_10px_28px_rgba(31,37,40,0.05)] transition-all hover:-translate-y-0.5 hover:border-[#C8D3D9]"
-              aria-label={t.common.call}
-            >
-              <Phone weight="fill" className="size-5" />
-            </a>
-          ) : (
-            <button
-              type="button"
-              disabled
-              title={landing.contact.phonePending}
-              className="flex size-12 cursor-not-allowed items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#AEBBC2] shadow-sm"
-              aria-label={landing.contact.phonePending}
-            >
-              <Phone weight="fill" className="size-5" />
-            </button>
-          )}
-
-          <BookingModal>
-            <Button
-              className="accent-button-shadow h-12 rounded-full bg-primary px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
-            >
-              {landing.hero.primaryCta}
-            </Button>
-          </BookingModal>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex size-12 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528] shadow-sm transition-all hover:bg-slate-50"
+            aria-label={t.common.openMenu}
+          >
+            <List className="size-6" />
+          </button>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <BookingModal>
-            <button
-              className="hidden h-10 items-center rounded-full bg-primary px-4 text-xs font-bold text-white shadow-[0_12px_28px_rgba(166,58,45,0.18)] sm:inline-flex"
-            >
-              {language === "ru" ? "Запись" : "Жазылу"}
-            </button>
-          </BookingModal>
-          <div className="flex items-center rounded-full border border-[#DDE3E7] bg-white/85 p-0.5 text-xs font-bold shadow-sm">
+          <div className="flex items-center rounded-full border border-[#DDE3E7] bg-white p-1 text-[12px] font-bold shadow-sm">
             <button
               type="button"
               onClick={() => setLanguage("ru")}
-              className={cn("rounded-full px-2.5 py-1.5", language === "ru" ? "bg-primary text-white" : "text-[#6E7B83]")}
+              className={cn(
+                "rounded-full px-3 py-1.5 transition-all duration-200", 
+                language === "ru" ? "bg-primary text-white" : "text-[#6E7B83]"
+              )}
             >
-              {t.common.languageRu}
+              Рус
             </button>
             <button
               type="button"
               onClick={() => setLanguage("kk")}
-              className={cn("rounded-full px-2.5 py-1.5", language === "kk" ? "bg-primary text-white" : "text-[#6E7B83]")}
+              className={cn(
+                "rounded-full px-3 py-1.5 transition-all duration-200", 
+                language === "kk" ? "bg-primary text-white" : "text-[#6E7B83]"
+              )}
             >
-              {t.common.languageKk}
+              Қаз
             </button>
           </div>
           <button
