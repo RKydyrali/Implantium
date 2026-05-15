@@ -1,4 +1,4 @@
-import type { BilingualText, LandingServicePanel } from "@/types";
+import type { LandingServicePanel } from "@/types";
 
 export const landingCopy = {
   ru: {
@@ -115,11 +115,6 @@ export const landingCopy = {
   },
 } as const;
 
-const pendingPrice: BilingualText = {
-  ru: "Стоимость врач уточнит после осмотра",
-  kk: "Бағаны дәрігер тексеруден кейін нақтылайды",
-};
-
 export const landingServices: LandingServicePanel[] = [
   {
     id: "implants-panel",
@@ -227,7 +222,14 @@ export const landingServices: LandingServicePanel[] = [
       ],
     },
     prices: [
-      { label: { ru: "Лечение зубов", kk: "Тісті емдеу" }, value: { ru: "Стоимость врач уточнит после осмотра", kk: "Бағаны дәрігер тексеруден кейін анықтайды" } },
+      { label: { ru: "Поверхностный кариес", kk: "Беткей тіс жегісі" }, value: { ru: "от 20 000 тг", kk: "20 000 тг бастап" } },
+      { label: { ru: "Глубокий кариес", kk: "Терең тіс жегісі" }, value: { ru: "от 30 000 тг", kk: "30 000 тг бастап" } },
+      { label: { ru: "Пульпит", kk: "Пульпит" }, value: { ru: "от 35 000 тг", kk: "35 000 тг бастап" } },
+      {
+        label: { ru: "Периодонтит", kk: "Периодонтит" },
+        value: { ru: "от 40 000 тг", kk: "40 000 тг бастап" },
+        note: { ru: "Цена зависит от сложности лечения", kk: "Баға емдеу күрделілігіне байланысты" },
+      },
     ],
     specialists: [
       { title: { ru: "Терапевт-стоматолог", kk: "Стоматолог-терапевт" }, description: { ru: "Лечит кариес, каналы и восстанавливает форму зуба.", kk: "Кариес, түбір өзектерін емдеп, тіс пішінін қалпына келтіреді." } },
@@ -261,7 +263,13 @@ export const landingServices: LandingServicePanel[] = [
         "Әдетте ыңғайсыздық бірнеше күнде азаяды",
       ],
     },
-    prices: [{ label: { ru: "Удаление зуба", kk: "Тіс жұлу" }, value: pendingPrice }],
+    prices: [
+      {
+        label: { ru: "Удаление зуба", kk: "Тіс жұлу" },
+        value: { ru: "от 18 000 тг", kk: "18 000 тг бастап" },
+        note: { ru: "Цена зависит от сложности удаления", kk: "Баға жұлу күрделілігіне байланысты" },
+      },
+    ],
     specialists: [
       { title: { ru: "Хирург-стоматолог", kk: "Хирург-стоматолог" }, description: { ru: "Проводит удаление и контролирует восстановление.", kk: "Жұлуды жүргізіп, қалпына келуді бақылайды." } },
     ],

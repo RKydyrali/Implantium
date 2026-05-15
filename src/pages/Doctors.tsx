@@ -344,11 +344,11 @@ function FeaturedDoctor({
   return (
     <article className="overflow-hidden rounded-[1.5rem] border border-[#D8E2EA] bg-white shadow-[0_20px_60px_rgba(39,64,95,0.07)]">
       <div className="grid gap-0 lg:grid-cols-[0.34fr_0.66fr]">
-        <div className="relative min-h-[16rem] overflow-hidden bg-[#EFF5F9] sm:min-h-[18rem] lg:min-h-[23rem]">
+        <div className="relative min-h-[16rem] overflow-hidden bg-[#EFF5F9] sm:min-h-[18rem] lg:min-h-[20rem]">
           <DoctorPhoto
             doctor={doctor}
             language={language}
-            className="bg-[linear-gradient(145deg,#F9FCFE,#E8F0F6)] text-[#27405F]"
+            className="absolute inset-0 bg-[linear-gradient(145deg,#F9FCFE,#E8F0F6)] text-[#27405F]"
             initialsClassName="size-24 border-[#D8E2EA] text-2xl"
             labelClassName="text-[#6B7C90]"
           />

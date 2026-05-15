@@ -68,7 +68,7 @@ export function FeaturedDoctorSkeleton() {
   return (
     <article className="overflow-hidden rounded-[1.5rem] border border-[#D8E2EA] bg-white shadow-[0_20px_60px_rgba(39,64,95,0.07)]">
       <div className="grid gap-0 lg:grid-cols-[0.34fr_0.66fr]">
-        <SkeletonBlock className="min-h-[16rem] rounded-none sm:min-h-[18rem] lg:min-h-[23rem]" />
+        <SkeletonBlock className="min-h-[16rem] rounded-none sm:min-h-[18rem] lg:min-h-[20rem]" />
         <div className="flex flex-col justify-center gap-5 p-5 md:p-7 lg:p-8">
           <div className="flex flex-col gap-4">
             <SkeletonBlock className="h-8 w-4/5" />
