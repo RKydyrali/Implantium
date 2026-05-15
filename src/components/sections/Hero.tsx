@@ -5,7 +5,6 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/sections/BookingModal";
-import { cn } from "@/lib/utils";
 
 export function Hero() {
   const { language } = useLanguage();

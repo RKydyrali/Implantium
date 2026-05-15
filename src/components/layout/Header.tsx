@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { List, Phone, X } from "@phosphor-icons/react";
+import { List, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "framer-motion";
 import implantiumLogo from "@/assets/implantium-logo-cropped.png";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
 import { landingCopy } from "@/data/landing";
-import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import { clinicContact } from "@/data/clinicContact";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/sections/BookingModal";
@@ -17,7 +17,6 @@ export function Header() {
   const landing = landingCopy[language];
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const hasPhone = hasContactValue(clinicContact.phoneHref);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 18);
