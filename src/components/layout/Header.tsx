@@ -6,7 +6,6 @@ import implantiumLogo from "@/assets/implantium-logo-cropped.png";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
 import { landingCopy } from "@/data/landing";
-import { clinicContact } from "@/data/clinicContact";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/sections/BookingModal";
