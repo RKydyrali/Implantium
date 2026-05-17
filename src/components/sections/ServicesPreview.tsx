@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { memo, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -16,7 +15,7 @@ import type { ComponentType } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy, landingServices } from "@/data/landing";
 import { usePublicDoctors } from "@/hooks/useDoctors";
-import type { Language } from "@/types";
+import type { Doctor, Language } from "@/types";
 import { cn } from "@/lib/utils";
 import implantsIcon from "@/assets/service-icons/implants.png";
 import crownsIcon from "@/assets/service-icons/crowns.png";
@@ -70,17 +69,13 @@ export function ServicesPreview() {
   const isMobileSheet = useMediaQuery("(max-width: 639px)");
   const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
   const t = landingCopy[language];
-  const [selectedServiceId, setSelectedServiceId] = useState(landingServices[0].id);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
   const [isServiceSheetExpanded, setIsServiceSheetExpanded] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const selectedService = useMemo(
-    () => landingServices.find((service) => service.id === selectedServiceId) ?? landingServices[0],
+    () => (selectedServiceId ? landingServices.find((service) => service.id === selectedServiceId) : undefined),
     [selectedServiceId]
-  );
-  const serviceDoctors = useMemo(
-    () => doctors.filter((doctor) => doctor.serviceIds.includes(selectedService.serviceId)).slice(0, 2),
-    [selectedService.serviceId, doctors]
   );
 
   const handleServiceClick = (serviceId: string) => {
@@ -94,12 +89,14 @@ export function ServicesPreview() {
 
     if (!open) {
       setIsServiceSheetExpanded(false);
+      setSelectedServiceId(null);
     }
   };
 
   const handleBookFromService = () => {
     setIsServiceDialogOpen(false);
     setIsServiceSheetExpanded(false);
+    setSelectedServiceId(null);
     setIsBookingOpen(true);
   };
 
@@ -109,93 +106,12 @@ export function ServicesPreview() {
     collapse: language === "ru" ? "Свернуть информацию об услуге" : "Қызмет ақпаратын жию",
   };
 
-  const serviceSheetBody = (
-    <motion.div
-      key={selectedService.id}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
-      className="p-4 sm:max-h-[calc(100dvh-3rem)] sm:p-6 lg:p-7"
-    >
-      <motion.div
-        className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8"
-      >
-        <ServiceMainPanel
-          service={selectedService}
-          language={language}
-          onBook={handleBookFromService}
-        />
-
-        <div className="grid content-start gap-5">
-          <section aria-labelledby="landing-specialists-title">
-            <h4 id="landing-specialists-title" className="font-display mb-4 text-2xl font-normal text-[#1F2528]">
-              {t.services.specialistsTitle}
-            </h4>
-            <div className={cn("grid gap-4", doctorsLoading || serviceDoctors.length > 1 ? "sm:grid-cols-2" : "sm:grid-cols-1")}>
-              {doctorsLoading &&
-                Array.from({ length: 2 }).map((_, index) => (
-                  <CompactDoctorCardSkeleton key={index} />
-                ))}
-              {serviceDoctors.map((doctor) => (
-                <article
-                  key={doctor.id}
-                  data-doctor-card={doctor.id}
-                  className="clinical-card-soft overflow-hidden rounded-[1.35rem]"
-                >
-                  <div className="aspect-square bg-[#EEF2F4]">
-                    <DoctorPhoto doctor={doctor} language={language} initialsClassName="size-14 text-base" />
-                  </div>
-                  <div className="p-5">
-                    <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary">
-                      {getDoctorExperience(doctor, language)}
-                    </p>
-                    <h5 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
-                      {doctor.name[language]}
-                    </h5>
-                    <p className="mb-3 text-xs font-bold uppercase tracking-[0.08em] text-[#606A70]">
-                      {doctor.specialty[language]}
-                    </p>
-                    <p className="line-clamp-4 text-sm leading-relaxed text-[#606A70]">
-                      {doctor.description[language]}
-                    </p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section aria-labelledby="landing-faq-title" className="rounded-[1.35rem] border border-[#DDE3E7] bg-white px-4 shadow-[0_18px_55px_rgba(31,37,40,0.045)]">
-            <h4 id="landing-faq-title" className="sr-only">
-              {t.services.faqTitle}
-            </h4>
-            <div className="border-b border-[#DDE3E7] py-4">
-              <p className="font-display text-2xl font-normal text-[#1F2528]">{t.services.faqTitle}</p>
-            </div>
-            <Accordion type="single" collapsible>
-              {selectedService.faqs.map((faq, idx) => (
-                <AccordionItem key={faq.question.ru} value={`${selectedService.id}-${idx}`} className="border-[#DDE3E7]">
-                  <AccordionTrigger className="text-left text-sm font-bold text-[#1F2528] hover:text-primary hover:no-underline">
-                    {faq.question[language]}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-[#606A70]">
-                    {faq.answer[language]}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </section>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-
   return (
     <section id="services" className="clinical-section relative isolate overflow-hidden px-4 py-12 md:px-8 md:py-16">
       <DentalParallaxBackground surface="home-services" />
       <div className="relative z-10 mx-auto max-w-[1320px]">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-
             <h2 className="font-display text-3xl font-normal text-[#1F2528] md:text-4xl">
               {t.services.title}
             </h2>
@@ -205,7 +121,7 @@ export function ServicesPreview() {
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
           {landingServices.map((service) => {
             const Icon = IconMap[service.iconName] ?? Tooth;
-            const isSelected = selectedService.id === service.id;
+            const isActive = isServiceDialogOpen && selectedServiceId === service.id;
             const generatedIcon = ServiceIconAssets[service.serviceId];
 
             return (
@@ -213,11 +129,11 @@ export function ServicesPreview() {
                 key={service.id}
                 type="button"
                 aria-haspopup="dialog"
-                aria-expanded={isSelected && isServiceDialogOpen}
+                aria-expanded={isActive}
                 onClick={() => handleServiceClick(service.id)}
                 className={cn(
-                  "group grid min-h-[5.75rem] grid-cols-[auto_1fr] items-center gap-3 rounded-2xl border bg-white p-4 text-left shadow-[0_12px_34px_rgba(31,37,40,0.04)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#C8D3D9] hover:shadow-[0_18px_46px_rgba(31,37,40,0.06)] active:translate-y-[1px] sm:min-h-[6.6rem] sm:gap-4 sm:p-5",
-                  isSelected
+                  "group grid min-h-[5.75rem] grid-cols-[auto_1fr] items-center gap-3 rounded-2xl border bg-white p-4 text-left shadow-[0_12px_34px_rgba(31,37,40,0.04)] transition-[border-color,background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#C8D3D9] hover:shadow-[0_18px_46px_rgba(31,37,40,0.06)] active:translate-y-[1px] sm:min-h-[6.6rem] sm:gap-4 sm:p-5",
+                  isActive
                     ? "border-primary/55 bg-[#F4E7E4]/45 text-[#1F2528] shadow-[0_18px_44px_rgba(166,58,45,0.08)]"
                     : "border-[#DDE3E7] text-[#606A70]"
                 )}
@@ -225,7 +141,7 @@ export function ServicesPreview() {
                 <span
                   className={cn(
                     "flex size-11 shrink-0 items-center justify-center rounded-2xl border transition-colors sm:size-12",
-                    isSelected
+                    isActive
                       ? "border-primary/20 bg-white text-primary"
                       : "border-[#E8EDF0] bg-[#FAFBFC] text-[#6E7B83] group-hover:text-primary"
                   )}
@@ -236,8 +152,8 @@ export function ServicesPreview() {
                     fallbackIcon={Icon}
                   />
                 </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-bold leading-tight text-[#1F2528] sm:text-base">
+                <span className="min-w-0 overflow-hidden">
+                  <span className="block break-words text-xs font-bold leading-snug text-[#1F2528] sm:text-sm">
                     {service.shortTitle[language]}
                   </span>
                   <span className="mt-1 hidden text-xs leading-snug text-[#606A70] sm:line-clamp-2 sm:text-sm">
@@ -249,34 +165,51 @@ export function ServicesPreview() {
           })}
         </div>
 
-        {isMobileSheet ? (
-          <MobileServiceSheet
-            open={isServiceDialogOpen}
-            onOpenChange={handleServiceDialogOpenChange}
-            expanded={isServiceSheetExpanded}
-            onExpandedChange={setIsServiceSheetExpanded}
-            closeLabel={serviceSheetLabels.close}
-            expandLabel={serviceSheetLabels.expand}
-            collapseLabel={serviceSheetLabels.collapse}
-            title={selectedService.title[language]}
-            description={selectedService.summary[language]}
-          >
-            {serviceSheetBody}
-          </MobileServiceSheet>
-        ) : (
-          <Dialog open={isServiceDialogOpen} onOpenChange={handleServiceDialogOpenChange}>
-            <DialogContent
-              overlayClassName="bg-[#1F2528]/45 backdrop-blur-[2px]"
-              className="max-h-[calc(100dvh-3rem)] overflow-hidden p-0 sm:max-w-[1120px] sm:rounded-[2rem]"
+        {selectedService && isServiceDialogOpen && (
+          isMobileSheet ? (
+            <MobileServiceSheet
+              open={isServiceDialogOpen}
+              onOpenChange={handleServiceDialogOpenChange}
+              expanded={isServiceSheetExpanded}
+              onExpandedChange={setIsServiceSheetExpanded}
               closeLabel={serviceSheetLabels.close}
+              expandLabel={serviceSheetLabels.expand}
+              collapseLabel={serviceSheetLabels.collapse}
+              title={selectedService.title[language]}
+              description={selectedService.summary[language]}
             >
-              <DialogHeader className="sr-only">
-                <DialogTitle>{selectedService.title[language]}</DialogTitle>
-                <DialogDescription>{selectedService.summary[language]}</DialogDescription>
-              </DialogHeader>
-              <div className="max-h-[calc(100dvh-3rem)] overflow-y-auto">{serviceSheetBody}</div>
-            </DialogContent>
-          </Dialog>
+              <ServiceSheetBody
+                service={selectedService}
+                language={language}
+                doctors={doctors}
+                doctorsLoading={doctorsLoading}
+                onBook={handleBookFromService}
+                deferHeavyContent
+              />
+            </MobileServiceSheet>
+          ) : (
+            <Dialog open={isServiceDialogOpen} onOpenChange={handleServiceDialogOpenChange}>
+              <DialogContent
+                overlayClassName="bg-[#1F2528]/50"
+                className="max-h-[calc(100dvh-3rem)] overflow-hidden p-0 sm:max-w-[1120px] sm:rounded-[2rem]"
+                closeLabel={serviceSheetLabels.close}
+              >
+                <DialogHeader className="sr-only">
+                  <DialogTitle>{selectedService.title[language]}</DialogTitle>
+                  <DialogDescription>{selectedService.summary[language]}</DialogDescription>
+                </DialogHeader>
+                <div className="max-h-[calc(100dvh-3rem)] overflow-y-auto">
+                  <ServiceSheetBody
+                    service={selectedService}
+                    language={language}
+                    doctors={doctors}
+                    doctorsLoading={doctorsLoading}
+                    onBook={handleBookFromService}
+                  />
+                </div>
+              </DialogContent>
+            </Dialog>
+          )
         )}
 
         <BookingModal open={isBookingOpen} onOpenChange={setIsBookingOpen}>
@@ -288,6 +221,148 @@ export function ServicesPreview() {
         <ServicesConsultationPrompt />
       </div>
     </section>
+  );
+}
+
+type ServiceSheetBodyProps = {
+  service: (typeof landingServices)[number];
+  language: Language;
+  doctors: Doctor[];
+  doctorsLoading: boolean;
+  onBook: () => void;
+  deferHeavyContent?: boolean;
+};
+
+const ServiceSheetBody = memo(function ServiceSheetBody({
+  service,
+  language,
+  doctors,
+  doctorsLoading,
+  onBook,
+  deferHeavyContent = false,
+}: ServiceSheetBodyProps) {
+  return (
+    <div className="p-4 sm:max-h-[calc(100dvh-3rem)] sm:p-6 lg:p-7">
+      <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8">
+        <ServiceMainPanel service={service} language={language} onBook={onBook} />
+        <ServiceSheetExtraSections
+          service={service}
+          language={language}
+          doctors={doctors}
+          doctorsLoading={doctorsLoading}
+          deferMount={deferHeavyContent}
+        />
+      </div>
+    </div>
+  );
+});
+
+type ServiceSheetExtraSectionsProps = {
+  service: (typeof landingServices)[number];
+  language: Language;
+  doctors: Doctor[];
+  doctorsLoading: boolean;
+  deferMount?: boolean;
+};
+
+function ServiceSheetExtraSections({
+  service,
+  language,
+  doctors,
+  doctorsLoading,
+  deferMount = false,
+}: ServiceSheetExtraSectionsProps) {
+  const t = landingCopy[language];
+  const [isReady, setIsReady] = useState(!deferMount);
+
+  useEffect(() => {
+    if (!deferMount) {
+      setIsReady(true);
+      return;
+    }
+
+    setIsReady(false);
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsReady(true));
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [deferMount, service.id]);
+
+  const serviceDoctors = useMemo(
+    () => doctors.filter((doctor) => doctor.serviceIds.includes(service.serviceId)).slice(0, 2),
+    [doctors, service.serviceId]
+  );
+
+  if (!isReady) {
+    return (
+      <div className="grid content-start gap-5" aria-hidden="true">
+        <div className="h-48 animate-pulse rounded-[1.35rem] bg-[#EEF2F4]" />
+        <div className="h-36 animate-pulse rounded-[1.35rem] bg-[#EEF2F4]" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid content-start gap-5">
+      <section aria-labelledby="landing-specialists-title">
+        <h4 id="landing-specialists-title" className="font-display mb-4 text-2xl font-normal text-[#1F2528]">
+          {t.services.specialistsTitle}
+        </h4>
+        <div className={cn("grid gap-4", doctorsLoading || serviceDoctors.length > 1 ? "sm:grid-cols-2" : "sm:grid-cols-1")}>
+          {doctorsLoading &&
+            Array.from({ length: 2 }).map((_, index) => (
+              <CompactDoctorCardSkeleton key={index} />
+            ))}
+          {serviceDoctors.map((doctor) => (
+            <article
+              key={doctor.id}
+              data-doctor-card={doctor.id}
+              className="clinical-card-soft overflow-hidden rounded-[1.35rem]"
+            >
+              <div className="aspect-square bg-[#EEF2F4]">
+                <DoctorPhoto doctor={doctor} language={language} initialsClassName="size-14 text-base" />
+              </div>
+              <div className="p-5">
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary">
+                  {getDoctorExperience(doctor, language)}
+                </p>
+                <h5 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
+                  {doctor.name[language]}
+                </h5>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.08em] text-[#606A70]">
+                  {doctor.specialty[language]}
+                </p>
+                <p className="line-clamp-4 text-sm leading-relaxed text-[#606A70]">
+                  {doctor.description[language]}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section aria-labelledby="landing-faq-title" className="rounded-[1.35rem] border border-[#DDE3E7] bg-white px-4 shadow-[0_18px_55px_rgba(31,37,40,0.045)]">
+        <h4 id="landing-faq-title" className="sr-only">
+          {t.services.faqTitle}
+        </h4>
+        <div className="border-b border-[#DDE3E7] py-4">
+          <p className="font-display text-2xl font-normal text-[#1F2528]">{t.services.faqTitle}</p>
+        </div>
+        <Accordion type="single" collapsible>
+          {service.faqs.map((faq, idx) => (
+            <AccordionItem key={faq.question.ru} value={`${service.id}-${idx}`} className="border-[#DDE3E7]">
+              <AccordionTrigger className="text-left text-sm font-bold text-[#1F2528] hover:text-primary hover:no-underline">
+                {faq.question[language]}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm leading-relaxed text-[#606A70]">
+                {faq.answer[language]}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
+    </div>
   );
 }
 
@@ -389,10 +464,10 @@ function ServiceMainPanel({ service, language, onBook }: ServiceMainPanelProps) 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button
           onClick={onBook}
-          className="accent-button-shadow h-14 rounded-2xl bg-primary px-7 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
+          className="accent-button-shadow inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-7 text-sm font-bold leading-none text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
         >
-          {t.services.book}
-          <ArrowRight data-icon="inline-end" className="ml-2 size-4" />
+          <span>{t.services.book}</span>
+          <ArrowRight className="size-4 shrink-0" />
         </Button>
         <Button
           asChild

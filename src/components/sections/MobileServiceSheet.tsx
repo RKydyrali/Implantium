@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useDragControls, useReducedMotion } from "framer-motion";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -58,18 +59,18 @@ export function MobileServiceSheet({
 
   const sheetTransition = reduceMotion
     ? { duration: 0 }
-    : { type: "spring" as const, damping: 32, stiffness: 340, mass: 0.85 };
+    : { duration: 0.26, ease: [0.32, 0.72, 0, 1] as const };
 
-  const overlayTransition = reduceMotion ? { duration: 0 } : { duration: 0.22 };
+  const overlayTransition = reduceMotion ? { duration: 0 } : { duration: 0.18 };
 
-  return (
+  const sheet = (
     <AnimatePresence>
       {open && (
         <>
           <motion.button
             type="button"
             aria-label={closeLabel}
-            className="fixed inset-0 z-50 bg-[#1F2528]/45 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[100] bg-[#1F2528]/50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -82,11 +83,12 @@ export function MobileServiceSheet({
             aria-labelledby={sheetTitleId}
             aria-describedby={sheetDescriptionId}
             className={cn(
-              "fixed inset-x-0 bottom-0 z-50 flex flex-col overflow-hidden rounded-t-[1.75rem] border border-b-0 border-[#DDE3E7] bg-white shadow-[0_28px_90px_rgba(31,37,40,0.16)]",
+              "fixed inset-x-0 bottom-0 z-[100] flex will-change-transform flex-col overflow-hidden rounded-t-[1.75rem] border border-b-0 border-[#DDE3E7] bg-white shadow-[0_28px_90px_rgba(31,37,40,0.16)] transition-[height] duration-300 ease-out",
+              expanded ? "h-[92dvh]" : "h-[70dvh]",
               className
             )}
             initial={{ y: "100%" }}
-            animate={{ y: 0, height: expanded ? "92dvh" : "70dvh" }}
+            animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={sheetTransition}
             drag="y"
@@ -143,7 +145,7 @@ export function MobileServiceSheet({
               <X className="size-4" />
             </button>
 
-            <motion.div layout className="min-h-0 flex-1 overflow-y-auto">
+            <motion.div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
               {children}
             </motion.div>
           </motion.div>
@@ -151,4 +153,10 @@ export function MobileServiceSheet({
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(sheet, document.body);
 }

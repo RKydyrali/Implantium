@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, X } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -130,7 +131,7 @@ export function ServicesConsultationPrompt() {
     }
   };
 
-  return (
+  const prompt = (
     <AnimatePresence>
       {isVisible && (
         <motion.aside
@@ -139,7 +140,7 @@ export function ServicesConsultationPrompt() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 8, scale: 0.97 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          className="fixed bottom-24 right-4 z-30 w-[calc(100%-2rem)] max-w-[18rem] rounded-2xl border border-primary/20 bg-white p-4 shadow-[0_12px_40px_rgba(166,58,45,0.12)] md:bottom-8 md:right-8"
+          className="fixed bottom-24 right-4 z-[60] w-[calc(100%-2rem)] max-w-[18rem] rounded-2xl border border-primary/20 bg-white p-4 shadow-[0_12px_40px_rgba(166,58,45,0.12)] md:bottom-8 md:right-8"
         >
           <button
             type="button"
@@ -169,4 +170,10 @@ export function ServicesConsultationPrompt() {
       )}
     </AnimatePresence>
   );
+
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(prompt, document.body);
 }

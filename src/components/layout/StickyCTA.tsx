@@ -17,7 +17,7 @@ export function StickyCTA() {
       <BookingModal>
         <button
           type="button"
-          className="flex h-12 flex-1 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-white shadow-[0_12px_30px_rgba(164,58,40,0.22)] transition-colors hover:bg-primary/90"
+          className="inline-flex h-12 min-h-12 flex-1 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold leading-none text-white shadow-[0_12px_30px_rgba(164,58,40,0.22)] transition-colors hover:bg-primary/90"
         >
           {t.common.bookConsultation}
         </button>
