@@ -49,6 +49,7 @@ function DecorativeTooth({
     [0, 1],
     shouldReduceMotion ? [0, 0] : [item.parallax, -item.parallax]
   );
+  const sway = item.sway ?? 3;
 
   return (
     <motion.div
@@ -58,11 +59,19 @@ function DecorativeTooth({
       <motion.img
         src={item.src}
         alt=""
-        className="block h-auto w-full [filter:drop-shadow(0_24px_36px_rgba(68,45,34,0.13))]"
+        className="block h-auto w-full [filter:drop-shadow(0_16px_28px_rgba(68,45,34,0.2))_drop-shadow(0_4px_12px_rgba(255,255,255,0.35))]"
         draggable={false}
         loading="lazy"
         decoding="async"
-        animate={shouldReduceMotion ? undefined : { y: [0, -item.float, 0] }}
+        animate={
+          shouldReduceMotion
+            ? undefined
+            : {
+                y: [0, -item.float, 0],
+                rotate: [-sway * 0.5, sway * 0.5, -sway * 0.5],
+                scale: [1, 1.03, 1],
+              }
+        }
         transition={
           shouldReduceMotion
             ? undefined

@@ -1,5 +1,6 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   CheckCircle,
@@ -23,6 +24,7 @@ import treatmentIcon from "@/assets/service-icons/treatment.png";
 import extractionIcon from "@/assets/service-icons/extraction.png";
 import cleaningIcon from "@/assets/service-icons/cleaning.png";
 import bracesIcon from "@/assets/service-icons/braces.png";
+import denturesIcon from "@/assets/service-icons/dentures.png";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DoctorPhoto } from "@/components/common/DoctorPhoto";
@@ -45,7 +47,7 @@ import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackg
 import { MobileServiceSheet } from "@/components/sections/MobileServiceSheet";
 import { ServicesConsultationPrompt } from "@/components/sections/ServicesConsultationPrompt";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { CrownVeneerComparison } from "@/components/services/CrownVeneerComparison";
+import { MotionListItem } from "@/components/motion/MotionPrimitives";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   Tooth,
@@ -63,11 +65,13 @@ const ServiceIconAssets: Record<string, string> = {
   "tooth-extraction": extractionIcon,
   cleaning: cleaningIcon,
   braces: bracesIcon,
+  dentures: denturesIcon,
 };
 
 export function ServicesPreview() {
   const { language } = useLanguage();
   const isMobileSheet = useMediaQuery("(max-width: 639px)");
+  const reduceMotion = useReducedMotion();
   const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
   const t = landingCopy[language];
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
@@ -126,14 +130,17 @@ export function ServicesPreview() {
             const generatedIcon = ServiceIconAssets[service.serviceId];
 
             return (
-              <button
+              <motion.button
                 key={service.id}
                 type="button"
                 aria-haspopup="dialog"
                 aria-expanded={isActive}
                 onClick={() => handleServiceClick(service.id)}
+                whileHover={reduceMotion ? undefined : { y: -4, scale: 1.006 }}
+                whileTap={reduceMotion ? undefined : { y: -1, scale: 0.992 }}
+                transition={{ type: "spring", stiffness: 320, damping: 26 }}
                 className={cn(
-                  "group grid min-h-[5.75rem] grid-cols-[auto_1fr] items-center gap-3 rounded-2xl border bg-white p-4 text-left shadow-[0_12px_34px_rgba(31,37,40,0.04)] transition-[border-color,background-color,box-shadow,transform] duration-200 ease-out hover:-translate-y-0.5 hover:border-[#C8D3D9] hover:shadow-[0_18px_46px_rgba(31,37,40,0.06)] active:translate-y-[1px] sm:min-h-[6.6rem] sm:gap-4 sm:p-5",
+                  "group grid min-h-[5.75rem] grid-cols-[auto_1fr] items-center gap-3 rounded-2xl border bg-white p-4 text-left shadow-[0_12px_34px_rgba(31,37,40,0.04)] transition-[border-color,background-color,box-shadow] duration-200 ease-out hover:border-[#C8D3D9] hover:shadow-[0_18px_46px_rgba(31,37,40,0.06)] sm:min-h-[6.6rem] sm:gap-4 sm:p-5",
                   isActive
                     ? "border-primary/55 bg-[#F4E7E4]/45 text-[#1F2528] shadow-[0_18px_44px_rgba(166,58,45,0.08)]"
                     : "border-[#DDE3E7] text-[#606A70]"
@@ -141,10 +148,10 @@ export function ServicesPreview() {
               >
                 <span
                   className={cn(
-                    "flex size-11 shrink-0 items-center justify-center rounded-2xl border transition-colors sm:size-12",
+                    "flex size-11 shrink-0 items-center justify-center rounded-2xl border transition-[border-color,background-color,color,transform] duration-200 sm:size-12 motion-reduce:transform-none",
                     isActive
                       ? "border-primary/20 bg-white text-primary"
-                      : "border-[#E8EDF0] bg-[#FAFBFC] text-[#6E7B83] group-hover:text-primary"
+                      : "border-[#E8EDF0] bg-[#FAFBFC] text-[#6E7B83] group-hover:scale-[1.03] group-hover:text-primary"
                   )}
                 >
                   <ServiceTileIcon
@@ -161,7 +168,7 @@ export function ServicesPreview() {
                     {service.summary[language]}
                   </span>
                 </span>
-              </button>
+              </motion.button>
             );
           })}
         </div>
@@ -274,21 +281,27 @@ function ServiceSheetExtraSections({
   deferMount = false,
 }: ServiceSheetExtraSectionsProps) {
   const t = landingCopy[language];
-  const [isReady, setIsReady] = useState(!deferMount);
+  const [readyServiceId, setReadyServiceId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!deferMount) {
-      setIsReady(true);
       return;
     }
 
-    setIsReady(false);
-    const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => setIsReady(true));
+    let secondFrame = 0;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => setReadyServiceId(service.id));
     });
 
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      if (secondFrame) {
+        cancelAnimationFrame(secondFrame);
+      }
+    };
   }, [deferMount, service.id]);
+
+  const isReady = !deferMount || readyServiceId === service.id;
 
   const serviceDoctors = useMemo(
     () => doctors.filter((doctor) => doctor.serviceIds.includes(service.serviceId)).slice(0, 2),
@@ -298,8 +311,8 @@ function ServiceSheetExtraSections({
   if (!isReady) {
     return (
       <div className="grid content-start gap-5" aria-hidden="true">
-        <div className="h-48 animate-pulse rounded-[1.35rem] bg-[#EEF2F4]" />
-        <div className="h-36 animate-pulse rounded-[1.35rem] bg-[#EEF2F4]" />
+        <div className="motion-skeleton h-48 rounded-[1.35rem]" />
+        <div className="motion-skeleton h-36 rounded-[1.35rem]" />
       </div>
     );
   }
@@ -311,35 +324,40 @@ function ServiceSheetExtraSections({
           {t.services.specialistsTitle}
         </h4>
         <div className={cn("grid gap-4", doctorsLoading || serviceDoctors.length > 1 ? "sm:grid-cols-2" : "sm:grid-cols-1")}>
-          {doctorsLoading &&
-            Array.from({ length: 2 }).map((_, index) => (
-              <CompactDoctorCardSkeleton key={index} />
-            ))}
-          {serviceDoctors.map((doctor) => (
-            <article
-              key={doctor.id}
-              data-doctor-card={doctor.id}
-              className="clinical-card-soft overflow-hidden rounded-[1.35rem]"
-            >
-              <div className="aspect-square bg-[#EEF2F4]">
-                <DoctorPhoto doctor={doctor} language={language} initialsClassName="size-14 text-base" />
-              </div>
-              <div className="p-5">
-                <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary">
-                  {getDoctorExperience(doctor, language)}
-                </p>
-                <h5 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
-                  {doctor.name[language]}
-                </h5>
-                <p className="mb-3 text-xs font-bold uppercase tracking-[0.08em] text-[#606A70]">
-                  {doctor.specialty[language]}
-                </p>
-                <p className="line-clamp-4 text-sm leading-relaxed text-[#606A70]">
-                  {doctor.description[language]}
-                </p>
-              </div>
-            </article>
-          ))}
+          <AnimatePresence initial={false}>
+            {doctorsLoading
+              ? Array.from({ length: 2 }).map((_, index) => (
+                  <MotionListItem key={`service-sheet-doctor-skeleton-${index}`} index={index}>
+                    <CompactDoctorCardSkeleton />
+                  </MotionListItem>
+                ))
+              : serviceDoctors.map((doctor, index) => (
+                  <MotionListItem key={doctor.id} index={index} interactive>
+                    <article
+                      data-doctor-card={doctor.id}
+                      className="clinical-card-soft overflow-hidden rounded-[1.35rem]"
+                    >
+                      <div className="aspect-square bg-[#EEF2F4]">
+                        <DoctorPhoto doctor={doctor} language={language} initialsClassName="size-14 text-base" />
+                      </div>
+                      <div className="p-5">
+                        <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary">
+                          {getDoctorExperience(doctor, language)}
+                        </p>
+                        <h5 className="mb-2 text-lg font-bold leading-tight text-[#1F2528]">
+                          {doctor.name[language]}
+                        </h5>
+                        <p className="mb-3 text-xs font-bold uppercase tracking-[0.08em] text-[#606A70]">
+                          {doctor.specialty[language]}
+                        </p>
+                        <p className="line-clamp-4 text-sm leading-relaxed text-[#606A70]">
+                          {doctor.description[language]}
+                        </p>
+                      </div>
+                    </article>
+                  </MotionListItem>
+                ))}
+          </AnimatePresence>
         </div>
       </section>
 
@@ -419,8 +437,6 @@ function ServiceMainPanel({ service, language, onBook }: ServiceMainPanelProps) 
         </p>
       </div>
 
-      {service.serviceId === "crowns" && <CrownVeneerComparison language={language} compact />}
-
       <div className="grid gap-3">
         {service.bullets[language].map((bullet) => (
           <div key={bullet} className="flex items-center gap-3">
@@ -467,15 +483,15 @@ function ServiceMainPanel({ service, language, onBook }: ServiceMainPanelProps) 
       <div className="flex flex-col gap-3 sm:flex-row">
         <Button
           onClick={onBook}
-          className="accent-button-shadow inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-7 text-sm font-bold leading-none text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
+          className="group accent-button-shadow inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-7 text-sm font-bold leading-none text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
         >
           <span>{t.services.book}</span>
-          <ArrowRight className="size-4 shrink-0" />
+          <ArrowRight className="size-4 shrink-0 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
         </Button>
         <Button
           asChild
           variant="outline"
-          className="h-14 rounded-2xl border-[#DDE3E7] bg-white px-7 text-sm font-bold text-[#1F2528] hover:border-[#C8D3D9] hover:bg-[#FAFBFC]"
+          className="group h-14 rounded-2xl border-[#DDE3E7] bg-white px-7 text-sm font-bold text-[#1F2528] hover:border-[#C8D3D9] hover:bg-[#FAFBFC]"
         >
           <Link to={`/services/${service.serviceId}`}>{t.services.details}</Link>
         </Button>

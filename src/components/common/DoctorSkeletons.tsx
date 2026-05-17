@@ -4,12 +4,27 @@ function SkeletonBlock({ className }: { className?: string }) {
   return (
     <div
       aria-hidden="true"
-      className={cn("animate-pulse rounded-xl bg-[#DDE3E7]/80", className)}
+      className={cn("motion-skeleton rounded-xl", className)}
     />
   );
 }
 
-export function CompactDoctorCardSkeleton() {
+export function CompactDoctorCardSkeleton({ variant = "vertical" }: { variant?: "vertical" | "horizontal" }) {
+  if (variant === "horizontal") {
+    return (
+      <article className="h-full overflow-hidden rounded-[1.2rem] border border-border/70 bg-white shadow-[0_16px_42px_rgba(68,45,34,0.06)]">
+        <div className="flex h-[11.75rem]">
+          <SkeletonBlock className="h-full w-36 shrink-0 rounded-none" />
+          <div className="flex min-w-0 flex-1 flex-col justify-center gap-2 p-5">
+            <SkeletonBlock className="h-4 w-4/5" />
+            <SkeletonBlock className="h-3 w-full" />
+            <SkeletonBlock className="h-3 w-2/3" />
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="clinical-card-soft overflow-hidden rounded-[1.35rem]">
       <SkeletonBlock className="aspect-square rounded-none" />

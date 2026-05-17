@@ -235,7 +235,7 @@ export function buildClinicJsonLd(siteUrl: string, serviceNames: string[] = []) 
     url: siteUrl,
     telephone: "+77027133939",
     priceRange: "₸₸",
-    image: `${siteUrl}/favicon.svg`,
+    image: `${siteUrl}/favicon-512.png`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "13 микрорайон, дом 39",

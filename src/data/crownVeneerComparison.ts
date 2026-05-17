@@ -32,7 +32,7 @@ export const crownVeneerCopy = {
       "Даёт «голливудскую» эстетику улыбки",
     ],
     ceramicLabel: "Цельная керамика",
-    ceramicHint: "Циркон / E-max · без металла",
+    ceramicHint: "Циркон / E-max · без металла, максимум эстетики",
     pfmLabel: "Металлокерамика",
     pfmHint: "Металл + керамика · высокая прочность",
     veneerShellLabel: "Тонкая накладка",

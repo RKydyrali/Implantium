@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { List, X } from "@phosphor-icons/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import implantiumLogo from "@/assets/implantium-logo-cropped.png";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
@@ -14,6 +14,7 @@ export function Header() {
   const { language, setLanguage } = useLanguage();
   const t = content[language];
   const landing = landingCopy[language];
+  const reduceMotion = useReducedMotion();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -137,10 +138,10 @@ export function Header() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -16 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.22 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -16 }}
+            transition={{ duration: reduceMotion ? 0.12 : 0.22 }}
             className="fixed inset-0 z-50 flex min-h-[100dvh] flex-col bg-[#F5F7F8]"
           >
             <div className="flex items-center justify-between border-b border-[#DDE3E7] bg-white p-4">

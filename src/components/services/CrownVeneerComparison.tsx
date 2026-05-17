@@ -3,135 +3,103 @@ import { Crown, Sparkle } from "@phosphor-icons/react";
 import type { Language } from "@/types";
 import { cn } from "@/lib/utils";
 import { getCrownVeneerCopy } from "@/data/crownVeneerComparison";
+import { ServiceComparisonTable } from "@/components/services/ServiceComparisonTable";
 import crownMaterialsImage from "@/assets/education/crown-materials-comparison.jpg";
 import veneersExplainerImage from "@/assets/education/veneers-explainer.jpg";
 
 type CrownVeneerComparisonProps = {
   language: Language;
-  compact?: boolean;
 };
 
 type CompareTab = "crown" | "veneer";
 
-export function CrownVeneerComparison({ language, compact = false }: CrownVeneerComparisonProps) {
+export function CrownVeneerComparison({ language }: CrownVeneerComparisonProps) {
   const copy = getCrownVeneerCopy(language);
   const [activeTab, setActiveTab] = useState<CompareTab>("crown");
 
   return (
     <section
-      className={cn(
-        "overflow-hidden rounded-[1.5rem] border border-[#DDE3E7] bg-[linear-gradient(180deg,#FFFFFF_0%,#FAFBFC_100%)] shadow-[0_18px_55px_rgba(31,37,40,0.05)]",
-        compact ? "p-4 sm:p-5" : "p-5 sm:p-7"
-      )}
+      className="overflow-hidden rounded-[1.5rem] border border-[#DDE3E7] bg-white p-5 shadow-[0_18px_55px_rgba(31,37,40,0.05)] sm:p-7"
       aria-labelledby="crown-veneer-comparison-title"
     >
-      <div className={cn("grid gap-6", compact ? "" : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-8")}>
-        <div>
-          <h3
-            id="crown-veneer-comparison-title"
-            className={cn(
-              "font-display font-normal text-[#1F2528]",
-              compact ? "text-2xl leading-tight" : "text-3xl md:text-4xl"
-            )}
-          >
-            {copy.sectionTitle}
-          </h3>
-          <p className="mt-3 text-sm leading-relaxed text-[#606A70] md:text-base">{copy.sectionIntro}</p>
+      <h3 id="crown-veneer-comparison-title" className="font-display text-3xl font-normal text-[#1F2528] md:text-4xl">
+        {copy.sectionTitle}
+      </h3>
+      <p className="mt-3 max-w-3xl text-base leading-relaxed text-[#606A70]">{copy.sectionIntro}</p>
 
-          <div className="mt-5 flex rounded-2xl border border-[#DDE3E7] bg-[#FAFBFC] p-1 lg:hidden">
-            <TabButton
-              active={activeTab === "crown"}
-              onClick={() => setActiveTab("crown")}
-              icon={<Crown weight="duotone" className="size-4" />}
-              label={copy.crownTitle}
-            />
-            <TabButton
-              active={activeTab === "veneer"}
-              onClick={() => setActiveTab("veneer")}
-              icon={<Sparkle weight="duotone" className="size-4" />}
-              label={copy.veneerTitle}
-            />
-          </div>
-
-          <div className="mt-5 space-y-4 lg:mt-6">
-            <ComparisonCard
-              title={copy.crownTitle}
-              icon={<Crown weight="duotone" className="size-5" />}
-              points={copy.crownPoints}
-              className={cn(activeTab !== "crown" && "hidden lg:block")}
-            />
-            <ComparisonCard
-              title={copy.veneerTitle}
-              icon={<Sparkle weight="duotone" className="size-5" />}
-              points={copy.veneerPoints}
-              className={cn(activeTab !== "veneer" && "hidden lg:block")}
-            />
-          </div>
-        </div>
-
-        <div className="grid gap-4">
-          <VisualPanel
-            title={copy.crownTitle}
-            caption={copy.materialsCaption}
-            imageSrc={crownMaterialsImage}
-            imageAlt={
-              language === "ru"
-                ? "Сравнение цельной керамической и металлокерамической коронок в разрезе"
-                : "Бітімді керамикалық және металлокерамикалық қаптамаларды салыстыру"
-            }
-            badges={[
-              { label: copy.ceramicLabel, hint: copy.ceramicHint, position: "left" },
-              { label: copy.pfmLabel, hint: copy.pfmHint, position: "right" },
-            ]}
-            className={cn(activeTab !== "crown" && "hidden lg:block")}
-            materialsHeading={copy.materialsTitle}
-          />
-          <VisualPanel
-            title={copy.veneerTitle}
-            caption={copy.veneerCaption}
-            imageSrc={veneersExplainerImage}
-            imageAlt={
-              language === "ru"
-                ? "Улыбка и схема установки виниров на передние зубы"
-                : "Күлкі және алдыңғы тістерге винир орнату схемасы"
-            }
-            badges={[{ label: copy.veneerShellLabel, hint: copy.veneerShellHint, position: "center" }]}
-            className={cn(activeTab !== "veneer" && "hidden lg:block")}
-          />
-        </div>
+      <div className="mt-6 flex rounded-2xl border border-[#DDE3E7] bg-[#FAFBFC] p-1 md:hidden">
+        <TabButton
+          active={activeTab === "crown"}
+          onClick={() => setActiveTab("crown")}
+          icon={<Crown weight="duotone" className="size-4" />}
+          label={copy.crownTitle}
+        />
+        <TabButton
+          active={activeTab === "veneer"}
+          onClick={() => setActiveTab("veneer")}
+          icon={<Sparkle weight="duotone" className="size-4" />}
+          label={copy.veneerTitle}
+        />
       </div>
 
-      <div className="mt-6 border-t border-[#DDE3E7] pt-6">
-        <h4 className="text-sm font-bold uppercase tracking-[0.12em] text-primary">{copy.comparisonTitle}</h4>
-        <div className="mt-4 overflow-hidden rounded-2xl border border-[#DDE3E7] bg-white">
-          <div className="hidden grid-cols-[1.1fr_1fr_1fr] gap-3 border-b border-[#DDE3E7] bg-[#FAFBFC] px-4 py-3 text-xs font-bold uppercase tracking-[0.08em] text-[#8A949B] sm:grid">
-            <span />
-            <span className="text-[#1F2528]">{copy.crownTitle}</span>
-            <span className="text-[#1F2528]">{copy.veneerTitle}</span>
-          </div>
-          {copy.rows.map((row, index) => (
-            <div
-              key={row.label}
-              className={cn(
-                "grid gap-2 px-4 py-3.5 sm:grid-cols-[1.1fr_1fr_1fr] sm:gap-3 sm:py-4",
-                index < copy.rows.length - 1 && "border-b border-[#EEF2F4]"
-              )}
-            >
-              <p className="text-xs font-bold uppercase tracking-[0.06em] text-[#8A949B] sm:text-sm sm:normal-case sm:tracking-normal sm:text-[#606A70]">
-                {row.label}
-              </p>
-              <p className="text-sm leading-relaxed text-[#1F2528]">
-                <span className="mb-1 block font-bold text-primary sm:hidden">{copy.crownTitle}</span>
-                {row.crown}
-              </p>
-              <p className="text-sm leading-relaxed text-[#1F2528]">
-                <span className="mb-1 block font-bold text-primary sm:hidden">{copy.veneerTitle}</span>
-                {row.veneer}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <VisualPanel
+          title={copy.crownTitle}
+          caption={copy.materialsCaption}
+          imageSrc={crownMaterialsImage}
+          imageAlt={
+            language === "ru"
+              ? "Сравнение цельной керамической и металлокерамической коронок в разрезе"
+              : "Бітімді керамикалық және металлокерамикалық қаптамаларды салыстыру"
+          }
+          badges={[
+            { label: copy.ceramicLabel, hint: copy.ceramicHint, position: "left" },
+            { label: copy.pfmLabel, hint: copy.pfmHint, position: "right" },
+          ]}
+          materialsHeading={copy.materialsTitle}
+          className={cn(activeTab !== "crown" && "hidden md:block")}
+        />
+        <VisualPanel
+          title={copy.veneerTitle}
+          caption={copy.veneerCaption}
+          imageSrc={veneersExplainerImage}
+          imageAlt={
+            language === "ru"
+              ? "Улыбка и схема установки виниров на передние зубы"
+              : "Күлкі және алдыңғы тістерге винир орнату схемасы"
+          }
+          badges={[{ label: copy.veneerShellLabel, hint: copy.veneerShellHint, position: "center" }]}
+          className={cn(activeTab !== "veneer" && "hidden md:block")}
+        />
       </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <ComparisonCard
+          title={copy.crownTitle}
+          icon={<Crown weight="duotone" className="size-5" />}
+          points={copy.crownPoints}
+          className={cn(activeTab !== "crown" && "hidden md:block")}
+        />
+        <ComparisonCard
+          title={copy.veneerTitle}
+          icon={<Sparkle weight="duotone" className="size-5" />}
+          points={copy.veneerPoints}
+          className={cn(activeTab !== "veneer" && "hidden md:block")}
+        />
+      </div>
+
+      <ServiceComparisonTable
+        className="mt-8"
+        title={copy.comparisonTitle}
+        columns={[
+          { id: "crown", title: copy.crownTitle, tone: "primary" },
+          { id: "veneer", title: copy.veneerTitle, tone: "blue" },
+        ]}
+        rows={copy.rows.map((row) => ({
+          label: row.label,
+          values: { crown: row.crown, veneer: row.veneer },
+        }))}
+      />
     </section>
   );
 }
@@ -174,7 +142,7 @@ function ComparisonCard({
   className?: string;
 }) {
   return (
-    <article className={cn("rounded-2xl border border-[#DDE3E7] bg-white p-4", className)}>
+    <article className={cn("rounded-2xl border border-[#DDE3E7] bg-[#FAFBFC] p-4", className)}>
       <div className="mb-3 flex items-center gap-2.5">
         <span className="flex size-9 items-center justify-center rounded-xl bg-[#F4E7E4]/70 text-primary">{icon}</span>
         <h4 className="text-lg font-bold text-[#1F2528]">{title}</h4>

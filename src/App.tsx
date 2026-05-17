@@ -1,25 +1,44 @@
-import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { AnimatePresence } from "framer-motion";
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyCTA } from "@/components/layout/StickyCTA";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
+import { MotionPage } from "@/components/motion/MotionPrimitives";
 
-import Home from "@/pages/Home";
-import Doctors from "@/pages/Doctors";
-import ServiceDetail from "@/pages/ServiceDetail";
-import NotFound from "@/pages/NotFound";
-import Admin from "@/pages/Admin";
+const Home = lazy(() => import("@/pages/Home"));
+const Doctors = lazy(() => import("@/pages/Doctors"));
+const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const Admin = lazy(() => import("@/pages/Admin"));
 
 function Layout() {
+  const location = useLocation();
+
   return (
     <div className="min-h-screen flex flex-col font-sans bg-background text-foreground selection:bg-primary/20">
       <ScrollToTop />
       <Header />
-      <Outlet />
+      <Suspense fallback={null}>
+        <AnimatePresence mode="wait" initial={false}>
+          <MotionPage key={location.pathname}>
+            <Outlet />
+          </MotionPage>
+        </AnimatePresence>
+      </Suspense>
       <Footer />
       <StickyCTA />
     </div>
+  );
+}
+
+function AdminRoute() {
+  return (
+    <Suspense fallback={null}>
+      <Admin />
+    </Suspense>
   );
 }
 
@@ -28,7 +47,7 @@ function App() {
     <LanguageProvider>
       <Router>
         <Routes>
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<AdminRoute />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="doctors" element={<Doctors />} />

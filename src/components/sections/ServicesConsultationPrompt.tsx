@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, X } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
@@ -12,6 +12,7 @@ const AUTO_HIDE_MS = 8000;
 export function ServicesConsultationPrompt() {
   const { language } = useLanguage();
   const copy = landingCopy[language].services;
+  const reduceMotion = useReducedMotion();
   const showTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
   const [hasShown, setHasShown] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -136,10 +137,10 @@ export function ServicesConsultationPrompt() {
       {isVisible && (
         <motion.aside
           aria-live="polite"
-          initial={{ opacity: 0, y: 12, scale: 0.97 }}
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 8, scale: 0.97 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
+          exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.97 }}
+          transition={{ duration: reduceMotion ? 0.12 : 0.25, ease: "easeOut" }}
           className="fixed bottom-24 right-4 z-[60] w-[calc(100%-2rem)] max-w-[18rem] rounded-2xl border border-primary/20 bg-white p-4 shadow-[0_12px_40px_rgba(166,58,45,0.12)] md:bottom-8 md:right-8"
         >
           <button

@@ -1,14 +1,16 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, HandHeart } from "@phosphor-icons/react";
 import heroClinicalImplant from "@/assets/hero-clinical-implant.png";
 import { useLanguage } from "@/hooks/useLanguage";
 import { landingCopy } from "@/data/landing";
 import { Button } from "@/components/ui/button";
 import { BookingModal } from "@/components/sections/BookingModal";
+import { TextReveal } from "@/components/motion/MotionPrimitives";
 
 export function Hero() {
   const { language } = useLanguage();
   const t = landingCopy[language];
+  const reduceMotion = useReducedMotion();
 
   return (
     <section className="relative isolate overflow-hidden bg-white pt-[5.4rem]">
@@ -18,6 +20,7 @@ export function Hero() {
           alt={t.hero.imageAlt}
           className="absolute inset-0 h-full w-full object-cover object-[95%_center] sm:object-[76%_center] md:object-[66%_center] lg:object-[62%_center]"
           loading="eager"
+          fetchPriority="high"
           decoding="async"
         />
         {/* Subtle brightness + blur overlay to make content pop */}
@@ -28,13 +31,14 @@ export function Hero() {
       <div className="section-shell pb-8 pt-4 sm:pt-12 md:pb-12 md:pt-16 lg:pb-20">
         <div className="flex items-center min-h-[500px] sm:min-h-[580px] lg:min-h-[640px]">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: reduceMotion ? 0.12 : 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10 flex max-w-2xl flex-col items-start gap-6 sm:gap-8"
           >
             <div className="flex flex-col gap-1">
-              <h1 className="text-[2.6rem] font-medium leading-[1.15] tracking-tight text-[#1F2528] sm:text-[3.8rem] md:text-[4.4rem] lg:text-[4.8rem]">
+              <TextReveal>
+                <h1 className="text-[2.6rem] font-medium leading-[1.15] tracking-tight text-[#1F2528] sm:text-[3.8rem] md:text-[4.4rem] lg:text-[4.8rem]">
                 {language === "kk" ? (
                   <>
                     <span className="font-inter font-normal">
@@ -55,13 +59,14 @@ export function Hero() {
                     <span className="font-display italic text-primary">здоровой улыбке</span>
                   </>
                 )}
-              </h1>
+                </h1>
+              </TextReveal>
             </div>
 
             <motion.div 
-              initial={{ opacity: 0, y: 10 }}
+              initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              transition={{ delay: reduceMotion ? 0 : 0.2, duration: reduceMotion ? 0.12 : 0.5 }}
               className="flex max-w-[22rem] items-center gap-3 rounded-[1.5rem] border border-white/80 bg-white/85 p-3 pr-5 shadow-[0_12px_45px_rgba(31,37,40,0.06)] backdrop-blur-xl sm:max-w-[28rem] sm:gap-4 sm:rounded-[2rem] sm:p-4 sm:pr-6"
             >
               <div className="flex size-11 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-[#F4E7E4] text-primary sm:size-14">
@@ -76,21 +81,21 @@ export function Hero() {
               <BookingModal>
                 <Button
                   size="lg"
-                  className="accent-button-shadow h-16 rounded-[1.25rem] bg-primary px-10 text-base font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
+                  className="group accent-button-shadow h-16 rounded-[1.25rem] bg-primary px-10 text-base font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]"
                 >
                   {t.hero.primaryCta}
-                  <ArrowRight weight="bold" className="ml-2 size-4 opacity-70" />
+                  <ArrowRight weight="bold" className="ml-2 size-4 opacity-70 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
                 </Button>
               </BookingModal>
               <Button
                 asChild
                 variant="outline"
                 size="lg"
-                className="h-16 rounded-[1.25rem] border-white/50 bg-white/70 px-10 text-base font-bold text-[#1F2528] shadow-[0_12px_30px_rgba(31,37,40,0.03)] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:bg-white active:translate-y-[1px]"
+                className="group h-16 rounded-[1.25rem] border-white/50 bg-white/70 px-10 text-base font-bold text-[#1F2528] shadow-[0_12px_30px_rgba(31,37,40,0.03)] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:bg-white active:translate-y-[1px]"
               >
                 <a href="/#services">
                   {t.hero.secondaryCta}
-                  <ArrowRight weight="bold" className="ml-2 size-4 text-[#606A70]" />
+                  <ArrowRight weight="bold" className="ml-2 size-4 text-[#606A70] transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
                 </a>
               </Button>
             </div>

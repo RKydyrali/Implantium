@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   CalendarCheck,
@@ -14,7 +15,7 @@ import {
   WhatsappLogo,
   type IconProps,
 } from "@phosphor-icons/react";
-import type { ComponentType, ReactNode } from "react";
+import { lazy, Suspense, type ComponentType, type ReactNode } from "react";
 import type { Doctor, FAQItem, Language, ServiceData } from "@/types";
 import { content } from "@/data/content";
 import { getServiceSeo } from "@/data/seo";
@@ -22,7 +23,7 @@ import { cn } from "@/lib/utils";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { DoctorPhoto } from "@/components/common/DoctorPhoto";
+import { CompactHorizontalDoctorCard } from "@/components/common/CompactHorizontalDoctorCard";
 import { CompactDoctorCardSkeleton } from "@/components/common/DoctorSkeletons";
 import { ImageSlider } from "@/components/ui/image-slider";
 import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
@@ -33,7 +34,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { BookingModal } from "@/components/sections/BookingModal";
-import { CrownVeneerComparison } from "@/components/services/CrownVeneerComparison";
+import { MotionListItem, Reveal, Stagger, StaggerItem, TextReveal } from "@/components/motion/MotionPrimitives";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   CalendarCheck,
@@ -46,6 +47,22 @@ const IconMap: Record<string, ComponentType<IconProps>> = {
   Sparkle,
   Tooth,
 };
+
+const CrownVeneerComparison = lazy(() =>
+  import("@/components/services/CrownVeneerComparison").then((module) => ({
+    default: module.CrownVeneerComparison,
+  }))
+);
+const DentureTypesEducation = lazy(() =>
+  import("@/components/services/DentureTypesEducation").then((module) => ({
+    default: module.DentureTypesEducation,
+  }))
+);
+const OrthopedicSectionNav = lazy(() =>
+  import("@/components/services/OrthopedicSectionNav").then((module) => ({
+    default: module.OrthopedicSectionNav,
+  }))
+);
 
 const detailCopy = {
   ru: {
@@ -147,6 +164,7 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
             aria-hidden="true"
             className="size-full object-cover object-[66%_center] opacity-55 md:object-[72%_center] md:opacity-100"
             loading="eager"
+            fetchPriority="high"
             decoding="async"
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,#f8fbfd_0%,#f8fbfd_32%,rgba(248,251,253,0.92)_48%,rgba(248,251,253,0.54)_66%,rgba(248,251,253,0.12)_84%,rgba(248,251,253,0)_100%)]" />
@@ -167,11 +185,13 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
           </nav>
 
           <div className="grid min-h-[520px] items-center gap-10 lg:grid-cols-[0.56fr_0.44fr] lg:gap-16">
-            <div className="max-w-3xl py-2 md:py-6">
-              <h1 className="font-display max-w-[10ch] text-5xl font-normal leading-[0.95] text-[#23201f] sm:text-6xl lg:text-7xl">
-                {service.title[language]}
-                <span className="mt-1 block text-primary">{service.heroAccent[language]}</span>
-              </h1>
+            <Reveal className="max-w-3xl py-2 md:py-6">
+              <TextReveal>
+                <h1 className="font-display max-w-[10ch] text-5xl font-normal leading-[0.95] text-[#23201f] sm:text-6xl lg:text-7xl">
+                  {service.title[language]}
+                  <span className="mt-1 block text-primary">{service.heroAccent[language]}</span>
+                </h1>
+              </TextReveal>
               <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 {service.shortDescription[language]} {service.explanation[language]}
               </p>
@@ -187,15 +207,15 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
 
               <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
                 <BookingModal>
-                  <Button size="lg" className="h-12 shrink-0 rounded-full bg-primary px-5 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] sm:h-14 sm:px-8">
+                  <Button size="lg" className="group h-12 shrink-0 rounded-full bg-primary px-5 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] sm:h-14 sm:px-8">
                     {t.common.bookConsultation}
-                    <ArrowRight weight="bold" className="size-4 ml-2" />
+                    <ArrowRight weight="bold" className="ml-2 size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
                   </Button>
                 </BookingModal>
-                <Button asChild variant="outline" size="lg" className="h-12 shrink-0 rounded-full border-primary/15 bg-white px-5 text-sm font-bold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-secondary active:translate-y-[1px] sm:h-14 sm:px-8">
+                <Button asChild variant="outline" size="lg" className="group h-12 shrink-0 rounded-full border-primary/15 bg-white px-5 text-sm font-bold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-secondary active:translate-y-[1px] sm:h-14 sm:px-8">
                   <a href="#service-process">
                     {copy.learnMore}
-                    <ArrowRight weight="fill" className="size-4 text-primary" />
+                    <ArrowRight weight="fill" className="size-4 text-primary transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
                   </a>
                 </Button>
               </div>
@@ -204,7 +224,7 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
                 <ShieldCheck weight="fill" className="size-4 text-primary" />
                 {copy.consultationNote}
               </p>
-            </div>
+            </Reveal>
 
             <div aria-hidden="true" className="hidden lg:block" />
           </div>
@@ -214,82 +234,98 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
       <section id="service-process" className="relative isolate overflow-hidden bg-white px-4 py-10 md:px-8 md:py-14">
         <DentalParallaxBackground surface="service-process" />
         <div className="relative z-10 mx-auto grid max-w-[1360px] gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-12">
-          <div>
+          <Reveal>
             <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.suitableTitle}</h2>
-            <div className="mt-6 grid gap-4">
+            <Stagger className="mt-6 grid gap-4">
               {service.suitableFor[language].map((item) => (
-                <div key={item} className="flex items-center gap-3 text-sm leading-relaxed text-muted-foreground">
+                <StaggerItem key={item} className="flex items-center gap-3 text-sm leading-relaxed text-muted-foreground">
                   <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-primary/15 bg-[#fff8f3] text-primary">
                     <Check weight="bold" className="size-3.5" />
                   </span>
                   <span>{item}</span>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
-          </div>
+            </Stagger>
+          </Reveal>
 
-          <div className="border-t border-border/70 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12">
+          <Reveal className="border-t border-border/70 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12">
             <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.processTitle}</h2>
-            <div className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+            <Stagger className="mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
               {service.processDetails.map((step, index) => (
-                <ProcessStep key={step.title.ru} step={step} index={index} language={language} />
+                <StaggerItem key={step.title.ru}>
+                  <ProcessStep step={step} index={index} language={language} />
+                </StaggerItem>
               ))}
-            </div>
-          </div>
+            </Stagger>
+          </Reveal>
         </div>
       </section>
 
       {service.id === "crowns" && (
         <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
           <DentalParallaxBackground surface="service-advantages" />
+          <div className="relative z-10 mx-auto max-w-[1360px] space-y-6">
+            <Suspense fallback={null}>
+              <OrthopedicSectionNav language={language} />
+              <CrownVeneerComparison language={language} />
+              <div id="prosthetics" className="scroll-mt-28">
+                <DentureTypesEducation language={language} />
+              </div>
+            </Suspense>
+          </div>
+        </section>
+      )}
+
+      {service.id === "dentures" && (
+        <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
+          <DentalParallaxBackground surface="service-advantages" />
           <div className="relative z-10 mx-auto max-w-[1360px]">
-            <CrownVeneerComparison language={language} />
+            <Suspense fallback={null}>
+              <DentureTypesEducation language={language} />
+            </Suspense>
           </div>
         </section>
       )}
 
       <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
         <DentalParallaxBackground surface="service-advantages" />
-        <div className="relative z-10 mx-auto max-w-[1360px] border-t border-border/70 pt-10">
+        <Reveal className="relative z-10 mx-auto max-w-[1360px] border-t border-border/70 pt-10">
           <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.advantagesTitle}</h2>
-          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <Stagger className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {service.advantages.map((item) => (
-              <AdvantageCard key={item.title.ru} item={item} language={language} />
+              <StaggerItem key={item.title.ru}>
+                <AdvantageCard item={item} language={language} />
+              </StaggerItem>
             ))}
-          </div>
-        </div>
+          </Stagger>
+        </Reveal>
       </section>
 
       {(doctorsLoading || doctors.length > 0) && (
         <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
           <DentalParallaxBackground surface="service-doctors" />
           <div className="relative z-10 mx-auto max-w-[1360px]">
-            <div className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <Reveal className="mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="font-display text-3xl font-normal text-foreground md:text-4xl">{copy.doctorsTitle}</h2>
-              <a href="/doctors" className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+              <a href="/doctors" className="group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
                 {copy.allDoctors}
-                <ArrowRight weight="bold" className="size-4" />
+                <ArrowRight weight="bold" className="size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
               </a>
-            </div>
-            <div className="grid gap-5 lg:grid-cols-3">
-              {doctorsLoading &&
-                Array.from({ length: 3 }).map((_, index) => (
-                  <CompactDoctorCardSkeleton key={index} />
-                ))}
-              {doctors.slice(0, 3).map((doctor) => (
-                <Card key={doctor.id} className="overflow-hidden rounded-[1.2rem] border-border/70 bg-white shadow-[0_16px_42px_rgba(68,45,34,0.06)]">
-                  <div className="grid min-h-[9.5rem] grid-cols-[9rem_1fr] items-stretch">
-                    <div className="overflow-hidden bg-secondary">
-                      <DoctorPhoto doctor={doctor} language={language} className="object-cover" />
-                    </div>
-                    <div className="flex min-w-0 flex-col justify-center p-5">
-                      <h3 className="text-base font-bold leading-snug text-foreground">{doctor.name[language]}</h3>
-                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{doctor.specialty[language]}</p>
-                      <p className="mt-4 text-sm font-medium text-muted-foreground">{doctor.description[language].split(".")[0]}.</p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+            </Reveal>
+            <div className="grid items-stretch gap-5 lg:grid-cols-3">
+              <AnimatePresence initial={false}>
+                {doctorsLoading
+                  ? Array.from({ length: 3 }).map((_, index) => (
+                      <MotionListItem key={`service-doctor-skeleton-${index}`} index={index} className="h-full">
+                        <CompactDoctorCardSkeleton variant="horizontal" />
+                      </MotionListItem>
+                    ))
+                  : doctors.slice(0, 3).map((doctor, index) => (
+                      <MotionListItem key={doctor.id} index={index} className="h-full" interactive>
+                        <CompactHorizontalDoctorCard doctor={doctor} language={language} />
+                      </MotionListItem>
+                    ))}
+              </AnimatePresence>
             </div>
           </div>
         </section>
@@ -297,7 +333,7 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
 
       <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-14">
         <DentalParallaxBackground surface="service-faq" />
-        <div className="relative z-10 mx-auto grid max-w-[1360px] gap-10 border-t border-border/70 pt-10 lg:grid-cols-[0.9fr_1.1fr]">
+        <Reveal className="relative z-10 mx-auto grid max-w-[1360px] gap-10 border-t border-border/70 pt-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <h2 className="font-display mb-6 text-3xl font-normal text-foreground md:text-4xl">{copy.faqTitle}</h2>
             <Accordion type="single" collapsible className="grid gap-3">
@@ -339,13 +375,13 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
               ))}
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="relative isolate overflow-hidden bg-white px-4 pb-12 md:px-8 md:pb-16">
         <DentalParallaxBackground surface="service-cta" />
         <div className="relative z-10 mx-auto max-w-[1360px]">
-          <div className="grid min-w-0 gap-5 overflow-hidden rounded-[1.7rem] border border-primary/10 bg-[linear-gradient(135deg,#fff8f3,#fffdfb)] p-5 shadow-[0_18px_55px_rgba(68,45,34,0.08)] md:p-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <Reveal className="grid min-w-0 gap-5 overflow-hidden rounded-[1.7rem] border border-primary/10 bg-[linear-gradient(135deg,#fff8f3,#fffdfb)] p-5 shadow-[0_18px_55px_rgba(68,45,34,0.08)] md:p-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
             <div className="flex min-w-0 items-center gap-5">
               <span className="hidden size-20 shrink-0 items-center justify-center rounded-full border border-primary/10 bg-white text-primary shadow-sm sm:flex">
                 <Phone weight="fill" className="size-8" />
@@ -372,13 +408,13 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
                 disabled={!hasWhatsapp}
               />
               <BookingModal>
-                <Button size="lg" className="h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] lg:w-auto">
+                <Button size="lg" className="group h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] lg:w-auto">
                   {t.common.bookConsultation}
-                  <ArrowRight weight="bold" className="size-4 ml-2" />
+                  <ArrowRight weight="bold" className="ml-2 size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" />
                 </Button>
               </BookingModal>
             </div>
-          </div>
+          </Reveal>
           <p className="mt-4 flex items-center justify-center gap-2 text-xs font-medium text-muted-foreground">
             <ShieldCheck weight="fill" className="size-4 text-primary" />
             {copy.consultationNote}
@@ -440,7 +476,7 @@ function AdvantageCard({ item, language }: { item: ServiceData["advantages"][num
 function ResultImage({ src, alt, label }: { src: string; alt: string; label: string }) {
   return (
     <div className="relative min-h-[8.5rem] overflow-hidden bg-secondary">
-      <img src={src} alt={alt} className="size-full object-cover" loading="eager" decoding="async" />
+      <img src={src} alt={alt} className="size-full object-cover" loading="lazy" decoding="async" />
       <span className="absolute left-3 top-3 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-primary shadow-sm backdrop-blur">
         {label}
       </span>
