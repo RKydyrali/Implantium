@@ -37,11 +37,13 @@ export function Hero() {
               <h1 className="text-[2.6rem] font-medium leading-[1.15] tracking-tight text-[#1F2528] sm:text-[3.8rem] md:text-[4.4rem] lg:text-[4.8rem]">
                 {language === "kk" ? (
                   <>
+                    <span className="font-inter font-normal">
                     Ақтаудағы <br />
                     заманауи <br />
                     стоматология <br />
                     Сау әрі әдемі <br />
                     күлкіге <br />
+                    </span>
                     <span className="font-display italic text-primary">{t.hero.lineThree}</span>
                   </>
                 ) : (
