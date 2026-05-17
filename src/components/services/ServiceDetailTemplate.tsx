@@ -33,6 +33,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { BookingModal } from "@/components/sections/BookingModal";
+import { CrownVeneerComparison } from "@/components/services/CrownVeneerComparison";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   CalendarCheck,
@@ -237,6 +238,15 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
           </div>
         </div>
       </section>
+
+      {service.id === "crowns" && (
+        <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
+          <DentalParallaxBackground surface="service-advantages" />
+          <div className="relative z-10 mx-auto max-w-[1360px]">
+            <CrownVeneerComparison language={language} />
+          </div>
+        </section>
+      )}
 
       <section className="relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12">
         <DentalParallaxBackground surface="service-advantages" />

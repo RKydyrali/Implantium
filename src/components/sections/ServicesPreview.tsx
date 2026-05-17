@@ -45,6 +45,7 @@ import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackg
 import { MobileServiceSheet } from "@/components/sections/MobileServiceSheet";
 import { ServicesConsultationPrompt } from "@/components/sections/ServicesConsultationPrompt";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { CrownVeneerComparison } from "@/components/services/CrownVeneerComparison";
 
 const IconMap: Record<string, ComponentType<IconProps>> = {
   Tooth,
@@ -417,6 +418,8 @@ function ServiceMainPanel({ service, language, onBook }: ServiceMainPanelProps) 
           {service.summary[language]}
         </p>
       </div>
+
+      {service.serviceId === "crowns" && <CrownVeneerComparison language={language} compact />}
 
       <div className="grid gap-3">
         {service.bullets[language].map((bullet) => (
