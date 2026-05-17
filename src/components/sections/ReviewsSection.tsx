@@ -102,7 +102,7 @@ function ReviewsMarquee({ sourceLabel }: { sourceLabel: string }) {
 
   return (
     <div className="reviews-marquee pt-6 pb-8 -mt-6" aria-label={language === "ru" ? "Реальные отзывы пациентов" : "Пациенттердің нақты пікірлері"}>
-      <div className="reviews-marquee-track gap-4 md:gap-5">
+      <div className="reviews-marquee-track items-start gap-4 md:gap-5">
         {repeatedReviews.map((review, index) => {
           const isDuplicate = index >= patientReviews.length;
 
@@ -140,11 +140,11 @@ function ReviewCard({
     <article
       aria-hidden={isDuplicate}
       className={cn(
-        "clinical-card-soft clinical-lift flex min-h-[20rem] w-[min(82vw,23rem)] shrink-0 flex-col rounded-[1.6rem] p-5 md:w-[25rem] md:p-6",
+        "clinical-card-soft clinical-lift flex w-[min(82vw,23rem)] shrink-0 flex-col rounded-[1.6rem] p-5 md:w-[25rem] md:p-6",
         isDuplicate && "reviews-marquee-duplicate"
       )}
     >
-      <div className="mb-5 flex items-center justify-between gap-4">
+      <div className="mb-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#DDE3E7] bg-white text-sm font-bold text-primary shadow-sm">
             {initials}
@@ -161,7 +161,7 @@ function ReviewCard({
         <Quotes weight="fill" className="size-7 shrink-0 text-primary/75" />
       </div>
 
-      <p className="flex-1 text-sm font-medium leading-7 text-[#1F2528]/80">
+      <p className="text-sm font-medium leading-6 text-[#1F2528]/80">
         {review.text[language]}
       </p>
 
@@ -170,7 +170,7 @@ function ReviewCard({
         target="_blank"
         rel="noreferrer"
         tabIndex={isDuplicate ? -1 : undefined}
-        className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#DDE3E7] bg-white px-4 py-2 text-xs font-bold text-[#1F2528] shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 active:translate-y-[1px]"
+        className="mt-4 inline-flex w-fit items-center gap-2 rounded-full border border-[#DDE3E7] bg-white px-4 py-2 text-xs font-bold text-[#1F2528] shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/25 active:translate-y-[1px]"
       >
         {sourceLabel}
         <ArrowRight weight="bold" className="size-3.5" />

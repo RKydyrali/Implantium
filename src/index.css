@@ -186,6 +186,7 @@
 
   .reviews-marquee-track {
     display: flex;
+    align-items: flex-start;
     width: max-content;
     animation: reviews-marquee 58s linear infinite;
     transform: translate3d(0, 0, 0);
