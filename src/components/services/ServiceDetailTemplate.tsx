@@ -17,6 +17,7 @@ import {
 import type { ComponentType, ReactNode } from "react";
 import type { Doctor, FAQItem, Language, ServiceData } from "@/types";
 import { content } from "@/data/content";
+import { getServiceSeo } from "@/data/seo";
 import { cn } from "@/lib/utils";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { Button } from "@/components/ui/button";
@@ -130,6 +131,7 @@ type ServiceDetailTemplateProps = {
 export function ServiceDetailTemplate({ service, doctors, doctorsLoading, language }: ServiceDetailTemplateProps) {
   const t = content[language];
   const copy = detailCopy[language];
+  const seo = getServiceSeo(service);
   const serviceFaq = getFaqItems(service, language);
   const hasPhone = hasContactValue(clinicContact.phoneHref);
   const hasWhatsapp = hasContactValue(clinicContact.whatsappUrl);
@@ -171,6 +173,9 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
                 {service.shortDescription[language]} {service.explanation[language]}
+              </p>
+              <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-[#52657B] md:text-base">
+                {seo.intro[language]}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">

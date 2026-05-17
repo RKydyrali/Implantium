@@ -1,4 +1,4 @@
-import { useEffect, type ComponentType } from "react";
+import { type ComponentType } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -17,9 +17,11 @@ import { Button } from "@/components/ui/button";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
 import { DentalParallaxBackground } from "@/components/decor/DentalParallaxBackground";
 import { useLanguage } from "@/hooks/useLanguage";
+import { getSiteOrigin, useSeo } from "@/hooks/useSeo";
 import { clinicContact, hasContactValue } from "@/data/clinicContact";
 import { usePublicDoctors } from "@/hooks/useDoctors";
 import { services } from "@/data/services";
+import { buildBreadcrumbJsonLd, buildClinicJsonLd, doctorsSeo } from "@/data/seo";
 import {
   DoctorsGridCardSkeleton,
   FeaturedDoctorSkeleton,
@@ -174,12 +176,19 @@ export default function Doctors() {
   const copy = doctorPageCopy[language];
   const featuredDoctor = doctors[0];
 
-  useEffect(() => {
-    document.title =
-      language === "ru"
-        ? "Врачи IMPLANTIUM - специалисты стоматологической клиники"
-        : "IMPLANTIUM дәрігерлері - стоматология мамандары";
-  }, [language]);
+  useSeo({
+    title: doctorsSeo.title[language],
+    description: doctorsSeo.description[language],
+    keywords: doctorsSeo.keywords,
+    path: "/doctors",
+    jsonLd: [
+      buildClinicJsonLd(getSiteOrigin(), services.map((service) => service.title.ru)),
+      buildBreadcrumbJsonLd(getSiteOrigin(), [
+        { name: language === "ru" ? "Главная" : "Басты бет", path: "/" },
+        { name: copy.title, path: "/doctors" },
+      ]),
+    ],
+  });
 
   return (
     <main className="flex-1 overflow-hidden bg-[#F4F8FB] text-[#17243B]">

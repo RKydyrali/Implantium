@@ -1,8 +1,14 @@
-import { useEffect, useMemo } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
 import { usePublicDoctors } from "@/hooks/useDoctors";
+import { getSiteOrigin, useSeo } from "@/hooks/useSeo";
 import { services } from "@/data/services";
+import {
+  buildBreadcrumbJsonLd,
+  buildClinicJsonLd,
+  buildServiceJsonLd,
+  getServiceSeo,
+} from "@/data/seo";
 import { ServiceDetailTemplate } from "@/components/services/ServiceDetailTemplate";
 
 export default function ServiceDetail() {
@@ -10,16 +16,28 @@ export default function ServiceDetail() {
   const { language } = useLanguage();
   const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
   const service = services.find((item) => item.id === id);
-  const serviceDoctors = useMemo(
-    () => service ? doctors.filter((doctor) => doctor.serviceIds.includes(service.id)) : [],
-    [doctors, service]
-  );
+  const serviceId = service?.id;
+  const seo = service ? getServiceSeo(service) : undefined;
+  const siteOrigin = getSiteOrigin();
+  const servicePath = serviceId ? `/services/${serviceId}` : "/404";
+  const serviceDoctors = serviceId ? doctors.filter((doctor) => doctor.serviceIds.includes(serviceId)) : [];
 
-  useEffect(() => {
-    if (service) {
-      document.title = `${service.title[language]} - IMPLANTIUM`;
-    }
-  }, [language, service]);
+  useSeo({
+    title: seo?.title[language] ?? "Страница не найдена | IMPLANTIUM",
+    description: seo?.description[language] ?? "Страница не найдена на сайте стоматологической клиники IMPLANTIUM.",
+    keywords: seo?.keywords ?? [],
+    path: servicePath,
+    noindex: !service,
+    jsonLd: service && seo ? [
+      buildClinicJsonLd(siteOrigin, services.map((item) => item.title.ru)),
+      buildServiceJsonLd(siteOrigin, servicePath, service, seo, language),
+      buildBreadcrumbJsonLd(siteOrigin, [
+        { name: language === "ru" ? "Главная" : "Басты бет", path: "/" },
+        { name: language === "ru" ? "Услуги" : "Қызметтер", path: "/#services" },
+        { name: service.title[language], path: servicePath },
+      ]),
+    ] : [],
+  });
 
   if (!service) {
     return <Navigate to="/404" replace />;

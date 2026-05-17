@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useLanguage } from "@/hooks/useLanguage";
+import { getSiteOrigin, useSeo } from "@/hooks/useSeo";
 
 import { Hero } from "@/components/sections/Hero";
 import { ServicesPreview } from "@/components/sections/ServicesPreview";
@@ -8,17 +8,19 @@ import { DoctorsSection } from "@/components/sections/DoctorsSection";
 
 import { LocationSection } from "@/components/sections/LocationSection";
 import { ReviewsSection } from "@/components/sections/ReviewsSection";
-
+import { services } from "@/data/services";
+import { buildClinicJsonLd, homeSeo } from "@/data/seo";
 
 export default function Home() {
   const { language } = useLanguage();
 
-  useEffect(() => {
-    document.title =
-      language === "ru"
-        ? "IMPLANTIUM - современная стоматология в Актау"
-        : "IMPLANTIUM - Ақтаудағы заманауи стоматология";
-  }, [language]);
+  useSeo({
+    title: homeSeo.title[language],
+    description: homeSeo.description[language],
+    keywords: homeSeo.keywords,
+    path: "/",
+    jsonLd: [buildClinicJsonLd(getSiteOrigin(), services.map((service) => service.title.ru))],
+  });
 
   return (
     <main className="flex-1 w-full overflow-hidden bg-[#F5F7F8]">
@@ -29,7 +31,6 @@ export default function Home() {
 
       <ReviewsSection />
       <LocationSection />
-
     </main>
   );
 }

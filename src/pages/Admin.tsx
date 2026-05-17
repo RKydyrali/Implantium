@@ -17,6 +17,7 @@ import {
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
 import { isConvexConfigured } from "@/lib/convex";
+import { useSeo } from "@/hooks/useSeo";
 import { services } from "@/data/services";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -98,9 +99,12 @@ export default function Admin() {
   const isAdminLoading =
     Boolean(token) && (viewer.status === "pending" || doctorsResult.status === "pending");
 
-  useEffect(() => {
-    document.title = "Управление врачами — IMPLANTIUM";
-  }, []);
+  useSeo({
+    title: "Управление врачами | IMPLANTIUM",
+    description: "Внутренний раздел управления врачами стоматологической клиники IMPLANTIUM.",
+    path: "/admin",
+    noindex: true,
+  });
 
   useEffect(() => {
     if (viewer.status === "success" && !viewer.data.isAdmin) {

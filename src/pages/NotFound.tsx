@@ -1,11 +1,21 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useSeo } from "@/hooks/useSeo";
 import { content } from "@/data/content";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   const { language } = useLanguage();
   const t = content[language];
+
+  useSeo({
+    title: language === "ru" ? "Страница не найдена | IMPLANTIUM" : "Бет табылмады | IMPLANTIUM",
+    description: language === "ru"
+      ? "Страница не найдена на сайте стоматологической клиники IMPLANTIUM в Актау."
+      : "Ақтаудағы IMPLANTIUM стоматологиясының сайтында бұл бет табылмады.",
+    path: "/404",
+    noindex: true,
+  });
 
   return (
     <main className="flex-1 flex items-center justify-center pt-32 pb-24">
