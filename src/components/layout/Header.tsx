@@ -38,8 +38,8 @@ export function Header() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-[#DDE3E7] bg-white/[0.94] py-1.5 shadow-[0_14px_42px_rgba(31,37,40,0.06)] backdrop-blur-xl"
-          : "border-b border-white/60 bg-white/[0.82] py-2 backdrop-blur-md"
+          ? "border-b border-[#DDE3E7] bg-white py-1.5 shadow-[0_14px_42px_rgba(31,37,40,0.06)]"
+          : "border-b border-[#ECEFF1] bg-white py-2"
       )}
     >
       <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-4 px-4 md:px-8">
@@ -51,7 +51,7 @@ export function Header() {
           <img
             src={implantiumLogo}
             alt={t.common.clinicName}
-            className="size-full object-contain object-left mix-blend-multiply transition-transform duration-300 group-hover:-translate-y-0.5"
+            className="size-full object-contain object-left transition-transform duration-300 group-hover:-translate-y-0.5"
           />
         </Link>
 
@@ -153,7 +153,7 @@ export function Header() {
                 <img
                   src={implantiumLogo}
                   alt={t.common.clinicName}
-                  className="size-full object-contain object-left mix-blend-multiply"
+                  className="size-full object-contain object-left"
                 />
               </Link>
               <button

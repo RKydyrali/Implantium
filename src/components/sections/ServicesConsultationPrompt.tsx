@@ -17,7 +17,6 @@ export function ServicesConsultationPrompt() {
   const [hasShown, setHasShown] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [hideAfterBooking, setHideAfterBooking] = useState(false);
 
   useEffect(() => {
     if (hasShown || isVisible) {
@@ -126,13 +125,18 @@ export function ServicesConsultationPrompt() {
   const handleBookingOpenChange = (open: boolean) => {
     setIsBookingOpen(open);
 
-    if (!open && hideAfterBooking) {
-      setHideAfterBooking(false);
+    if (open) {
       setIsVisible(false);
     }
   };
 
+  const handleOpenBooking = () => {
+    setIsBookingOpen(true);
+    setIsVisible(false);
+  };
+
   const prompt = (
+    <>
     <AnimatePresence>
       {isVisible && (
         <motion.aside
@@ -156,20 +160,20 @@ export function ServicesConsultationPrompt() {
             <h3 className="text-sm font-bold leading-tight text-[#1F2528]">{copy.promptTitle}</h3>
             <p className="mt-1.5 text-[13px] leading-relaxed text-[#606A70]">{copy.promptText}</p>
             
-            <BookingModal open={isBookingOpen} onOpenChange={handleBookingOpenChange}>
-              <button
-                type="button"
-                onClick={() => setHideAfterBooking(true)}
-                className="mt-3.5 flex items-center gap-1.5 text-xs font-bold text-primary transition-colors hover:text-[#8F2F25]"
-              >
-                {copy.book}
-                <ArrowRight weight="bold" className="size-3" />
-              </button>
-            </BookingModal>
+            <button
+              type="button"
+              onClick={handleOpenBooking}
+              className="mt-3.5 flex items-center gap-1.5 text-xs font-bold text-primary transition-colors hover:text-[#8F2F25]"
+            >
+              {copy.book}
+              <ArrowRight weight="bold" className="size-3" />
+            </button>
           </div>
         </motion.aside>
       )}
     </AnimatePresence>
+    <BookingModal open={isBookingOpen} onOpenChange={handleBookingOpenChange} />
+    </>
   );
 
   if (typeof document === "undefined") {

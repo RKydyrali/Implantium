@@ -5,7 +5,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { clinicContact } from "@/data/clinicContact";
 
 type BookingModalProps = {
-  children: ReactNode;
+  children?: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
@@ -29,9 +29,7 @@ export function BookingModal({ children, open, onOpenChange }: BookingModalProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
+      {children ? <DialogTrigger asChild>{children}</DialogTrigger> : null}
       <DialogContent
         motionPreset="booking"
         overlayClassName="bg-[#1F2528]/45 backdrop-blur-[2px]"
