@@ -13,6 +13,7 @@ const Doctors = lazy(() => import("@/pages/Doctors"));
 const ServiceDetail = lazy(() => import("@/pages/ServiceDetail"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Admin = lazy(() => import("@/pages/Admin"));
+const Visitka = lazy(() => import("@/pages/Visitka"));
 
 function Layout() {
   const location = useLocation();
@@ -48,6 +49,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/admin" element={<AdminRoute />} />
+          <Route path="/visitka" element={
+            <Suspense fallback={null}>
+              <Visitka />
+            </Suspense>
+          } />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="doctors" element={<Doctors />} />
