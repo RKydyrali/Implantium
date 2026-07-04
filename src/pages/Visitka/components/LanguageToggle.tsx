@@ -11,7 +11,7 @@ export function LanguageToggle({ value, onChange }: LanguageToggleProps) {
     <ToggleGroup
       type="single"
       value={value}
-      onValueChange={(next) => {
+      onValueChange={(next: string) => {
         if (next === "kk" || next === "ru") {
           onChange(next)
         }
