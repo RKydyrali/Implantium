@@ -5,7 +5,7 @@ import implantiumLogo from "@/assets/implantium-logo-cropped.png";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
 import { landingCopy, landingServices } from "@/data/landing";
-import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import { clinicContact, getWhatsAppUrl, hasContactValue } from "@/data/clinicContact";
 
 export function Footer() {
   const { language } = useLanguage();
@@ -25,7 +25,7 @@ export function Footer() {
               <FooterIcon href={clinicContact.instagramUrl} label="Instagram">
                 <InstagramLogo weight="fill" className="size-5" />
               </FooterIcon>
-              <FooterIcon href={clinicContact.whatsappUrl} label="WhatsApp">
+              <FooterIcon href={getWhatsAppUrl(language)} label="WhatsApp">
                 <WhatsappLogo weight="fill" className="size-5" />
               </FooterIcon>
             </div>
@@ -77,7 +77,7 @@ export function Footer() {
               <li className="footer-contact-line">
                 <WhatsappLogo weight="fill" className="mt-0.5 size-5 shrink-0 text-primary" />
                 {hasContactValue(clinicContact.whatsappUrl) ? (
-                  <a href={clinicContact.whatsappUrl} className="transition-colors hover:text-primary">
+                  <a href={getWhatsAppUrl(language)} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">
                     {clinicContact.phoneDisplay}
                   </a>
                 ) : (

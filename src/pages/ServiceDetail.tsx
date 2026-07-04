@@ -6,6 +6,7 @@ import { services } from "@/data/services";
 import {
   buildBreadcrumbJsonLd,
   buildClinicJsonLd,
+  buildFaqJsonLd,
   buildServiceJsonLd,
   getServiceSeo,
 } from "@/data/seo";
@@ -36,6 +37,7 @@ export default function ServiceDetail() {
         { name: language === "ru" ? "Услуги" : "Қызметтер", path: "/#services" },
         { name: service.title[language], path: servicePath },
       ]),
+      ...(service.faq.length > 0 ? [buildFaqJsonLd(service.faq, language)] : []),
     ] : [],
   });
 

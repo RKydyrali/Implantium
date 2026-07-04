@@ -2,7 +2,7 @@ import { Phone, WhatsappLogo } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
 import { content } from "@/data/content";
 import { landingCopy } from "@/data/landing";
-import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import { clinicContact, getWhatsAppUrl, hasContactValue } from "@/data/clinicContact";
 import { BookingModal } from "@/components/sections/BookingModal";
 
 export function StickyCTA() {
@@ -24,9 +24,11 @@ export function StickyCTA() {
       </BookingModal>
       {hasWhatsapp ? (
         <a
-          href={clinicContact.whatsappUrl}
+          href={getWhatsAppUrl(language)}
           className="flex size-12 shrink-0 items-center justify-center rounded-full border border-primary/15 bg-secondary text-primary shadow-sm transition-colors hover:bg-secondary/80"
           aria-label="WhatsApp"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <WhatsappLogo weight="fill" className="size-5" />
         </a>

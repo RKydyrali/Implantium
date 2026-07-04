@@ -20,7 +20,7 @@ import type { Doctor, FAQItem, Language, ServiceData } from "@/types";
 import { content } from "@/data/content";
 import { getServiceSeo } from "@/data/seo";
 import { cn } from "@/lib/utils";
-import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import { clinicContact, getWhatsAppUrl, hasContactValue } from "@/data/clinicContact";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CompactHorizontalDoctorCard } from "@/components/common/CompactHorizontalDoctorCard";
@@ -402,10 +402,11 @@ export function ServiceDetailTemplate({ service, doctors, doctorsLoading, langua
               />
               <ContactPill
                 icon={<WhatsappLogo weight="fill" className="size-5" />}
-                href={clinicContact.whatsappUrl}
+                href={getWhatsAppUrl(language)}
                 title={hasWhatsapp ? "WhatsApp" : copy.whatsappPending}
                 caption={copy.whatsappCaption}
                 disabled={!hasWhatsapp}
+                external
               />
               <BookingModal>
                 <Button size="lg" className="group h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] lg:w-auto">
@@ -490,12 +491,14 @@ function ContactPill({
   title,
   caption,
   disabled,
+  external = false,
 }: {
   icon: ReactNode;
   href?: string;
   title: string;
   caption: string;
   disabled: boolean;
+  external?: boolean;
 }) {
   const titleLines = title.split(",").map((line) => line.trim()).filter(Boolean);
   const contentNode = (
@@ -514,7 +517,11 @@ function ContactPill({
 
   if (!disabled && href) {
     return (
-      <a href={href} className="flex h-14 w-full min-w-0 items-center gap-3 rounded-full border border-border/70 bg-white px-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/20 active:translate-y-[1px] lg:w-auto">
+      <a
+        href={href}
+        className="flex h-14 w-full min-w-0 items-center gap-3 rounded-full border border-border/70 bg-white px-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/20 active:translate-y-[1px] lg:w-auto"
+        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
         {contentNode}
       </a>
     );

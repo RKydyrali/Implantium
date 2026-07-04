@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Phone, WhatsappLogo } from "@phosphor-icons/react";
 import { useLanguage } from "@/hooks/useLanguage";
-import { clinicContact } from "@/data/clinicContact";
+import { clinicContact, getWhatsAppUrl } from "@/data/clinicContact";
 
 type BookingModalProps = {
   children?: ReactNode;
@@ -47,7 +47,7 @@ export function BookingModal({ children, open, onOpenChange }: BookingModalProps
           </p>
           
           <a
-            href={clinicContact.whatsappUrl}
+            href={getWhatsAppUrl(language)}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-3 rounded-2xl bg-[#25D366] p-4 font-semibold text-white shadow-sm transition-colors hover:bg-[#20bd5a]"

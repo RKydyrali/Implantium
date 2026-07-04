@@ -241,7 +241,13 @@ export function buildClinicJsonLd(siteUrl: string, serviceNames: string[] = []) 
       streetAddress: "13 микрорайон, дом 39",
       addressLocality: "Актау",
       addressRegion: "Мангистауская область",
+      postalCode: "130000",
       addressCountry: "KZ",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 43.667073,
+      longitude: 51.136723,
     },
     areaServed: {
       "@type": "City",
@@ -305,6 +311,26 @@ export function buildBreadcrumbJsonLd(siteUrl: string, items: { name: string; pa
       position: index + 1,
       name: item.name,
       item: `${siteUrl}${item.path}`,
+    })),
+  };
+}
+
+/**
+ * Generates FAQPage JSON-LD from a service's FAQ items.
+ * Produces rich accordion snippets in Google search results.
+ */
+export function buildFaqJsonLd(faqItems: { question: { ru: string; kk: string }; answer: { ru: string; kk: string } }[], language: Language) {
+  if (faqItems.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question[language],
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer[language],
+      },
     })),
   };
 }

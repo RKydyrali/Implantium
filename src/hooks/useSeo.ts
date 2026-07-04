@@ -10,6 +10,7 @@ type SeoConfig = {
   jsonLd?: unknown[];
   noindex?: boolean;
   type?: "website" | "article";
+  image?: string;
 };
 
 export function getSiteOrigin() {
@@ -35,6 +36,7 @@ export function useSeo({
   jsonLd = [],
   noindex = false,
   type = "website",
+  image,
 }: SeoConfig) {
   useEffect(() => {
     const siteOrigin = getSiteOrigin();
@@ -47,19 +49,23 @@ export function useSeo({
     upsertMeta("name", "keywords", keywords.join(", "));
     upsertLink("canonical", canonicalUrl);
 
+    const ogImage = image ?? `${siteOrigin}/og-image.png`;
+
     upsertMeta("property", "og:site_name", "IMPLANTIUM");
     upsertMeta("property", "og:type", type);
     upsertMeta("property", "og:title", title);
     upsertMeta("property", "og:description", description);
     upsertMeta("property", "og:url", canonicalUrl);
     upsertMeta("property", "og:locale", "ru_KZ");
+    upsertMeta("property", "og:image", ogImage);
 
-    upsertMeta("name", "twitter:card", "summary");
+    upsertMeta("name", "twitter:card", "summary_large_image");
     upsertMeta("name", "twitter:title", title);
     upsertMeta("name", "twitter:description", description);
+    upsertMeta("name", "twitter:image", ogImage);
 
     upsertJsonLd(jsonLd);
-  }, [description, jsonLd, keywords, noindex, path, title, type]);
+  }, [description, image, jsonLd, keywords, noindex, path, title, type]);
 }
 
 function normalizeOrigin(value?: string) {
