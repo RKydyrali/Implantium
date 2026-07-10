@@ -11,13 +11,16 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof localStorage === "undefined") return "ru";
     const saved = localStorage.getItem("implantium_lang");
     return (saved === "ru" || saved === "kk") ? saved : "ru";
   });
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem("implantium_lang", lang);
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("implantium_lang", lang);
+    }
   };
 
   useEffect(() => {

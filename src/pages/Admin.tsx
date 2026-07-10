@@ -56,7 +56,7 @@ type EditorState = {
 type SaveStatus = "idle" | "saving" | "saved" | "error";
 
 export default function Admin() {
-  const [token, setToken] = useState(() => localStorage.getItem(ADMIN_TOKEN_KEY) ?? "");
+  const [token, setToken] = useState(() => typeof localStorage !== "undefined" ? (localStorage.getItem(ADMIN_TOKEN_KEY) ?? "") : "");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [selectedId, setSelectedId] = useState<Id<"doctors"> | "new" | null>(null);
@@ -108,7 +108,7 @@ export default function Admin() {
 
   useEffect(() => {
     if (viewer.status === "success" && !viewer.data.isAdmin) {
-      localStorage.removeItem(ADMIN_TOKEN_KEY);
+      if (typeof localStorage !== "undefined") localStorage.removeItem(ADMIN_TOKEN_KEY);
       setToken("");
       setLoginError("Сессия истекла. Войдите снова.");
     }
@@ -179,7 +179,7 @@ export default function Admin() {
         return;
       }
 
-      localStorage.setItem(ADMIN_TOKEN_KEY, result.token);
+      if (typeof localStorage !== "undefined") localStorage.setItem(ADMIN_TOKEN_KEY, result.token);
       setToken(result.token);
       setPassword("");
     } catch (error) {
@@ -193,7 +193,7 @@ export default function Admin() {
         await logout({ token });
       }
     } finally {
-      localStorage.removeItem(ADMIN_TOKEN_KEY);
+      if (typeof localStorage !== "undefined") localStorage.removeItem(ADMIN_TOKEN_KEY);
       setToken("");
       setSelectedId(null);
     }

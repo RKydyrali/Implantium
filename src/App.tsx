@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { AnimatePresence } from "framer-motion";
-import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from "react-router-dom";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -47,27 +47,25 @@ function AdminRoute() {
 function App() {
   return (
     <LanguageProvider>
-      <Router>
-        <Routes>
-          <Route path="/admin" element={<AdminRoute />} />
-          <Route path="/visitka" element={
-            <Suspense fallback={null}>
-              <Visitka />
-            </Suspense>
-          } />
-          <Route path="/visitka2" element={
-            <Suspense fallback={null}>
-              <Visitka2 />
-            </Suspense>
-          } />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="doctors" element={<Doctors />} />
-            <Route path="services/:id" element={<ServiceDetail />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </Router>
+      <Routes>
+        <Route path="/admin" element={<AdminRoute />} />
+        <Route path="/visitka" element={
+          <Suspense fallback={null}>
+            <Visitka />
+          </Suspense>
+        } />
+        <Route path="/visitka2" element={
+          <Suspense fallback={null}>
+            <Visitka2 />
+          </Suspense>
+        } />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="doctors" element={<Doctors />} />
+          <Route path="services/:id" element={<ServiceDetail />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </LanguageProvider>
   );
 }

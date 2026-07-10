@@ -59,11 +59,10 @@ function loadEnvFile(filePath) {
 
 function resolveSiteUrl() {
   const explicitUrl = process.env.VITE_SITE_URL;
-  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
-  const rawUrl = explicitUrl || vercelUrl || "https://implantium.kz";
+  const rawUrl = explicitUrl || "https://implantium.kz";
 
-  if (!explicitUrl && !vercelUrl) {
-    console.warn("VITE_SITE_URL is not set; using https://implantium.kz for generated SEO files.");
+  if (!explicitUrl) {
+    console.warn("VITE_SITE_URL is not set; defaulting strictly to https://implantium.kz for generated SEO files.");
   }
 
   const withProtocol = /^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`;

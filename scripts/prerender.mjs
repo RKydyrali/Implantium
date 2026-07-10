@@ -181,11 +181,7 @@ function buildSeoBlock({ title, description, keywords, ogImage, canonical }) {
   ].join('\n    ');
 }
 
-/**
- * Inject route-specific SEO tags into the SPA HTML template.
- * Strategy: strip the tags we control, then re-insert correct versions.
- */
-function injectMeta(template, route) {
+function injectMeta(template, route, appHtml) {
   const canonical = `${SITE}${route.path === '/' ? '' : route.path}`;
 
   // Strip all existing title, description, keywords, canonical, og:*, twitter:* tags.
@@ -205,7 +201,14 @@ function injectMeta(template, route) {
   const seoBlock = buildSeoBlock({ ...route, canonical });
 
   // Insert SEO block right before </head>
-  return html.replace('</head>', `    ${seoBlock}\n  </head>`);
+  html = html.replace('</head>', `    ${seoBlock}\n  </head>`);
+  
+  // Inject SSR HTML into the root div
+  if (appHtml) {
+    html = html.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`);
+  }
+
+  return html;
 }
 
 // ---------------------------------------------------------------------------
@@ -222,8 +225,31 @@ if (!existsSync(templatePath)) {
 
 const template = readFileSync(templatePath, 'utf-8');
 
+let render;
+try {
+  const serverEntryPath = resolve(rootDir, 'dist-server', 'entry-server.js');
+  if (existsSync(serverEntryPath)) {
+    const serverEntryUrl = new URL(`file://${serverEntryPath}`).href;
+    const entry = await import(serverEntryUrl);
+    render = entry.render;
+  } else {
+    console.warn('[prerender] ⚠️ dist-server/entry-server.js not found. Skipping HTML body prerender.');
+  }
+} catch (e) {
+  console.warn('[prerender] ⚠️ Could not load SSR entry-server.js. Pre-rendering without HTML body.', e.message);
+}
+
 for (const route of ROUTES) {
-  const html = injectMeta(template, route);
+  let appHtml = '';
+  if (render) {
+    try {
+      appHtml = render(route.path);
+    } catch (e) {
+      console.warn(`[prerender] ⚠️ SSR render failed for ${route.path}:`, e.message);
+    }
+  }
+
+  const html = injectMeta(template, route, appHtml);
 
   if (route.path === '/') {
     // Overwrite root index.html in-place

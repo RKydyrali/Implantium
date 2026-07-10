@@ -28,7 +28,10 @@ function getInitialLanguage(): Language {
 }
 
 export default function Visitka2() {
-  const [language, setLanguage] = useState<Language>(getInitialLanguage)
+  const [language, setLanguage] = useState<Language>(() => {
+    if (typeof window === "undefined") return "kk"
+    return getInitialLanguage()
+  })
   const shouldReduceMotion = useReducedMotion()
   const copy = content[language]
 
