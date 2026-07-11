@@ -2,7 +2,7 @@ import { c as clinicContact, u as hasContactValue } from "../entry-server.js";
 //#region src/data/seo.ts
 var homeSeo = {
 	title: {
-		ru: "Стоматология Актау | Зубная клиника IMPLANTIUM",
+		ru: "Имплантация зубов в Актау | Стоматология IMPLANTIUM",
 		kk: "Ақтау стоматология | IMPLANTIUM"
 	},
 	description: {

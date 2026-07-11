@@ -7,7 +7,7 @@ import { n as usePublicDoctors, t as DoctorPhoto } from "./DoctorPhoto-DOksaJFy.
 import { n as useSeo, t as getSiteOrigin } from "./useSeo-BpLXIewB.js";
 import { t as services } from "./services-D-OeEqLJ.js";
 import { t as Badge } from "./badge-DifIX8yv.js";
-import { n as buildClinicJsonLd, s as homeSeo } from "./seo-DGPaXBVw.js";
+import { n as buildClinicJsonLd, s as homeSeo } from "./seo-rlBEYM3X.js";
 import { i as AccordionTrigger, n as AccordionContent, r as AccordionItem, t as Accordion } from "./accordion-C0Sf2kTr.js";
 import { Suspense, lazy, memo, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";

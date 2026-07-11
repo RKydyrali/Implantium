@@ -9,7 +9,8 @@
     "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server",
     "postbuild": "node scripts/generate-seo-files.mjs && node scripts/prerender.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:seo": "node scripts/seo-test.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

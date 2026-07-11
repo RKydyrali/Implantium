@@ -5,7 +5,7 @@ import { i as FeaturedDoctorSkeleton, r as DoctorsGridCardSkeleton } from "./Doc
 import { n as usePublicDoctors, t as DoctorPhoto } from "./DoctorPhoto-DOksaJFy.js";
 import { n as useSeo, t as getSiteOrigin } from "./useSeo-BpLXIewB.js";
 import { t as services } from "./services-D-OeEqLJ.js";
-import { a as doctorsSeo, n as buildClinicJsonLd, t as buildBreadcrumbJsonLd } from "./seo-DGPaXBVw.js";
+import { a as doctorsSeo, n as buildClinicJsonLd, t as buildBreadcrumbJsonLd } from "./seo-rlBEYM3X.js";
 import { Suspense, lazy } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";

@@ -160,8 +160,87 @@ function escHtml(str) {
     .replace(/>/g, '&gt;');
 }
 
+const CLINIC_SERVICES = [
+  "Имплантация зубов", "Костная пластика", "Пластика уздечки", "Удаление зуба", 
+  "Удаление зуба мудрости", "Коронки", "Протезирование", "Брекеты", "Лечение зубов", "Чистка зубов"
+];
+
+function getClinicJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Dentist",
+    "@id": `${SITE}/#clinic`,
+    name: "IMPLANTIUM",
+    alternateName: ["Стоматологическая клиника IMPLANTIUM", "IMPLANTIUM стоматологиясы"],
+    description: "Зубная клиника в Актау: имплантация зубов, брекеты, лечение зубов. Ақтау стоматология — тіс емдеу және тіс имплантациясы.",
+    url: SITE,
+    telephone: "+77027133939",
+    priceRange: "₸₸",
+    image: `${SITE}/favicon-512.png`,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "13 микрорайон, дом 39",
+      addressLocality: "Актау",
+      addressRegion: "Мангистауская область",
+      postalCode: "130000",
+      addressCountry: "KZ",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 43.667073,
+      longitude: 51.136723,
+    },
+    areaServed: {
+      "@type": "City",
+      name: "Актау",
+    },
+    openingHoursSpecification: [
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens: "10:00",
+        closes: "22:00",
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: "Sunday",
+        opens: "10:00",
+        closes: "14:00",
+      },
+    ],
+    medicalSpecialty: ["Dentistry", "Orthodontics", "Dental implantology"],
+    availableService: CLINIC_SERVICES.map(name => ({ "@type": "MedicalProcedure", name })),
+    sameAs: ["https://www.instagram.com/implantium_aktau/", "https://go.2gis.com/83pdr2"],
+  };
+}
+
+function getServiceJsonLd(path, title, description) {
+  const serviceName = title.split(" | ")[0];
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${SITE}${path}#service`,
+    name: serviceName,
+    description: description,
+    serviceType: serviceName,
+    areaServed: {
+      "@type": "City",
+      name: "Актау",
+    },
+    provider: {
+      "@id": `${SITE}/#clinic`,
+    },
+    url: `${SITE}${path}`,
+  };
+}
+
 /** Build a fresh <head> block of SEO tags for a route */
-function buildSeoBlock({ title, description, keywords, ogImage, canonical }) {
+function buildSeoBlock({ title, description, keywords, ogImage, canonical, path }) {
+  const jsonLdItems = [getClinicJsonLd()];
+  if (path.startsWith('/services/')) {
+    jsonLdItems.push(getServiceJsonLd(path, title, description));
+  }
+
   return [
     `<title>${escHtml(title)}</title>`,
     `<meta name="description" content="${escHtml(description)}" />`,
@@ -178,6 +257,7 @@ function buildSeoBlock({ title, description, keywords, ogImage, canonical }) {
     `<meta name="twitter:title" content="${escHtml(title)}" />`,
     `<meta name="twitter:description" content="${escHtml(description)}" />`,
     `<meta name="twitter:image" content="${ogImage}" />`,
+    `<script type="application/ld+json">${JSON.stringify(jsonLdItems)}</script>`
   ].join('\n    ');
 }
 

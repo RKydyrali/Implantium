@@ -6,7 +6,7 @@ import { n as CompactDoctorCardSkeleton } from "./DoctorSkeletons-BGIYgWVM.js";
 import { n as usePublicDoctors, t as DoctorPhoto } from "./DoctorPhoto-DOksaJFy.js";
 import { n as useSeo, t as getSiteOrigin } from "./useSeo-BpLXIewB.js";
 import { t as services } from "./services-D-OeEqLJ.js";
-import { i as buildServiceJsonLd, n as buildClinicJsonLd, o as getServiceSeo, r as buildFaqJsonLd, t as buildBreadcrumbJsonLd } from "./seo-DGPaXBVw.js";
+import { i as buildServiceJsonLd, n as buildClinicJsonLd, o as getServiceSeo, r as buildFaqJsonLd, t as buildBreadcrumbJsonLd } from "./seo-rlBEYM3X.js";
 import { i as AccordionTrigger, n as AccordionContent, r as AccordionItem, t as Accordion } from "./accordion-C0Sf2kTr.js";
 import * as React from "react";
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from "react";

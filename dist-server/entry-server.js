@@ -2003,9 +2003,9 @@ function MotionListItem({ children, className, index = 0, interactive = false, l
 }
 //#endregion
 //#region src/App.tsx
-var Home = lazy(() => import("./assets/Home-Dt2DMy-x.js"));
-var Doctors = lazy(() => import("./assets/Doctors-aa6lpWdI.js"));
-var ServiceDetail = lazy(() => import("./assets/ServiceDetail-BBUHkOSU.js"));
+var Home = lazy(() => import("./assets/Home-uiPGWjOm.js"));
+var Doctors = lazy(() => import("./assets/Doctors-C-1rCpw2.js"));
+var ServiceDetail = lazy(() => import("./assets/ServiceDetail-CHnDBAQ2.js"));
 var NotFound = lazy(() => import("./assets/NotFound-RznLx3N4.js"));
 var Admin = lazy(() => import("./assets/Admin-BP0QFqJV.js"));
 var Visitka = lazy(() => import("./assets/Visitka-CWngYSAd.js"));
