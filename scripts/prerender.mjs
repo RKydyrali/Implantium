@@ -49,7 +49,7 @@ const SITE = resolveSiteUrl();
 const ROUTES = [
   {
     path: '/',
-    title: 'Стоматология Актау | Зубная клиника IMPLANTIUM',
+    title: 'Имплантация зубов в Актау | Стоматология IMPLANTIUM',
     description:
       'Зубная клиника IMPLANTIUM — стоматология в Актау: имплантация зубов, брекеты, лечение зубов, удаление, чистка и коронки. Запись на консультацию.',
     keywords:

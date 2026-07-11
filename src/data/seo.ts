@@ -15,7 +15,7 @@ export type ServiceSeoContent = PageSeoContent & {
 
 export const homeSeo: PageSeoContent = {
   title: {
-    ru: "Стоматология Актау | Зубная клиника IMPLANTIUM",
+    ru: "Имплантация зубов в Актау | Стоматология IMPLANTIUM",
     kk: "Ақтау стоматология | IMPLANTIUM",
   },
   description: {
