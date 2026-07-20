@@ -1,12 +1,5 @@
 import { lazy, Suspense } from "react";
-import { AnimatePresence } from "framer-motion";
-import { Routes, Route, Outlet, useLocation } from "react-router-dom";
-import { LanguageProvider } from "@/hooks/useLanguage";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { StickyCTA } from "@/components/layout/StickyCTA";
-import { ScrollToTop } from "@/components/layout/ScrollToTop";
-import { MotionPage } from "@/components/motion/MotionPrimitives";
+import { AppRouter } from "@/AppRouter";
 
 const Home = lazy(() => import("@/pages/Home"));
 const Doctors = lazy(() => import("@/pages/Doctors"));
@@ -16,57 +9,11 @@ const Admin = lazy(() => import("@/pages/Admin"));
 const Visitka = lazy(() => import("@/pages/Visitka"));
 const Visitka2 = lazy(() => import("@/pages/Visitka2"));
 
-function Layout() {
-  const location = useLocation();
-
-  return (
-    <div className="min-h-screen flex flex-col font-sans bg-background text-foreground selection:bg-primary/20">
-      <ScrollToTop />
-      <Header />
-      <Suspense fallback={null}>
-        <AnimatePresence mode="wait" initial={false}>
-          <MotionPage key={location.pathname}>
-            <Outlet />
-          </MotionPage>
-        </AnimatePresence>
-      </Suspense>
-      <Footer />
-      <StickyCTA />
-    </div>
-  );
-}
-
-function AdminRoute() {
-  return (
-    <Suspense fallback={null}>
-      <Admin />
-    </Suspense>
-  );
-}
-
 function App() {
   return (
-    <LanguageProvider>
-      <Routes>
-        <Route path="/admin" element={<AdminRoute />} />
-        <Route path="/visitka" element={
-          <Suspense fallback={null}>
-            <Visitka />
-          </Suspense>
-        } />
-        <Route path="/visitka2" element={
-          <Suspense fallback={null}>
-            <Visitka2 />
-          </Suspense>
-        } />
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="doctors" element={<Doctors />} />
-          <Route path="services/:id" element={<ServiceDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </LanguageProvider>
+    <Suspense fallback={null}>
+      <AppRouter pages={{ Home, Doctors, ServiceDetail, NotFound, Admin, Visitka, Visitka2 }} />
+    </Suspense>
   );
 }
 
