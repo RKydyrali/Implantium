@@ -15,6 +15,7 @@ export default function NotFound() {
       : "Ақтаудағы IMPLANTIUM стоматологиясының сайтында бұл бет табылмады.",
     path: "/404",
     noindex: true,
+    canonical: false,
   });
 
   return (

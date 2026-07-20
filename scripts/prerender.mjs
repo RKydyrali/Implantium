@@ -123,17 +123,17 @@ function getServiceJsonLd(path, title, description) {
 }
 
 /** Build a fresh <head> block of SEO tags for a route */
-function buildSeoBlock({ title, description, keywords, ogImage, canonical, path }) {
-  const jsonLdItems = [getClinicJsonLd()];
-  if (path.startsWith('/services/')) {
+function buildSeoBlock({ title, description, keywords, ogImage, canonical, path, noindex = false, includeCanonical = true, includeJsonLd = true }) {
+  const jsonLdItems = includeJsonLd ? [getClinicJsonLd()] : [];
+  if (includeJsonLd && path.startsWith('/services/')) {
     jsonLdItems.push(getServiceJsonLd(path, title, description));
   }
 
-  return [
+  const tags = [
     `<title>${escHtml(title)}</title>`,
     `<meta name="description" content="${escHtml(description)}" />`,
     `<meta name="keywords" content="${escHtml(keywords)}" />`,
-    `<link rel="canonical" href="${canonical}" />`,
+    `<meta name="robots" content="${noindex ? 'noindex, follow' : 'index, follow'}" />`,
     `<meta property="og:site_name" content="IMPLANTIUM" />`,
     `<meta property="og:type" content="website" />`,
     `<meta property="og:title" content="${escHtml(title)}" />`,
@@ -145,8 +145,16 @@ function buildSeoBlock({ title, description, keywords, ogImage, canonical, path 
     `<meta name="twitter:title" content="${escHtml(title)}" />`,
     `<meta name="twitter:description" content="${escHtml(description)}" />`,
     `<meta name="twitter:image" content="${ogImage}" />`,
-    `<script type="application/ld+json">${JSON.stringify(jsonLdItems)}</script>`
-  ].join('\n    ');
+  ];
+
+  if (includeCanonical) {
+    tags.splice(4, 0, `<link rel="canonical" href="${canonical}" />`);
+  }
+  if (jsonLdItems.length > 0) {
+    tags.push(`<script id="seo-json-ld" type="application/ld+json">${JSON.stringify(jsonLdItems)}</script>`);
+  }
+
+  return tags.join('\n    ');
 }
 
 function injectMeta(template, route, appHtml) {
@@ -232,5 +240,19 @@ for (const route of ROUTES) {
     console.log(`[prerender] ✓ ${route.path}  →  dist${route.path}/index.html`);
   }
 }
+
+const notFoundRoute = {
+  path: '/404',
+  title: 'Страница не найдена | IMPLANTIUM',
+  description: 'Страница не найдена на сайте стоматологической клиники IMPLANTIUM в Актау.',
+  keywords: '',
+  ogImage: `${SITE}/og-image.png`,
+  noindex: true,
+  includeCanonical: false,
+  includeJsonLd: false,
+};
+const notFoundHtml = injectMeta(template, notFoundRoute, render ? render('/404') : '');
+writeFileSync(resolve(distDir, '404.html'), notFoundHtml, 'utf-8');
+console.log('[prerender] ✓ 404 → dist/404.html');
 
 console.log(`[prerender] ✅ ${ROUTES.length} routes prerendered.`);

@@ -1,9 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "implantium.kz"
+        }
+      ],
+      "destination": "https://www.implantium.kz/:path*",
+      "permanent": true
     }
   ]
 }

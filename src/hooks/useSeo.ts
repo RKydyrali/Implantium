@@ -10,6 +10,7 @@ type SeoConfig = {
   noindex?: boolean;
   type?: "website" | "article";
   image?: string;
+  canonical?: boolean;
 };
 
 export function getSiteOrigin() {
@@ -32,17 +33,22 @@ export function useSeo({
   noindex = false,
   type = "website",
   image,
+  canonical = true,
 }: SeoConfig) {
   useEffect(() => {
     const siteOrigin = getSiteOrigin();
     const canonicalUrl = `${siteOrigin}${normalizePath(path)}`;
-    const robotsContent = noindex ? "noindex, nofollow" : "index, follow";
+    const robotsContent = noindex ? "noindex, follow" : "index, follow";
 
     document.title = title;
     upsertMeta("name", "description", description);
     upsertMeta("name", "robots", robotsContent);
     upsertMeta("name", "keywords", keywords.join(", "));
-    upsertLink("canonical", canonicalUrl);
+    if (canonical) {
+      upsertLink("canonical", canonicalUrl);
+    } else {
+      document.head.querySelector('link[rel="canonical"]')?.remove();
+    }
 
     const ogImage = image ?? `${siteOrigin}/og-image.png`;
 
@@ -60,7 +66,7 @@ export function useSeo({
     upsertMeta("name", "twitter:image", ogImage);
 
     upsertJsonLd(jsonLd);
-  }, [description, image, jsonLd, keywords, noindex, path, title, type]);
+  }, [canonical, description, image, jsonLd, keywords, noindex, path, title, type]);
 }
 
 function normalizeOrigin(value?: string) {
