@@ -1,8 +1,8 @@
-import { t as cn } from "./utils-DVvWhTIj.js";
-import { t as ServiceComparisonTable } from "./ServiceComparisonTable-C9JDrIY4.js";
+import { t as cn } from "./utils-BmXddvPc.js";
+import { t as ServiceComparisonTable } from "./ServiceComparisonTable-D7q_-s9O.js";
 import { useState } from "react";
-import { jsx, jsxs } from "react/jsx-runtime";
 import { Anchor, ArrowsLeftRight, Tooth } from "@phosphor-icons/react";
+import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/data/dentureTypes.ts
 var dentureTypesCopy = {
 	ru: {

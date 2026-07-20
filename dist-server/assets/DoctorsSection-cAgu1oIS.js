@@ -1,10 +1,8 @@
 import { n as useLanguage } from "./useLanguage-D1hkxYkq.js";
-import { g as Button, n as MotionListItem, o as TextReveal, r as Reveal, s as BookingModal, y as content } from "../entry-server.js";
-import { a as HomeDoctorCardSkeleton } from "./DoctorSkeletons-BGIYgWVM.js";
-import { n as usePublicDoctors, t as DoctorPhoto } from "./DoctorPhoto-DOksaJFy.js";
+import { a as MotionListItem, c as BookingModal, d as content, i as usePublicDoctors, l as Button, n as HomeDoctorCardSkeleton, o as Reveal, r as DoctorPhoto, s as TextReveal } from "../entry-server.js";
 import { AnimatePresence } from "framer-motion";
-import { jsx, jsxs } from "react/jsx-runtime";
 import { ArrowRight } from "@phosphor-icons/react";
+import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/components/sections/DoctorsSection.tsx
 function DoctorsSection() {
 	const { language } = useLanguage();

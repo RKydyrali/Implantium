@@ -1,9 +1,9 @@
 import { n as useLanguage } from "./useLanguage-D1hkxYkq.js";
-import { t as cn } from "./utils-DVvWhTIj.js";
-import { _ as landingCopy, c as clinicContact, u as hasContactValue } from "../entry-server.js";
-import { t as DentalParallaxBackground } from "./DentalParallaxBackground-BqYR4s3Q.js";
-import { jsx, jsxs } from "react/jsx-runtime";
+import { r as hasContactValue, t as clinicContact } from "./clinicContact-BRM7EXga.js";
+import { t as cn } from "./utils-BmXddvPc.js";
+import { t as DentalParallaxBackground, u as landingCopy } from "../entry-server.js";
 import { ArrowRight, Quotes, Star } from "@phosphor-icons/react";
+import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/data/reviews.ts
 var patientReviews = [
 	{

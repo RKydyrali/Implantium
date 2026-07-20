@@ -1,6 +1,5 @@
 import { n as useLanguage } from "./useLanguage-D1hkxYkq.js";
-import { y as content } from "../entry-server.js";
-import { t as DentalParallaxBackground } from "./DentalParallaxBackground-BqYR4s3Q.js";
+import { d as content, t as DentalParallaxBackground } from "../entry-server.js";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region src/components/sections/AboutClinic.tsx
 var aboutCards = [

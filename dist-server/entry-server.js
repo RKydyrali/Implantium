@@ -1,22 +1,29 @@
 import { n as useLanguage, t as LanguageProvider } from "./assets/useLanguage-D1hkxYkq.js";
-import { t as cn } from "./assets/utils-DVvWhTIj.js";
+import { n as getWhatsAppUrl, r as hasContactValue, t as clinicContact } from "./assets/clinicContact-BRM7EXga.js";
+import { t as cn } from "./assets/utils-BmXddvPc.js";
 import * as React from "react";
-import { StrictMode, Suspense, lazy, useEffect, useState } from "react";
+import { StrictMode, Suspense, lazy, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { renderToString } from "react-dom/server";
-import { Link, Outlet, Route, Routes, StaticRouter, useLocation } from "react-router-dom";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { jsx, jsxs } from "react/jsx-runtime";
-import { Clock, InstagramLogo, List, MapPin, Phone, WhatsappLogo, X } from "@phosphor-icons/react";
+import { Link, Navigate, Outlet, Route, Routes, StaticRouter, useLocation, useParams } from "react-router-dom";
+import { AnimatePresence, motion, useDragControls, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { ArrowDown, ArrowRight, ArrowUp, CalendarCheck, CaretLeft, CaretRight, Check, CheckCircle, Clock, Eye, EyeSlash, FirstAidKit, FloppyDisk, GlobeHemisphereWest, HandHeart, Heartbeat, ImageSquare, InstagramLogo, List, MapPin, Phone, Plus, ShieldCheck, SignOut, Smiley, Sparkle, Tooth, Trash, UploadSimple, UsersThree, WhatsappLogo, X } from "@phosphor-icons/react";
+import { Fragment as Fragment$1, jsx, jsxs } from "react/jsx-runtime";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X as X$1 } from "lucide-react";
-import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { ChevronDown, X as X$1 } from "lucide-react";
+import { ConvexProvider, ConvexReactClient, useMutation, useQuery_experimental } from "convex/react";
+import { anyApi, componentsGeneric } from "convex/server";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { createPortal } from "react-dom";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
+import * as TogglePrimitive from "@radix-ui/react-toggle";
 //#region src/assets/implantium-logo-cropped.png
 var implantium_logo_cropped_default = "/assets/implantium-logo-cropped-DrnpNZVq.png";
 //#endregion
 //#region src/data/content.ts
-var content = {
+var content$2 = {
 	ru: {
 		nav: {
 			home: "Главная",
@@ -1259,354 +1266,10 @@ var landingServices = [
 	}
 ];
 //#endregion
-//#region src/components/ui/button.tsx
-var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0 motion-reduce:active:scale-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", {
-	variants: {
-		variant: {
-			default: "bg-primary text-primary-foreground hover:bg-primary/90",
-			destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-			outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-			secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-			ghost: "hover:bg-accent hover:text-accent-foreground",
-			link: "text-primary underline-offset-4 hover:underline"
-		},
-		size: {
-			default: "h-10 px-4 py-2",
-			sm: "h-9 rounded-md px-3",
-			lg: "h-11 rounded-md px-8",
-			icon: "h-10 w-10"
-		}
-	},
-	defaultVariants: {
-		variant: "default",
-		size: "default"
-	}
-});
-var Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
-	return /* @__PURE__ */ jsx(asChild ? Slot : "button", {
-		className: cn(buttonVariants({
-			variant,
-			size,
-			className
-		})),
-		ref,
-		...props
-	});
-});
-Button.displayName = "Button";
-//#endregion
-//#region src/components/ui/dialog.tsx
-var Dialog = DialogPrimitive.Root;
-var DialogTrigger = DialogPrimitive.Trigger;
-var DialogPortal = DialogPrimitive.Portal;
-var DialogOverlay = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Overlay, {
-	ref,
-	className: cn("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
-	...props
-}));
-DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
-var defaultDialogMotion = "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg";
-var bookingDialogMotion = "booking-dialog-content fixed bottom-0 left-1/2 z-50 grid w-[calc(100%-0.75rem)] max-w-md gap-4 border border-border/70 bg-background p-5 shadow-[0_24px_70px_rgba(31,37,40,0.16)] sm:bottom-auto sm:top-1/2 sm:p-6";
-var DialogContent = React.forwardRef(({ className, children, motionPreset = "default", overlayClassName, closeLabel = "Close", ...props }, ref) => /* @__PURE__ */ jsxs(DialogPortal, { children: [/* @__PURE__ */ jsx(DialogOverlay, { className: overlayClassName }), /* @__PURE__ */ jsxs(DialogPrimitive.Content, {
-	ref,
-	className: cn(motionPreset === "booking" ? bookingDialogMotion : defaultDialogMotion, className),
-	...props,
-	children: [children, /* @__PURE__ */ jsxs(DialogPrimitive.Close, {
-		"aria-label": closeLabel,
-		className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
-		children: [/* @__PURE__ */ jsx(X$1, { className: "h-4 w-4" }), /* @__PURE__ */ jsx("span", {
-			className: "sr-only",
-			children: closeLabel
-		})]
-	})]
-})] }));
-DialogContent.displayName = DialogPrimitive.Content.displayName;
-var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ jsx("div", {
-	className: cn("flex flex-col space-y-1.5 text-center sm:text-left", className),
-	...props
-});
-DialogHeader.displayName = "DialogHeader";
-var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ jsx("div", {
-	className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
-	...props
-});
-DialogFooter.displayName = "DialogFooter";
-var DialogTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Title, {
-	ref,
-	className: cn("text-lg font-semibold leading-none tracking-tight", className),
-	...props
-}));
-DialogTitle.displayName = DialogPrimitive.Title.displayName;
-var DialogDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, {
-	ref,
-	className: cn("text-sm text-muted-foreground", className),
-	...props
-}));
-DialogDescription.displayName = DialogPrimitive.Description.displayName;
-//#endregion
-//#region src/data/clinicContact.ts
-var WHATSAPP_MESSAGE = {
-	ru: "Здравствуйте! 👋 Хочу записаться на консультацию в стоматологию IMPLANTIUM. Подскажите, пожалуйста, какое время свободно на этой неделе?",
-	kk: "Сәлеметсіз бе! 👋 IMPLANTIUM стоматологиясына консультацияға жазылғым келеді. Осы аптада қандай уақыт бос екенін айтып жібере аласыз ба?"
-};
-var clinicContact = {
-	phoneDisplay: "+7 (702) 713-39-39, +7 (707) 362-13-39",
-	phoneHref: "tel:+77027133939",
-	whatsappUrl: "https://wa.me/77027133939",
-	instagramUrl: "https://www.instagram.com/implantium.aktau",
-	twoGisUrl: "https://2gis.kz/aktau/firm/70000001038002984/tab/reviews"
-};
-/**
-* Returns a WhatsApp deep-link URL with a pre-filled localized booking message.
-* Falls back to the bare whatsappUrl if the contact is not configured.
-*/
-function getWhatsAppUrl(language) {
-	const base = clinicContact.whatsappUrl;
-	if (!hasContactValue(base) || !base) return void 0;
-	return `${base}?text=${encodeURIComponent(WHATSAPP_MESSAGE[language])}`;
-}
-function hasContactValue(value) {
-	return Boolean(value && !value.includes("_HERE"));
-}
-//#endregion
-//#region src/components/sections/BookingModal.tsx
-function BookingModal({ children, open, onOpenChange }) {
-	const { language } = useLanguage();
-	const copy = {
-		ru: {
-			title: "Записаться на прием",
-			description: "Выберите удобный способ связи, и мы ответим вам в ближайшее время.",
-			whatsapp: "Написать в WhatsApp",
-			close: "Закрыть окно записи"
-		},
-		kk: {
-			title: "Қабылдауға жазылу",
-			description: "Өзіңізге ыңғайлы байланыс тәсілін таңдаңыз, біз сізге жақын арада жауап береміз.",
-			whatsapp: "WhatsApp-қа жазу",
-			close: "Жазылу терезесін жабу"
-		}
-	}[language];
-	return /* @__PURE__ */ jsxs(Dialog, {
-		open,
-		onOpenChange,
-		children: [children ? /* @__PURE__ */ jsx(DialogTrigger, {
-			asChild: true,
-			children
-		}) : null, /* @__PURE__ */ jsxs(DialogContent, {
-			motionPreset: "booking",
-			overlayClassName: "bg-[#1F2528]/45 backdrop-blur-[2px]",
-			className: "rounded-t-[1.75rem] rounded-b-none sm:rounded-[1.5rem]",
-			closeLabel: copy.close,
-			children: [/* @__PURE__ */ jsx(DialogHeader, { children: /* @__PURE__ */ jsx(DialogTitle, {
-				className: "font-display text-2xl text-center",
-				children: copy.title
-			}) }), /* @__PURE__ */ jsxs("div", {
-				className: "flex flex-col gap-3 py-4",
-				children: [
-					/* @__PURE__ */ jsx("p", {
-						className: "mb-2 text-center text-sm text-[#606A70]",
-						children: copy.description
-					}),
-					/* @__PURE__ */ jsxs("a", {
-						href: getWhatsAppUrl(language),
-						target: "_blank",
-						rel: "noopener noreferrer",
-						className: "flex items-center justify-center gap-3 rounded-2xl bg-[#25D366] p-4 font-semibold text-white shadow-sm transition-colors hover:bg-[#20bd5a]",
-						children: [/* @__PURE__ */ jsx(WhatsappLogo, {
-							weight: "fill",
-							className: "size-6"
-						}), copy.whatsapp]
-					}),
-					/* @__PURE__ */ jsxs("a", {
-						href: clinicContact.phoneHref,
-						className: "flex items-center justify-center gap-3 rounded-2xl bg-[#EEF2F4] p-4 font-semibold text-[#1F2528] transition-colors hover:bg-[#DDE3E7]",
-						children: [/* @__PURE__ */ jsx(Phone, {
-							weight: "fill",
-							className: "size-6 text-primary"
-						}), "+7 (702) 713-39-39"]
-					}),
-					/* @__PURE__ */ jsxs("a", {
-						href: "tel:+77073621339",
-						className: "flex items-center justify-center gap-3 rounded-2xl bg-[#EEF2F4] p-4 font-semibold text-[#1F2528] transition-colors hover:bg-[#DDE3E7]",
-						children: [/* @__PURE__ */ jsx(Phone, {
-							weight: "fill",
-							className: "size-6 text-primary"
-						}), "+7 (707) 362-13-39"]
-					})
-				]
-			})]
-		})]
-	});
-}
-//#endregion
-//#region src/components/layout/Header.tsx
-function Header() {
-	const { language, setLanguage } = useLanguage();
-	const t = content[language];
-	const landing = landingCopy[language];
-	const reduceMotion = useReducedMotion();
-	const [scrolled, setScrolled] = useState(false);
-	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-	useEffect(() => {
-		const handleScroll = () => setScrolled(window.scrollY > 18);
-		handleScroll();
-		window.addEventListener("scroll", handleScroll, { passive: true });
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
-	const navLinks = [
-		{
-			name: t.nav.services,
-			href: "/#services"
-		},
-		{
-			name: t.nav.doctors,
-			href: "/doctors"
-		},
-		{
-			name: t.nav.about,
-			href: "/#about"
-		},
-		{
-			name: t.nav.reviews,
-			href: "/#reviews"
-		},
-		{
-			name: t.nav.location,
-			href: "/#location"
-		}
-	];
-	return /* @__PURE__ */ jsxs("header", {
-		className: cn("fixed inset-x-0 top-0 z-50 transition-all duration-300", scrolled ? "border-b border-[#DDE3E7] bg-white py-1.5 shadow-[0_14px_42px_rgba(31,37,40,0.06)]" : "border-b border-[#ECEFF1] bg-white py-2"),
-		children: [/* @__PURE__ */ jsxs("div", {
-			className: "mx-auto flex max-w-[1360px] items-center justify-between gap-4 px-4 md:px-8",
-			children: [
-				/* @__PURE__ */ jsx(Link, {
-					to: "/",
-					className: "group flex h-14 w-[10rem] items-center md:h-16 md:w-[11.5rem]",
-					"aria-label": t.common.clinicName,
-					children: /* @__PURE__ */ jsx("img", {
-						src: implantium_logo_cropped_default,
-						alt: t.common.clinicName,
-						className: "size-full object-contain object-left transition-transform duration-300 group-hover:-translate-y-0.5"
-					})
-				}),
-				/* @__PURE__ */ jsx("nav", {
-					className: "hidden items-center gap-7 lg:flex xl:gap-9",
-					children: navLinks.map((link) => /* @__PURE__ */ jsx("a", {
-						href: link.href,
-						className: "text-sm font-semibold text-[#606A70] transition-colors hover:text-primary",
-						children: link.name
-					}, link.name))
-				}),
-				/* @__PURE__ */ jsxs("div", {
-					className: "hidden items-center gap-3 lg:flex",
-					children: [/* @__PURE__ */ jsxs("div", {
-						className: "flex items-center rounded-full border border-[#DDE3E7] bg-white p-1 text-[13px] font-bold",
-						children: [/* @__PURE__ */ jsx("button", {
-							type: "button",
-							onClick: () => setLanguage("ru"),
-							className: cn("rounded-full px-4 py-1.5 transition-all duration-200", language === "ru" ? "bg-primary text-white shadow-md" : "text-[#6E7B83] hover:text-[#1F2528]"),
-							children: "Рус"
-						}), /* @__PURE__ */ jsx("button", {
-							type: "button",
-							onClick: () => setLanguage("kk"),
-							className: cn("rounded-full px-4 py-1.5 transition-all duration-200", language === "kk" ? "bg-primary text-white shadow-md" : "text-[#6E7B83] hover:text-[#1F2528]"),
-							children: "Қаз"
-						})]
-					}), /* @__PURE__ */ jsx("button", {
-						type: "button",
-						onClick: () => setMobileMenuOpen(true),
-						className: "flex size-12 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528] shadow-sm transition-all hover:bg-slate-50",
-						"aria-label": t.common.openMenu,
-						children: /* @__PURE__ */ jsx(List, { className: "size-6" })
-					})]
-				}),
-				/* @__PURE__ */ jsxs("div", {
-					className: "flex items-center gap-2 lg:hidden",
-					children: [/* @__PURE__ */ jsxs("div", {
-						className: "flex items-center rounded-full border border-[#DDE3E7] bg-white p-1 text-[12px] font-bold shadow-sm",
-						children: [/* @__PURE__ */ jsx("button", {
-							type: "button",
-							onClick: () => setLanguage("ru"),
-							className: cn("rounded-full px-3 py-1.5 transition-all duration-200", language === "ru" ? "bg-primary text-white" : "text-[#6E7B83]"),
-							children: "Рус"
-						}), /* @__PURE__ */ jsx("button", {
-							type: "button",
-							onClick: () => setLanguage("kk"),
-							className: cn("rounded-full px-3 py-1.5 transition-all duration-200", language === "kk" ? "bg-primary text-white" : "text-[#6E7B83]"),
-							children: "Қаз"
-						})]
-					}), /* @__PURE__ */ jsx("button", {
-						type: "button",
-						onClick: () => setMobileMenuOpen(true),
-						className: "flex size-11 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528] shadow-sm",
-						"aria-label": t.common.openMenu,
-						children: /* @__PURE__ */ jsx(List, { className: "size-6" })
-					})]
-				})
-			]
-		}), /* @__PURE__ */ jsx(AnimatePresence, { children: mobileMenuOpen && /* @__PURE__ */ jsxs(motion.div, {
-			initial: reduceMotion ? { opacity: 0 } : {
-				opacity: 0,
-				y: -16
-			},
-			animate: {
-				opacity: 1,
-				y: 0
-			},
-			exit: reduceMotion ? { opacity: 0 } : {
-				opacity: 0,
-				y: -16
-			},
-			transition: { duration: reduceMotion ? .12 : .22 },
-			className: "fixed inset-0 z-50 flex min-h-[100dvh] flex-col bg-[#F5F7F8]",
-			children: [/* @__PURE__ */ jsxs("div", {
-				className: "flex items-center justify-between border-b border-[#DDE3E7] bg-white p-4",
-				children: [/* @__PURE__ */ jsx(Link, {
-					to: "/",
-					onClick: () => setMobileMenuOpen(false),
-					className: "flex h-14 w-[10rem] items-center",
-					children: /* @__PURE__ */ jsx("img", {
-						src: "/assets/implantium-logo-cropped-DrnpNZVq.png",
-						alt: t.common.clinicName,
-						className: "size-full object-contain object-left"
-					})
-				}), /* @__PURE__ */ jsx("button", {
-					type: "button",
-					onClick: () => setMobileMenuOpen(false),
-					className: "flex size-11 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528]",
-					"aria-label": t.common.closeMenu,
-					children: /* @__PURE__ */ jsx(X, { className: "size-6" })
-				})]
-			}), /* @__PURE__ */ jsxs("div", {
-				className: "flex flex-1 flex-col gap-6 overflow-y-auto p-5",
-				children: [/* @__PURE__ */ jsx("nav", {
-					className: "grid gap-3",
-					children: navLinks.map((link) => /* @__PURE__ */ jsx("a", {
-						href: link.href,
-						onClick: () => setMobileMenuOpen(false),
-						className: "rounded-2xl border border-[#DDE3E7] bg-white px-5 py-4 text-lg font-semibold text-[#1F2528] shadow-sm transition-colors hover:text-primary",
-						children: link.name
-					}, link.name))
-				}), /* @__PURE__ */ jsxs("div", {
-					className: "mt-auto rounded-[1.5rem] border border-[#DDE3E7] bg-white p-5 shadow-[0_18px_50px_rgba(31,37,40,0.06)]",
-					children: [/* @__PURE__ */ jsx("p", {
-						className: "mb-4 text-sm font-semibold leading-relaxed text-[#606A70]",
-						children: landing.contact.address
-					}), /* @__PURE__ */ jsx(BookingModal, { children: /* @__PURE__ */ jsx(Button, {
-						className: "h-12 w-full rounded-2xl bg-primary text-sm font-bold text-white hover:bg-[#8F2F25]",
-						children: landing.hero.primaryCta
-					}) })]
-				})]
-			})]
-		}) })]
-	});
-}
-//#endregion
 //#region src/components/layout/Footer.tsx
 function Footer() {
 	const { language } = useLanguage();
-	const t = content[language];
+	const t = content$2[language];
 	const landing = landingCopy[language];
 	return /* @__PURE__ */ jsx("footer", {
 		className: "border-t border-[#DDE3E7] bg-[#FAFBFC] px-4 py-10 md:px-8 md:py-14",
@@ -1778,10 +1441,338 @@ function FooterIcon({ href, label, children }) {
 	});
 }
 //#endregion
+//#region src/components/ui/button.tsx
+var buttonVariants = cva("inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:active:translate-y-0 motion-reduce:active:scale-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", {
+	variants: {
+		variant: {
+			default: "bg-primary text-primary-foreground hover:bg-primary/90",
+			destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+			outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+			secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+			ghost: "hover:bg-accent hover:text-accent-foreground",
+			link: "text-primary underline-offset-4 hover:underline"
+		},
+		size: {
+			default: "h-10 px-4 py-2",
+			sm: "h-9 rounded-md px-3",
+			lg: "h-11 rounded-md px-8",
+			icon: "h-10 w-10"
+		}
+	},
+	defaultVariants: {
+		variant: "default",
+		size: "default"
+	}
+});
+var Button = React.forwardRef(({ className, variant, size, asChild = false, ...props }, ref) => {
+	return /* @__PURE__ */ jsx(asChild ? Slot : "button", {
+		className: cn(buttonVariants({
+			variant,
+			size,
+			className
+		})),
+		ref,
+		...props
+	});
+});
+Button.displayName = "Button";
+//#endregion
+//#region src/components/ui/dialog.tsx
+var Dialog = DialogPrimitive.Root;
+var DialogTrigger = DialogPrimitive.Trigger;
+var DialogPortal = DialogPrimitive.Portal;
+var DialogOverlay = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Overlay, {
+	ref,
+	className: cn("fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0", className),
+	...props
+}));
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
+var defaultDialogMotion = "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg";
+var bookingDialogMotion = "booking-dialog-content fixed bottom-0 left-1/2 z-50 grid w-[calc(100%-0.75rem)] max-w-md gap-4 border border-border/70 bg-background p-5 shadow-[0_24px_70px_rgba(31,37,40,0.16)] sm:bottom-auto sm:top-1/2 sm:p-6";
+var DialogContent = React.forwardRef(({ className, children, motionPreset = "default", overlayClassName, closeLabel = "Close", ...props }, ref) => /* @__PURE__ */ jsxs(DialogPortal, { children: [/* @__PURE__ */ jsx(DialogOverlay, { className: overlayClassName }), /* @__PURE__ */ jsxs(DialogPrimitive.Content, {
+	ref,
+	className: cn(motionPreset === "booking" ? bookingDialogMotion : defaultDialogMotion, className),
+	...props,
+	children: [children, /* @__PURE__ */ jsxs(DialogPrimitive.Close, {
+		"aria-label": closeLabel,
+		className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+		children: [/* @__PURE__ */ jsx(X$1, { className: "h-4 w-4" }), /* @__PURE__ */ jsx("span", {
+			className: "sr-only",
+			children: closeLabel
+		})]
+	})]
+})] }));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
+var DialogHeader = ({ className, ...props }) => /* @__PURE__ */ jsx("div", {
+	className: cn("flex flex-col space-y-1.5 text-center sm:text-left", className),
+	...props
+});
+DialogHeader.displayName = "DialogHeader";
+var DialogFooter = ({ className, ...props }) => /* @__PURE__ */ jsx("div", {
+	className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
+	...props
+});
+DialogFooter.displayName = "DialogFooter";
+var DialogTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Title, {
+	ref,
+	className: cn("text-lg font-semibold leading-none tracking-tight", className),
+	...props
+}));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
+var DialogDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(DialogPrimitive.Description, {
+	ref,
+	className: cn("text-sm text-muted-foreground", className),
+	...props
+}));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
+//#endregion
+//#region src/components/sections/BookingModal.tsx
+function BookingModal({ children, open, onOpenChange }) {
+	const { language } = useLanguage();
+	const copy = {
+		ru: {
+			title: "Записаться на прием",
+			description: "Выберите удобный способ связи, и мы ответим вам в ближайшее время.",
+			whatsapp: "Написать в WhatsApp",
+			close: "Закрыть окно записи"
+		},
+		kk: {
+			title: "Қабылдауға жазылу",
+			description: "Өзіңізге ыңғайлы байланыс тәсілін таңдаңыз, біз сізге жақын арада жауап береміз.",
+			whatsapp: "WhatsApp-қа жазу",
+			close: "Жазылу терезесін жабу"
+		}
+	}[language];
+	return /* @__PURE__ */ jsxs(Dialog, {
+		open,
+		onOpenChange,
+		children: [children ? /* @__PURE__ */ jsx(DialogTrigger, {
+			asChild: true,
+			children
+		}) : null, /* @__PURE__ */ jsxs(DialogContent, {
+			motionPreset: "booking",
+			overlayClassName: "bg-[#1F2528]/45 backdrop-blur-[2px]",
+			className: "rounded-t-[1.75rem] rounded-b-none sm:rounded-[1.5rem]",
+			closeLabel: copy.close,
+			children: [/* @__PURE__ */ jsx(DialogHeader, { children: /* @__PURE__ */ jsx(DialogTitle, {
+				className: "font-display text-2xl text-center",
+				children: copy.title
+			}) }), /* @__PURE__ */ jsxs("div", {
+				className: "flex flex-col gap-3 py-4",
+				children: [
+					/* @__PURE__ */ jsx("p", {
+						className: "mb-2 text-center text-sm text-[#606A70]",
+						children: copy.description
+					}),
+					/* @__PURE__ */ jsxs("a", {
+						href: getWhatsAppUrl(language),
+						target: "_blank",
+						rel: "noopener noreferrer",
+						className: "flex items-center justify-center gap-3 rounded-2xl bg-[#25D366] p-4 font-semibold text-white shadow-sm transition-colors hover:bg-[#20bd5a]",
+						children: [/* @__PURE__ */ jsx(WhatsappLogo, {
+							weight: "fill",
+							className: "size-6"
+						}), copy.whatsapp]
+					}),
+					/* @__PURE__ */ jsxs("a", {
+						href: clinicContact.phoneHref,
+						className: "flex items-center justify-center gap-3 rounded-2xl bg-[#EEF2F4] p-4 font-semibold text-[#1F2528] transition-colors hover:bg-[#DDE3E7]",
+						children: [/* @__PURE__ */ jsx(Phone, {
+							weight: "fill",
+							className: "size-6 text-primary"
+						}), "+7 (702) 713-39-39"]
+					}),
+					/* @__PURE__ */ jsxs("a", {
+						href: "tel:+77073621339",
+						className: "flex items-center justify-center gap-3 rounded-2xl bg-[#EEF2F4] p-4 font-semibold text-[#1F2528] transition-colors hover:bg-[#DDE3E7]",
+						children: [/* @__PURE__ */ jsx(Phone, {
+							weight: "fill",
+							className: "size-6 text-primary"
+						}), "+7 (707) 362-13-39"]
+					})
+				]
+			})]
+		})]
+	});
+}
+//#endregion
+//#region src/components/layout/Header.tsx
+function Header() {
+	const { language, setLanguage } = useLanguage();
+	const t = content$2[language];
+	const landing = landingCopy[language];
+	const reduceMotion = useReducedMotion();
+	const [scrolled, setScrolled] = useState(false);
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+	useEffect(() => {
+		const handleScroll = () => setScrolled(window.scrollY > 18);
+		handleScroll();
+		window.addEventListener("scroll", handleScroll, { passive: true });
+		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+	const navLinks = [
+		{
+			name: t.nav.services,
+			href: "/#services"
+		},
+		{
+			name: t.nav.doctors,
+			href: "/doctors"
+		},
+		{
+			name: t.nav.about,
+			href: "/#about"
+		},
+		{
+			name: t.nav.reviews,
+			href: "/#reviews"
+		},
+		{
+			name: t.nav.location,
+			href: "/#location"
+		}
+	];
+	return /* @__PURE__ */ jsxs("header", {
+		className: cn("fixed inset-x-0 top-0 z-50 transition-all duration-300", scrolled ? "border-b border-[#DDE3E7] bg-white py-1.5 shadow-[0_14px_42px_rgba(31,37,40,0.06)]" : "border-b border-[#ECEFF1] bg-white py-2"),
+		children: [/* @__PURE__ */ jsxs("div", {
+			className: "mx-auto flex max-w-[1360px] items-center justify-between gap-4 px-4 md:px-8",
+			children: [
+				/* @__PURE__ */ jsx(Link, {
+					to: "/",
+					className: "group flex h-14 w-[10rem] items-center md:h-16 md:w-[11.5rem]",
+					"aria-label": t.common.clinicName,
+					children: /* @__PURE__ */ jsx("img", {
+						src: implantium_logo_cropped_default,
+						alt: t.common.clinicName,
+						className: "size-full object-contain object-left transition-transform duration-300 group-hover:-translate-y-0.5"
+					})
+				}),
+				/* @__PURE__ */ jsx("nav", {
+					className: "hidden items-center gap-7 lg:flex xl:gap-9",
+					children: navLinks.map((link) => /* @__PURE__ */ jsx("a", {
+						href: link.href,
+						className: "text-sm font-semibold text-[#606A70] transition-colors hover:text-primary",
+						children: link.name
+					}, link.name))
+				}),
+				/* @__PURE__ */ jsxs("div", {
+					className: "hidden items-center gap-3 lg:flex",
+					children: [/* @__PURE__ */ jsxs("div", {
+						className: "flex items-center rounded-full border border-[#DDE3E7] bg-white p-1 text-[13px] font-bold",
+						children: [/* @__PURE__ */ jsx("button", {
+							type: "button",
+							onClick: () => setLanguage("ru"),
+							className: cn("rounded-full px-4 py-1.5 transition-all duration-200", language === "ru" ? "bg-primary text-white shadow-md" : "text-[#6E7B83] hover:text-[#1F2528]"),
+							children: "Рус"
+						}), /* @__PURE__ */ jsx("button", {
+							type: "button",
+							onClick: () => setLanguage("kk"),
+							className: cn("rounded-full px-4 py-1.5 transition-all duration-200", language === "kk" ? "bg-primary text-white shadow-md" : "text-[#6E7B83] hover:text-[#1F2528]"),
+							children: "Қаз"
+						})]
+					}), /* @__PURE__ */ jsx("button", {
+						type: "button",
+						onClick: () => setMobileMenuOpen(true),
+						className: "flex size-12 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528] shadow-sm transition-all hover:bg-slate-50",
+						"aria-label": t.common.openMenu,
+						children: /* @__PURE__ */ jsx(List, { className: "size-6" })
+					})]
+				}),
+				/* @__PURE__ */ jsxs("div", {
+					className: "flex items-center gap-2 lg:hidden",
+					children: [/* @__PURE__ */ jsxs("div", {
+						className: "flex items-center rounded-full border border-[#DDE3E7] bg-white p-1 text-[12px] font-bold shadow-sm",
+						children: [/* @__PURE__ */ jsx("button", {
+							type: "button",
+							onClick: () => setLanguage("ru"),
+							className: cn("rounded-full px-3 py-1.5 transition-all duration-200", language === "ru" ? "bg-primary text-white" : "text-[#6E7B83]"),
+							children: "Рус"
+						}), /* @__PURE__ */ jsx("button", {
+							type: "button",
+							onClick: () => setLanguage("kk"),
+							className: cn("rounded-full px-3 py-1.5 transition-all duration-200", language === "kk" ? "bg-primary text-white" : "text-[#6E7B83]"),
+							children: "Қаз"
+						})]
+					}), /* @__PURE__ */ jsx("button", {
+						type: "button",
+						onClick: () => setMobileMenuOpen(true),
+						className: "flex size-11 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528] shadow-sm",
+						"aria-label": t.common.openMenu,
+						children: /* @__PURE__ */ jsx(List, { className: "size-6" })
+					})]
+				})
+			]
+		}), /* @__PURE__ */ jsx(AnimatePresence, { children: mobileMenuOpen && /* @__PURE__ */ jsxs(motion.div, {
+			initial: reduceMotion ? { opacity: 0 } : {
+				opacity: 0,
+				y: -16
+			},
+			animate: {
+				opacity: 1,
+				y: 0
+			},
+			exit: reduceMotion ? { opacity: 0 } : {
+				opacity: 0,
+				y: -16
+			},
+			transition: { duration: reduceMotion ? .12 : .22 },
+			className: "fixed inset-0 z-50 flex min-h-[100dvh] flex-col bg-[#F5F7F8]",
+			children: [/* @__PURE__ */ jsxs("div", {
+				className: "flex items-center justify-between border-b border-[#DDE3E7] bg-white p-4",
+				children: [/* @__PURE__ */ jsx(Link, {
+					to: "/",
+					onClick: () => setMobileMenuOpen(false),
+					className: "flex h-14 w-[10rem] items-center",
+					children: /* @__PURE__ */ jsx("img", {
+						src: "/assets/implantium-logo-cropped-DrnpNZVq.png",
+						alt: t.common.clinicName,
+						className: "size-full object-contain object-left"
+					})
+				}), /* @__PURE__ */ jsx("button", {
+					type: "button",
+					onClick: () => setMobileMenuOpen(false),
+					className: "flex size-11 items-center justify-center rounded-full border border-[#DDE3E7] bg-white text-[#1F2528]",
+					"aria-label": t.common.closeMenu,
+					children: /* @__PURE__ */ jsx(X, { className: "size-6" })
+				})]
+			}), /* @__PURE__ */ jsxs("div", {
+				className: "flex flex-1 flex-col gap-6 overflow-y-auto p-5",
+				children: [/* @__PURE__ */ jsx("nav", {
+					className: "grid gap-3",
+					children: navLinks.map((link) => /* @__PURE__ */ jsx("a", {
+						href: link.href,
+						onClick: () => setMobileMenuOpen(false),
+						className: "rounded-2xl border border-[#DDE3E7] bg-white px-5 py-4 text-lg font-semibold text-[#1F2528] shadow-sm transition-colors hover:text-primary",
+						children: link.name
+					}, link.name))
+				}), /* @__PURE__ */ jsxs("div", {
+					className: "mt-auto rounded-[1.5rem] border border-[#DDE3E7] bg-white p-5 shadow-[0_18px_50px_rgba(31,37,40,0.06)]",
+					children: [/* @__PURE__ */ jsx("p", {
+						className: "mb-4 text-sm font-semibold leading-relaxed text-[#606A70]",
+						children: landing.contact.address
+					}), /* @__PURE__ */ jsx(BookingModal, { children: /* @__PURE__ */ jsx(Button, {
+						className: "h-12 w-full rounded-2xl bg-primary text-sm font-bold text-white hover:bg-[#8F2F25]",
+						children: landing.hero.primaryCta
+					}) })]
+				})]
+			})]
+		}) })]
+	});
+}
+//#endregion
+//#region src/components/layout/ScrollToTop.tsx
+function ScrollToTop() {
+	const { pathname } = useLocation();
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, [pathname]);
+	return null;
+}
+//#endregion
 //#region src/components/layout/StickyCTA.tsx
 function StickyCTA() {
 	const { language } = useLanguage();
-	const t = content[language];
+	const t = content$2[language];
 	const landing = landingCopy[language];
 	const hasPhone = hasContactValue(clinicContact.phoneHref);
 	const hasWhatsapp = hasContactValue(clinicContact.whatsappUrl);
@@ -1835,15 +1826,6 @@ function StickyCTA() {
 			})
 		]
 	});
-}
-//#endregion
-//#region src/components/layout/ScrollToTop.tsx
-function ScrollToTop() {
-	const { pathname } = useLocation();
-	useEffect(() => {
-		window.scrollTo(0, 0);
-	}, [pathname]);
-	return null;
 }
 //#endregion
 //#region src/components/motion/MotionPrimitives.tsx
@@ -2002,14 +1984,7 @@ function MotionListItem({ children, className, index = 0, interactive = false, l
 	});
 }
 //#endregion
-//#region src/App.tsx
-var Home = lazy(() => import("./assets/Home-uiPGWjOm.js"));
-var Doctors = lazy(() => import("./assets/Doctors-C-1rCpw2.js"));
-var ServiceDetail = lazy(() => import("./assets/ServiceDetail-CHnDBAQ2.js"));
-var NotFound = lazy(() => import("./assets/NotFound-RznLx3N4.js"));
-var Admin = lazy(() => import("./assets/Admin-BP0QFqJV.js"));
-var Visitka = lazy(() => import("./assets/Visitka-CWngYSAd.js"));
-var Visitka2 = lazy(() => import("./assets/Visitka2-D04EfiWr.js"));
+//#region src/AppRouter.tsx
 function Layout() {
 	const location = useLocation();
 	return /* @__PURE__ */ jsxs("div", {
@@ -2030,31 +2005,20 @@ function Layout() {
 		]
 	});
 }
-function AdminRoute() {
-	return /* @__PURE__ */ jsx(Suspense, {
-		fallback: null,
-		children: /* @__PURE__ */ jsx(Admin, {})
-	});
-}
-function App() {
+function AppRouter({ pages }) {
+	const { Home: HomePage, Doctors: DoctorsPage, ServiceDetail: ServiceDetailPage, NotFound: NotFoundPage, Admin: AdminPage, Visitka: VisitkaPage, Visitka2: Visitka2Page } = pages;
 	return /* @__PURE__ */ jsx(LanguageProvider, { children: /* @__PURE__ */ jsxs(Routes, { children: [
 		/* @__PURE__ */ jsx(Route, {
 			path: "/admin",
-			element: /* @__PURE__ */ jsx(AdminRoute, {})
+			element: /* @__PURE__ */ jsx(AdminPage, {})
 		}),
 		/* @__PURE__ */ jsx(Route, {
 			path: "/visitka",
-			element: /* @__PURE__ */ jsx(Suspense, {
-				fallback: null,
-				children: /* @__PURE__ */ jsx(Visitka, {})
-			})
+			element: /* @__PURE__ */ jsx(VisitkaPage, {})
 		}),
 		/* @__PURE__ */ jsx(Route, {
 			path: "/visitka2",
-			element: /* @__PURE__ */ jsx(Suspense, {
-				fallback: null,
-				children: /* @__PURE__ */ jsx(Visitka2, {})
-			})
+			element: /* @__PURE__ */ jsx(Visitka2Page, {})
 		}),
 		/* @__PURE__ */ jsxs(Route, {
 			path: "/",
@@ -2062,19 +2026,19 @@ function App() {
 			children: [
 				/* @__PURE__ */ jsx(Route, {
 					index: true,
-					element: /* @__PURE__ */ jsx(Home, {})
+					element: /* @__PURE__ */ jsx(HomePage, {})
 				}),
 				/* @__PURE__ */ jsx(Route, {
 					path: "doctors",
-					element: /* @__PURE__ */ jsx(Doctors, {})
+					element: /* @__PURE__ */ jsx(DoctorsPage, {})
 				}),
 				/* @__PURE__ */ jsx(Route, {
 					path: "services/:id",
-					element: /* @__PURE__ */ jsx(ServiceDetail, {})
+					element: /* @__PURE__ */ jsx(ServiceDetailPage, {})
 				}),
 				/* @__PURE__ */ jsx(Route, {
 					path: "*",
-					element: /* @__PURE__ */ jsx(NotFound, {})
+					element: /* @__PURE__ */ jsx(NotFoundPage, {})
 				})
 			]
 		})
@@ -2091,12 +2055,7095 @@ function AppConvexProvider({ children }) {
 	});
 }
 //#endregion
+//#region src/data/seo.ts
+var homeSeo = {
+	title: {
+		ru: "Имплантация зубов в Актау | Стоматология IMPLANTIUM",
+		kk: "Ақтау стоматология | IMPLANTIUM"
+	},
+	description: {
+		ru: "Зубная клиника IMPLANTIUM — стоматология в Актау: имплантация зубов, брекеты, лечение зубов, удаление, чистка и коронки. Запись на консультацию.",
+		kk: "IMPLANTIUM — Ақтау стоматология: тіс имплантациясы, брекет, тіс емдеу Ақтау, жұлу, тазалау және қаптама. Кеңеске жазылыңыз."
+	},
+	keywords: [
+		"стоматология Актау",
+		"зубная клиника Актау",
+		"имплантация зубов Актау",
+		"брекеты Актау",
+		"лечение зубов Актау",
+		"Ақтау стоматология",
+		"тіс емдеу Ақтау"
+	]
+};
+var doctorsSeo = {
+	title: {
+		ru: "Стоматологи в Актау | Врачи IMPLANTIUM",
+		kk: "Ақтаудағы стоматологтар | IMPLANTIUM дәрігерлері"
+	},
+	description: {
+		ru: "Врачи стоматологической клиники IMPLANTIUM в Актау: имплантолог, ортодонт, терапевт, хирург и специалисты по протезированию.",
+		kk: "Ақтаудағы IMPLANTIUM стоматологиясының дәрігерлері: имплантолог, ортодонт, терапевт, хирург және протездеу мамандары."
+	},
+	keywords: [
+		"стоматолог Актау",
+		"врач стоматолог Актау",
+		"ортодонт Актау",
+		"имплантолог Актау",
+		"детальный план лечения зубов Актау",
+		"Ақтауда стоматолог"
+	]
+};
+var serviceSeo = {
+	implants: {
+		title: {
+			ru: "Имплантация зубов в Актау | IMPLANTIUM",
+			kk: "Ақтауда тіс имплантациясы | IMPLANTIUM"
+		},
+		description: {
+			ru: "Имплантация зубов в Актау в клинике IMPLANTIUM: подбор импланта, 3D-диагностика, коронки на имплантах и понятный план лечения.",
+			kk: "Ақтауда IMPLANTIUM клиникасында тіс имплантациясы: имплант таңдау, 3D диагностика, имплантқа қаптама және түсінікті ем жоспары."
+		},
+		intro: {
+			ru: "Ищете имплантацию зубов в Актау? В IMPLANTIUM врач подбирает систему имплантов под клиническую ситуацию, бюджет и будущую эстетику улыбки.",
+			kk: "Ақтауда тіс имплантациясын іздесеңіз, IMPLANTIUM дәрігері имплант жүйесін жағдайыңызға, бюджетке және күтілетін эстетикаға сай таңдайды."
+		},
+		keywords: [
+			"имплантация зубов Актау",
+			"импланты Актау",
+			"имплантолог Актау",
+			"зубной имплант Актау",
+			"Ақтауда тіс имплантациясы"
+		]
+	},
+	"bone-augmentation": {
+		title: {
+			ru: "Костная пластика в Актау | IMPLANTIUM",
+			kk: "Ақтауда сүйек пластикасы | IMPLANTIUM"
+		},
+		description: {
+			ru: "Костная пластика в Актау перед имплантацией: диагностика, подбор материала и подготовка надежной основы для импланта.",
+			kk: "Ақтауда имплантация алдындағы сүйек пластикасы: диагностика, материал таңдау және имплантқа сенімді негіз дайындау."
+		},
+		intro: {
+			ru: "Костная пластика в Актау помогает подготовить надежную основу для имплантации, если объема костной ткани недостаточно.",
+			kk: "Ақтауда сүйек пластикасы сүйек көлемі жеткіліксіз болған жағдайда имплантацияға сенімді негіз дайындауға көмектеседі."
+		},
+		keywords: [
+			"костная пластика Актау",
+			"наращивание костной ткани Актау",
+			"подготовка к имплантации Актау",
+			"сүйек пластикасы Ақтау"
+		]
+	},
+	frenectomy: {
+		title: {
+			ru: "Пластика уздечки в Актау | IMPLANTIUM",
+			kk: "Ақтауда жүгеншені кесу | IMPLANTIUM"
+		},
+		description: {
+			ru: "Пластика уздечки в Актау: аккуратная стоматологическая процедура под анестезией с понятными рекомендациями по восстановлению.",
+			kk: "Ақтауда жүгеншені түзету: анестезиямен жасалатын ұқыпты стоматологиялық процедура және қалпына келу бойынша нақты кеңес."
+		},
+		intro: {
+			ru: "Пластика уздечки в Актау проводится, когда короткая уздечка мешает речи, прикусу, движению губы или языку.",
+			kk: "Ақтауда жүгеншені түзету сөйлеуге, тістемге, ерін немесе тіл қозғалысына кедергі болған жағдайда жасалады."
+		},
+		keywords: [
+			"пластика уздечки Актау",
+			"подрезание уздечки Актау",
+			"френэктомия Актау",
+			"жүгеншені кесу Ақтау"
+		]
+	},
+	"tooth-extraction": {
+		title: {
+			ru: "Удаление зуба в Актау | IMPLANTIUM",
+			kk: "Ақтауда тіс жұлу | IMPLANTIUM"
+		},
+		description: {
+			ru: "Удаление зуба в Актау под анестезией: бережная хирургия, диагностика перед процедурой и рекомендации для спокойного восстановления.",
+			kk: "Ақтауда тісті анестезиямен жұлу: ұқыпты хирургия, процедура алдындағы диагностика және қалпына келу бойынша кеңес."
+		},
+		intro: {
+			ru: "Удаление зуба в Актау в IMPLANTIUM проводится бережно, с предварительным осмотром и объяснением дальнейших шагов восстановления.",
+			kk: "Ақтауда IMPLANTIUM клиникасында тіс жұлу алдын ала тексерумен және қалпына келу кезеңдерін түсіндірумен жасалады."
+		},
+		keywords: [
+			"удаление зуба Актау",
+			"удалить зуб Актау",
+			"хирург стоматолог Актау",
+			"тіс жұлу Ақтау"
+		]
+	},
+	"wisdom-tooth-removal": {
+		title: {
+			ru: "Удаление зуба мудрости в Актау | IMPLANTIUM",
+			kk: "Ақтауда ақыл тісін жұлу | IMPLANTIUM"
+		},
+		description: {
+			ru: "Удаление зуба мудрости в Актау: оценка положения зуба, анестезия, бережное удаление и рекомендации после процедуры.",
+			kk: "Ақтауда ақыл тісін жұлу: тістің орналасуын бағалау, анестезия, ұқыпты жұлу және процедурадан кейінгі кеңестер."
+		},
+		intro: {
+			ru: "Если беспокоит зуб мудрости в Актау, врач IMPLANTIUM оценивает снимок и планирует безопасное удаление.",
+			kk: "Ақтауда ақыл тісі мазаласа, IMPLANTIUM дәрігері суретті бағалап, қауіпсіз жұлу жоспарын жасайды."
+		},
+		keywords: [
+			"удаление зуба мудрости Актау",
+			"зуб мудрости Актау",
+			"сложное удаление зуба Актау",
+			"ақыл тісін жұлу Ақтау"
+		]
+	},
+	crowns: {
+		title: {
+			ru: "Коронки на зубы в Актау | IMPLANTIUM",
+			kk: "Ақтауда тіс қаптамалары | IMPLANTIUM"
+		},
+		description: {
+			ru: "Коронки на зубы в Актау: металлокерамика, циркон, коронки на импланты и восстановление эстетики улыбки.",
+			kk: "Ақтауда тіс қаптамалары: металлокерамика, циркон, имплантқа қаптама және күлкі эстетикасын қалпына келтіру."
+		},
+		intro: {
+			ru: "Коронки в Актау помогают восстановить форму, функцию и внешний вид зуба после разрушения или лечения.",
+			kk: "Ақтауда тіс қаптамалары тіс бұзылғаннан немесе емделгеннен кейін оның пішінін, қызметін және көрінісін қалпына келтіреді."
+		},
+		keywords: [
+			"коронки Актау",
+			"коронки на зубы Актау",
+			"цирконовые коронки Актау",
+			"металлокерамика Актау",
+			"тіс қаптамасы Ақтау"
+		]
+	},
+	dentures: {
+		title: {
+			ru: "Протезирование зубов в Актау | IMPLANTIUM",
+			kk: "Ақтауда тіс протездері | IMPLANTIUM"
+		},
+		description: {
+			ru: "Протезирование зубов в Актау: съемные и несъемные решения, восстановление жевания, дикции и уверенной улыбки.",
+			kk: "Ақтауда тіс протездері: алмалы және тұрақты шешімдер, шайнау, сөйлеу және сенімді күлкіні қалпына келтіру."
+		},
+		intro: {
+			ru: "Протезирование зубов в Актау подбирается индивидуально: врач учитывает количество зубов, прикус, комфорт и эстетику.",
+			kk: "Ақтауда тіс протездері жеке таңдалады: дәрігер тіс санына, тістемге, жайлылыққа және эстетикаға қарайды."
+		},
+		keywords: [
+			"протезирование зубов Актау",
+			"протезы Актау",
+			"съемные протезы Актау",
+			"несъемные протезы Актау",
+			"тіс протездері Ақтау"
+		]
+	},
+	braces: {
+		title: {
+			ru: "Брекеты в Актау | IMPLANTIUM",
+			kk: "Ақтауда брекет | IMPLANTIUM"
+		},
+		description: {
+			ru: "Брекеты в Актау: консультация ортодонта, металлические и самолигирующие системы, план коррекции прикуса и зубного ряда.",
+			kk: "Ақтауда брекет: ортодонт кеңесі, металл және өзін-өзі байланыстыратын жүйелер, тістем мен тіс қатарын түзету жоспары."
+		},
+		intro: {
+			ru: "Брекеты в Актау помогают исправить прикус и выровнять зубы; ортодонт IMPLANTIUM подбирает систему после диагностики.",
+			kk: "Ақтауда брекет тістемді түзетуге және тістерді тегістеуге көмектеседі; IMPLANTIUM ортодонты жүйені диагностикадан кейін таңдайды."
+		},
+		keywords: [
+			"брекеты Актау",
+			"ортодонт Актау",
+			"исправление прикуса Актау",
+			"металлические брекеты Актау",
+			"Ақтауда брекет"
+		]
+	},
+	treatment: {
+		title: {
+			ru: "Лечение зубов в Актау | IMPLANTIUM",
+			kk: "Ақтауда тіс емдеу | IMPLANTIUM"
+		},
+		description: {
+			ru: "Лечение зубов в Актау: кариес, пульпит, периодонтит, диагностика и восстановление зуба с комфортной анестезией.",
+			kk: "Ақтауда тіс емдеу: кариес, пульпит, периодонтит, диагностика және жайлы анестезиямен тісті қалпына келтіру."
+		},
+		intro: {
+			ru: "Лечение зубов в Актау в IMPLANTIUM начинается с диагностики, чтобы сохранить зуб и выбрать спокойный план лечения.",
+			kk: "Ақтауда IMPLANTIUM клиникасында тіс емдеу диагностикадан басталады, бұл тісті сақтап, дұрыс ем жоспарын таңдауға көмектеседі."
+		},
+		keywords: [
+			"лечение зубов Актау",
+			"кариес Актау",
+			"пульпит Актау",
+			"пломба Актау",
+			"стоматолог терапевт Актау",
+			"Ақтауда тіс емдеу"
+		]
+	},
+	cleaning: {
+		title: {
+			ru: "Чистка зубов в Актау | IMPLANTIUM",
+			kk: "Ақтауда тіс тазалау | IMPLANTIUM"
+		},
+		description: {
+			ru: "Профессиональная чистка зубов в Актау: снятие налета и зубного камня, Air Flow, полировка и профилактика здоровья десен.",
+			kk: "Ақтауда кәсіби тіс тазалау: қақ пен тіс тасын алу, Air Flow, жылтырату және қызыл иек саулығының алдын алу."
+		},
+		intro: {
+			ru: "Профессиональная чистка зубов в Актау помогает убрать налет и камень, освежить улыбку и подготовить зубы к лечению.",
+			kk: "Ақтауда кәсіби тіс тазалау қақ пен тіс тасын кетіруге, күлкіні сергітуге және тісті емге дайындауға көмектеседі."
+		},
+		keywords: [
+			"чистка зубов Актау",
+			"профессиональная гигиена Актау",
+			"Air Flow Актау",
+			"зубной камень Актау",
+			"Ақтауда тіс тазалау"
+		]
+	}
+};
+function getServiceSeo(service) {
+	return serviceSeo[service.id] ?? {
+		title: {
+			ru: `${service.title.ru} в Актау | IMPLANTIUM`,
+			kk: `${service.title.kk} | IMPLANTIUM`
+		},
+		description: {
+			ru: `${service.title.ru} в стоматологической клинике IMPLANTIUM в Актау. Диагностика, понятный план лечения и запись на консультацию.`,
+			kk: `${service.title.kk} IMPLANTIUM стоматологиясында. Диагностика, түсінікті ем жоспары және кеңеске жазылу.`
+		},
+		intro: {
+			ru: `${service.title.ru} в Актау проводится после диагностики и подбора индивидуального плана лечения.`,
+			kk: `${service.title.kk} диагностикадан және жеке ем жоспарын таңдаудан кейін жүргізіледі.`
+		},
+		keywords: [
+			`${service.title.ru} Актау`,
+			`${service.title.kk} Ақтау`,
+			"стоматология Актау"
+		]
+	};
+}
+function buildClinicJsonLd(siteUrl, serviceNames = []) {
+	return {
+		"@context": "https://schema.org",
+		"@type": "Dentist",
+		"@id": `${siteUrl}/#clinic`,
+		name: "IMPLANTIUM",
+		alternateName: ["Стоматологическая клиника IMPLANTIUM", "IMPLANTIUM стоматологиясы"],
+		description: "Зубная клиника в Актау: имплантация зубов, брекеты, лечение зубов. Ақтау стоматология — тіс емдеу және тіс имплантациясы.",
+		url: siteUrl,
+		telephone: "+77027133939",
+		priceRange: "₸₸",
+		image: `${siteUrl}/favicon-512.png`,
+		address: {
+			"@type": "PostalAddress",
+			streetAddress: "13 микрорайон, дом 39",
+			addressLocality: "Актау",
+			addressRegion: "Мангистауская область",
+			postalCode: "130000",
+			addressCountry: "KZ"
+		},
+		geo: {
+			"@type": "GeoCoordinates",
+			latitude: 43.667073,
+			longitude: 51.136723
+		},
+		areaServed: {
+			"@type": "City",
+			name: "Актау"
+		},
+		openingHoursSpecification: [{
+			"@type": "OpeningHoursSpecification",
+			dayOfWeek: [
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday",
+				"Saturday"
+			],
+			opens: "10:00",
+			closes: "22:00"
+		}, {
+			"@type": "OpeningHoursSpecification",
+			dayOfWeek: "Sunday",
+			opens: "10:00",
+			closes: "14:00"
+		}],
+		medicalSpecialty: [
+			"Dentistry",
+			"Orthodontics",
+			"Dental implantology"
+		],
+		availableService: serviceNames.map((name) => ({
+			"@type": "MedicalProcedure",
+			name
+		})),
+		sameAs: [clinicContact.instagramUrl, clinicContact.twoGisUrl].filter(hasContactValue)
+	};
+}
+function buildServiceJsonLd(siteUrl, path, service, seo, language) {
+	return {
+		"@context": "https://schema.org",
+		"@type": "Service",
+		"@id": `${siteUrl}${path}#service`,
+		name: seo.title[language].replace(" | IMPLANTIUM", ""),
+		alternateName: service.title[language === "ru" ? "kk" : "ru"],
+		description: seo.description[language],
+		serviceType: service.title.ru,
+		areaServed: {
+			"@type": "City",
+			name: "Актау"
+		},
+		provider: { "@id": `${siteUrl}/#clinic` },
+		url: `${siteUrl}${path}`,
+		offers: {
+			"@type": "Offer",
+			priceCurrency: "KZT",
+			description: `${service.startingPrice[language]}. ${service.priceCaption[language]}`,
+			availability: "https://schema.org/InStock"
+		}
+	};
+}
+function buildBreadcrumbJsonLd(siteUrl, items) {
+	return {
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		itemListElement: items.map((item, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			name: item.name,
+			item: `${siteUrl}${item.path}`
+		}))
+	};
+}
+/**
+* Generates FAQPage JSON-LD from a service's FAQ items.
+* Produces rich accordion snippets in Google search results.
+*/
+function buildFaqJsonLd(faqItems, language) {
+	if (faqItems.length === 0) return null;
+	return {
+		"@context": "https://schema.org",
+		"@type": "FAQPage",
+		mainEntity: faqItems.map((item) => ({
+			"@type": "Question",
+			name: item.question[language],
+			acceptedAnswer: {
+				"@type": "Answer",
+				text: item.answer[language]
+			}
+		}))
+	};
+}
+//#endregion
+//#region src/seo/registry.ts
+var PRODUCTION_ORIGIN = "https://www.implantium.kz";
+var SERVICE_ROUTE_IDS = [
+	"implants",
+	"bone-augmentation",
+	"frenectomy",
+	"tooth-extraction",
+	"wisdom-tooth-removal",
+	"crowns",
+	"dentures",
+	"braces",
+	"treatment",
+	"cleaning"
+];
+var sharedLegacyPath = (path) => ({
+	ru: path,
+	kk: path
+});
+var SEO_ROUTES = [
+	{
+		key: "home",
+		pageType: "home",
+		localePaths: sharedLegacyPath("/"),
+		canonicalPath: sharedLegacyPath("/"),
+		alternates: sharedLegacyPath("/"),
+		indexable: true,
+		includeInSitemap: true,
+		sitemapPriority: "1.0",
+		sitemapChangefreq: "weekly",
+		seo: homeSeo,
+		ogImagePath: "/og-image.png"
+	},
+	{
+		key: "doctors",
+		pageType: "doctors",
+		localePaths: sharedLegacyPath("/doctors"),
+		canonicalPath: sharedLegacyPath("/doctors"),
+		alternates: sharedLegacyPath("/doctors"),
+		indexable: true,
+		includeInSitemap: true,
+		sitemapPriority: "0.8",
+		sitemapChangefreq: "weekly",
+		seo: doctorsSeo,
+		ogImagePath: "/og-image.png"
+	},
+	...SERVICE_ROUTE_IDS.map((serviceId) => {
+		const path = `/services/${serviceId}`;
+		return {
+			key: `service:${serviceId}`,
+			pageType: "service",
+			serviceId,
+			localePaths: sharedLegacyPath(path),
+			canonicalPath: sharedLegacyPath(path),
+			alternates: sharedLegacyPath(path),
+			indexable: true,
+			includeInSitemap: true,
+			sitemapPriority: "0.9",
+			sitemapChangefreq: "weekly",
+			seo: serviceSeo[serviceId],
+			ogImagePath: `/og/${serviceId}.jpg`
+		};
+	})
+];
+new Map(SEO_ROUTES.map((route) => [route.key, route]));
+new Map(SEO_ROUTES.filter((route) => route.serviceId).map((route) => [route.serviceId, route]));
+//#endregion
+//#region src/hooks/useSeo.ts
+function getSiteOrigin() {
+	const normalizedConfiguredUrl = normalizeOrigin(void 0);
+	if (normalizedConfiguredUrl) return normalizedConfiguredUrl;
+	return PRODUCTION_ORIGIN;
+}
+function useSeo({ title, description, path, keywords = [], jsonLd = [], noindex = false, type = "website", image, canonical = true }) {
+	useEffect(() => {
+		const siteOrigin = getSiteOrigin();
+		const canonicalUrl = `${siteOrigin}${normalizePath(path)}`;
+		const robotsContent = noindex ? "noindex, follow" : "index, follow";
+		document.title = title;
+		upsertMeta("name", "description", description);
+		upsertMeta("name", "robots", robotsContent);
+		upsertMeta("name", "keywords", keywords.join(", "));
+		if (canonical) upsertLink("canonical", canonicalUrl);
+		else document.head.querySelector("link[rel=\"canonical\"]")?.remove();
+		const ogImage = image ?? `${siteOrigin}/og-image.png`;
+		upsertMeta("property", "og:site_name", "IMPLANTIUM");
+		upsertMeta("property", "og:type", type);
+		upsertMeta("property", "og:title", title);
+		upsertMeta("property", "og:description", description);
+		upsertMeta("property", "og:url", canonicalUrl);
+		upsertMeta("property", "og:locale", "ru_KZ");
+		upsertMeta("property", "og:image", ogImage);
+		upsertMeta("name", "twitter:card", "summary_large_image");
+		upsertMeta("name", "twitter:title", title);
+		upsertMeta("name", "twitter:description", description);
+		upsertMeta("name", "twitter:image", ogImage);
+		upsertJsonLd(jsonLd);
+	}, [
+		canonical,
+		description,
+		image,
+		jsonLd,
+		keywords,
+		noindex,
+		path,
+		title,
+		type
+	]);
+}
+function normalizeOrigin(value) {
+	const trimmed = value?.trim();
+	if (!trimmed) return "";
+	return (/^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`).replace(/\/+$/, "");
+}
+function normalizePath(path) {
+	if (!path || path === "/") return "";
+	return path.startsWith("/") ? path : `/${path}`;
+}
+function upsertMeta(attribute, key, content) {
+	const selector = `meta[${attribute}="${key}"]`;
+	let element = document.head.querySelector(selector);
+	if (!content) {
+		element?.remove();
+		return;
+	}
+	if (!element) {
+		element = document.createElement("meta");
+		element.setAttribute(attribute, key);
+		document.head.appendChild(element);
+	}
+	element.setAttribute("content", content);
+}
+function upsertLink(rel, href) {
+	let element = document.head.querySelector(`link[rel="${rel}"]`);
+	if (!element) {
+		element = document.createElement("link");
+		element.setAttribute("rel", rel);
+		document.head.appendChild(element);
+	}
+	element.setAttribute("href", href);
+}
+function upsertJsonLd(items) {
+	const scriptId = "seo-json-ld";
+	let element = document.getElementById(scriptId);
+	if (items.length === 0) {
+		element?.remove();
+		return;
+	}
+	if (!element) {
+		element = document.createElement("script");
+		element.id = scriptId;
+		element.type = "application/ld+json";
+		document.head.appendChild(element);
+	}
+	element.textContent = JSON.stringify(items.length === 1 ? items[0] : items);
+}
+//#endregion
+//#region src/assets/hero-clinical-implant.png
+var hero_clinical_implant_default = "/assets/hero-clinical-implant-Dx0V7BDd.png";
+//#endregion
+//#region src/components/sections/Hero.tsx
+function Hero() {
+	const { language } = useLanguage();
+	const t = landingCopy[language];
+	const reduceMotion = useReducedMotion();
+	return /* @__PURE__ */ jsxs("section", {
+		className: "relative isolate overflow-hidden bg-white pt-[5.4rem]",
+		children: [/* @__PURE__ */ jsxs("div", {
+			className: "absolute inset-0 -z-10",
+			children: [
+				/* @__PURE__ */ jsx("img", {
+					src: hero_clinical_implant_default,
+					alt: t.hero.imageAlt,
+					className: "absolute inset-0 h-full w-full object-cover object-[95%_center] sm:object-[76%_center] md:object-[66%_center] lg:object-[62%_center]",
+					loading: "eager",
+					fetchPriority: "high",
+					decoding: "async"
+				}),
+				/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-white/60 backdrop-blur-[4px] sm:bg-white/10 sm:backdrop-blur-0" }),
+				/* @__PURE__ */ jsx("div", { className: "absolute inset-y-0 left-0 w-full bg-gradient-to-r from-white/95 via-white/80 to-transparent sm:w-[60%] md:w-[50%]" })
+			]
+		}), /* @__PURE__ */ jsx("div", {
+			className: "section-shell pb-8 pt-4 sm:pt-12 md:pb-12 md:pt-16 lg:pb-20",
+			children: /* @__PURE__ */ jsx("div", {
+				className: "flex items-center min-h-[500px] sm:min-h-[580px] lg:min-h-[640px]",
+				children: /* @__PURE__ */ jsxs(motion.div, {
+					initial: reduceMotion ? { opacity: 0 } : {
+						opacity: 0,
+						x: -20
+					},
+					animate: {
+						opacity: 1,
+						x: 0
+					},
+					transition: {
+						duration: reduceMotion ? .12 : .7,
+						ease: [
+							.16,
+							1,
+							.3,
+							1
+						]
+					},
+					className: "relative z-10 flex max-w-2xl flex-col items-start gap-6 sm:gap-8",
+					children: [
+						/* @__PURE__ */ jsx("div", {
+							className: "flex flex-col gap-1",
+							children: /* @__PURE__ */ jsx(TextReveal, { children: /* @__PURE__ */ jsx("h1", {
+								className: "text-[2.6rem] font-medium leading-[1.15] tracking-tight text-[#1F2528] sm:text-[3.8rem] md:text-[4.4rem] lg:text-[4.8rem]",
+								children: language === "kk" ? /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsxs("span", {
+									className: "font-inter font-normal",
+									children: [
+										"Ақтаудағы ",
+										/* @__PURE__ */ jsx("br", {}),
+										"заманауи ",
+										/* @__PURE__ */ jsx("br", {}),
+										"стоматология ",
+										/* @__PURE__ */ jsx("br", {}),
+										"Сау әрі әдемі ",
+										/* @__PURE__ */ jsx("br", {}),
+										"күлкіге ",
+										/* @__PURE__ */ jsx("br", {})
+									]
+								}), /* @__PURE__ */ jsx("span", {
+									className: "font-display italic text-primary",
+									children: t.hero.lineThree
+								})] }) : /* @__PURE__ */ jsxs(Fragment$1, { children: [
+									"Современная ",
+									/* @__PURE__ */ jsx("br", {}),
+									"стоматология ",
+									/* @__PURE__ */ jsx("br", {}),
+									"в Актау — ",
+									/* @__PURE__ */ jsx("br", {}),
+									"путь к ",
+									/* @__PURE__ */ jsx("br", {}),
+									/* @__PURE__ */ jsx("span", {
+										className: "font-display italic text-primary",
+										children: "здоровой улыбке"
+									})
+								] })
+							}) })
+						}),
+						/* @__PURE__ */ jsxs(motion.div, {
+							initial: reduceMotion ? { opacity: 0 } : {
+								opacity: 0,
+								y: 10
+							},
+							animate: {
+								opacity: 1,
+								y: 0
+							},
+							transition: {
+								delay: reduceMotion ? 0 : .2,
+								duration: reduceMotion ? .12 : .5
+							},
+							className: "flex max-w-[22rem] items-center gap-3 rounded-[1.5rem] border border-white/80 bg-white/85 p-3 pr-5 shadow-[0_12px_45px_rgba(31,37,40,0.06)] backdrop-blur-xl sm:max-w-[28rem] sm:gap-4 sm:rounded-[2rem] sm:p-4 sm:pr-6",
+							children: [/* @__PURE__ */ jsx("div", {
+								className: "flex size-11 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-[#F4E7E4] text-primary sm:size-14",
+								children: /* @__PURE__ */ jsx(HandHeart, {
+									weight: "bold",
+									className: "size-5 sm:size-7"
+								})
+							}), /* @__PURE__ */ jsx("p", {
+								className: "text-[13px] font-semibold leading-snug text-[#343D42] sm:text-sm sm:font-medium sm:leading-relaxed",
+								children: t.hero.subheadline
+							})]
+						}),
+						/* @__PURE__ */ jsxs("div", {
+							className: "flex w-full flex-col gap-4 pt-2 sm:w-auto sm:flex-row",
+							children: [/* @__PURE__ */ jsx(BookingModal, { children: /* @__PURE__ */ jsxs(Button, {
+								size: "lg",
+								className: "group accent-button-shadow h-16 rounded-[1.25rem] bg-primary px-10 text-base font-bold text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]",
+								children: [t.hero.primaryCta, /* @__PURE__ */ jsx(ArrowRight, {
+									weight: "bold",
+									className: "ml-2 size-4 opacity-70 transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+								})]
+							}) }), /* @__PURE__ */ jsx(Button, {
+								asChild: true,
+								variant: "outline",
+								size: "lg",
+								className: "group h-16 rounded-[1.25rem] border-white/50 bg-white/70 px-10 text-base font-bold text-[#1F2528] shadow-[0_12px_30px_rgba(31,37,40,0.03)] backdrop-blur-md transition-all hover:-translate-y-0.5 hover:bg-white active:translate-y-[1px]",
+								children: /* @__PURE__ */ jsxs("a", {
+									href: "/#services",
+									children: [t.hero.secondaryCta, /* @__PURE__ */ jsx(ArrowRight, {
+										weight: "bold",
+										className: "ml-2 size-4 text-[#606A70] transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+									})]
+								})
+							})]
+						})
+					]
+				})
+			})
+		})]
+	});
+}
+//#endregion
+//#region convex/_generated/api.js
+/**
+* Generated `api` utility.
+*
+* THIS CODE IS AUTOMATICALLY GENERATED.
+*
+* To regenerate, run `npx convex dev`.
+* @module
+*/
+/**
+* A utility for referencing Convex functions in your app's API.
+*
+* Usage:
+* ```js
+* const myFunctionReference = api.myModule.myFunction;
+* ```
+*/
+var api = anyApi;
+componentsGeneric();
+//#endregion
+//#region src/data/doctors.ts
+var doctors = [
+	{
+		id: "zhaksybaev-bauyrzhan",
+		name: {
+			ru: "Жаксыбаев Бауыржан Советханович",
+			kk: "Жаксыбаев Бауыржан Советханович"
+		},
+		specialty: {
+			ru: "ЧЛХ, хирург-имплантолог",
+			kk: "Жақ-бет хирургы, хирург-имплантолог"
+		},
+		description: {
+			ru: "Стаж работы: 15 лет. Специализируется на имплантации, синус-лифтинге, пластике десны, костной пластике и сложном удалении зубов.",
+			kk: "15 жылдық тәжірибесі бар. Имплантация, синус-лифтинг, қызыл иек пластикасы, сүйек пластикасы және күрделі тіс жұлу бағыттарында жұмыс істейді."
+		},
+		photo: "",
+		experienceYears: 15,
+		serviceIds: [
+			"implants",
+			"bone-augmentation",
+			"frenectomy",
+			"tooth-extraction",
+			"wisdom-tooth-removal"
+		]
+	},
+	{
+		id: "doskaziev-bauyrzhan",
+		name: {
+			ru: "Досказиев Бауыржан Саинович",
+			kk: "Досказиев Бауыржан Саинович"
+		},
+		specialty: {
+			ru: "Врач-ортопед",
+			kk: "Стоматолог-ортопед"
+		},
+		description: {
+			ru: "Стаж работы: 15 лет. Выполняет коронки на зубы и импланты, виниры и протезирование.",
+			kk: "15 жылдық тәжірибесі бар. Тіске және имплантқа қаптама, винир және протездеу жұмыстарын орындайды."
+		},
+		photo: "",
+		experienceYears: 15,
+		serviceIds: ["crowns", "dentures"]
+	},
+	{
+		id: "kolesnikova-natalya",
+		name: {
+			ru: "Колесникова Наталья Сергеевна",
+			kk: "Колесникова Наталья Сергеевна"
+		},
+		specialty: {
+			ru: "Стоматолог-терапевт · Ортодонт",
+			kk: "Стоматолог-терапевт · Ортодонт"
+		},
+		description: {
+			ru: "Стаж работы: 13 лет. Проводит комплексное лечение зубов и работает с современными брекет-системами.",
+			kk: "13 жылдық тәжірибесі бар. Тістерді кешенді емдейді және заманауи брекет жүйелерімен жұмыс істейді."
+		},
+		photo: "",
+		experienceYears: 13,
+		serviceIds: [
+			"treatment",
+			"cleaning",
+			"braces"
+		]
+	},
+	{
+		id: "aibolatov-bolek",
+		name: {
+			ru: "Айболатов Болек Айболатович",
+			kk: "Айболатов Болек Айболатович"
+		},
+		specialty: {
+			ru: "Стоматолог-терапевт · Ортодонт",
+			kk: "Стоматолог-терапевт · Ортодонт"
+		},
+		description: {
+			ru: "Опыт работы: 7 лет. Проводит лечение зубов, исправление прикуса и работу с современными брекет-системами.",
+			kk: "7 жылдық тәжірибесі бар. Тіс емдеу, тістемді түзету және заманауи брекет жүйелерімен жұмыс жүргізеді."
+		},
+		photo: "",
+		experienceYears: 7,
+		serviceIds: [
+			"treatment",
+			"cleaning",
+			"braces"
+		]
+	},
+	{
+		id: "burabai-dastan",
+		name: {
+			ru: "Бурабай Дастан Бекболатович",
+			kk: "Бурабай Дастан Бекболатович"
+		},
+		specialty: {
+			ru: "Стоматолог-терапевт · Ортопед · Хирург · Имплантолог",
+			kk: "Стоматолог-терапевт · Ортопед · Хирург · Имплантолог"
+		},
+		description: {
+			ru: "Опыт работы: 7 лет. Выполняет полный спектр стоматологических услуг.",
+			kk: "7 жылдық тәжірибесі бар. Стоматологиялық қызметтердің толық спектрін орындайды."
+		},
+		photo: "",
+		experienceYears: 7,
+		serviceIds: [
+			"implants",
+			"bone-augmentation",
+			"frenectomy",
+			"tooth-extraction",
+			"wisdom-tooth-removal",
+			"crowns",
+			"dentures",
+			"treatment",
+			"cleaning"
+		]
+	},
+	{
+		id: "madreimova-damira",
+		name: {
+			ru: "Мадреймова Дамира Орынбаевна",
+			kk: "Мадреймова Дамира Орынбаевна"
+		},
+		specialty: {
+			ru: "Стоматолог-ортодонт",
+			kk: "Стоматолог-ортодонт"
+		},
+		description: {
+			ru: "Опыт работы: 3 года. Занимается исправлением прикуса и брекет-системами.",
+			kk: "3 жылдық тәжірибесі бар. Тістемді түзету және брекет жүйелерімен айналысады."
+		},
+		photo: "",
+		experienceYears: 3,
+		serviceIds: ["braces"]
+	},
+	{
+		id: "izturganov-duman",
+		name: {
+			ru: "Изтурганов Думан Куанышович",
+			kk: "Изтурганов Думан Куанышович"
+		},
+		specialty: {
+			ru: "Стоматолог-ортопед",
+			kk: "Стоматолог-ортопед"
+		},
+		description: {
+			ru: "Опыт работы: 7 лет. Выполняет коронки, виниры и протезирование.",
+			kk: "7 жылдық тәжірибесі бар. Қаптама, винир және протездеу жұмыстарын орындайды."
+		},
+		photo: "",
+		experienceYears: 7,
+		serviceIds: ["crowns", "dentures"]
+	}
+];
+//#endregion
+//#region src/hooks/useDoctors.ts
+function usePublicDoctors() {
+	const result = useQuery_experimental({
+		query: api.doctors.listPublicDoctors,
+		args: isConvexConfigured ? {} : "skip"
+	});
+	if (!isConvexConfigured) return {
+		doctors,
+		isLoading: false,
+		isUsingFallback: true
+	};
+	if (result.status === "pending") return {
+		doctors: [],
+		isLoading: true,
+		isUsingFallback: false
+	};
+	if (result.status === "error") return {
+		doctors,
+		isLoading: false,
+		isUsingFallback: true,
+		error: result.error
+	};
+	return {
+		doctors: result.data,
+		isLoading: false,
+		isUsingFallback: false
+	};
+}
+//#endregion
+//#region src/assets/service-icons/implants.png
+var implants_default = "/assets/implants-BRuLdyXy.png";
+//#endregion
+//#region src/assets/service-icons/crowns.png
+var crowns_default = "/assets/crowns-Csa108Su.png";
+//#endregion
+//#region src/assets/service-icons/treatment.png
+var treatment_default = "/assets/treatment-Bl_pEKQx.png";
+//#endregion
+//#region src/assets/service-icons/extraction.png
+var extraction_default = "/assets/extraction-D70BWU8d.png";
+//#endregion
+//#region src/assets/service-icons/cleaning.png
+var cleaning_default = "/assets/cleaning-D8zkHm_I.png";
+//#endregion
+//#region src/assets/service-icons/braces.png
+var braces_default = "/assets/braces-fZyjWHns.png";
+//#endregion
+//#region src/assets/service-icons/dentures.png
+var dentures_default = "/assets/dentures-h5g1-q4x.png";
+//#endregion
+//#region src/components/ui/badge.tsx
+var badgeVariants = cva("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", {
+	variants: { variant: {
+		default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+		secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+		destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+		outline: "text-foreground"
+	} },
+	defaultVariants: { variant: "default" }
+});
+function Badge({ className, variant, ...props }) {
+	return /* @__PURE__ */ jsx("div", {
+		className: cn(badgeVariants({ variant }), className),
+		...props
+	});
+}
+//#endregion
+//#region src/components/common/DoctorPhoto.tsx
+function DoctorPhoto({ doctor, language, className, style, initialsClassName, labelClassName }) {
+	if (doctor.photo) return /* @__PURE__ */ jsx("img", {
+		src: doctor.photo,
+		alt: doctor.name[language],
+		className: cn("size-full object-cover", className),
+		style,
+		loading: "lazy",
+		decoding: "async"
+	});
+	return /* @__PURE__ */ jsxs("div", {
+		"data-photo-placeholder": true,
+		className: cn("relative flex size-full flex-col items-center justify-center gap-3 overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(217,225,229,0.9),transparent_42%),linear-gradient(145deg,#FAFBFC,#EEF2F4)] text-primary", className),
+		style,
+		children: [
+			/* @__PURE__ */ jsx("div", { className: "absolute inset-x-8 top-8 h-px bg-white/80" }),
+			/* @__PURE__ */ jsx("div", { className: "absolute bottom-0 h-20 w-40 rounded-t-full border border-white/80 bg-white/38 blur-sm" }),
+			/* @__PURE__ */ jsx("span", {
+				className: cn("relative flex size-16 items-center justify-center rounded-full border border-white bg-white/90 text-lg font-bold shadow-[0_18px_46px_rgba(31,37,40,0.08)]", initialsClassName),
+				children: getDoctorInitials(doctor.name.ru)
+			}),
+			/* @__PURE__ */ jsx("span", {
+				className: cn("relative text-xs font-semibold text-[#6E7B83]", labelClassName),
+				children: language === "ru" ? "Фото скоро" : "Фото кейін қосылады"
+			})
+		]
+	});
+}
+function getDoctorInitials(name) {
+	return name.split(" ").filter(Boolean).slice(0, 2).map((part) => part[0]).join("");
+}
+//#endregion
+//#region src/components/common/DoctorSkeletons.tsx
+function SkeletonBlock({ className }) {
+	return /* @__PURE__ */ jsx("div", {
+		"aria-hidden": "true",
+		className: cn("motion-skeleton rounded-xl", className)
+	});
+}
+function CompactDoctorCardSkeleton({ variant = "vertical" }) {
+	if (variant === "horizontal") return /* @__PURE__ */ jsx("article", {
+		className: "h-full overflow-hidden rounded-[1.2rem] border border-border/70 bg-white shadow-[0_16px_42px_rgba(68,45,34,0.06)]",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "flex h-[11.75rem]",
+			children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-full w-36 shrink-0 rounded-none" }), /* @__PURE__ */ jsxs("div", {
+				className: "flex min-w-0 flex-1 flex-col justify-center gap-2 p-5",
+				children: [
+					/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-4 w-4/5" }),
+					/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-full" }),
+					/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-2/3" })
+				]
+			})]
+		})
+	});
+	return /* @__PURE__ */ jsxs("article", {
+		className: "clinical-card-soft overflow-hidden rounded-[1.35rem]",
+		children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "aspect-square rounded-none" }), /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-col gap-3 p-5",
+			children: [
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-24 rounded-full" }),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-5 w-4/5" }),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-3/5 rounded-full" }),
+				/* @__PURE__ */ jsxs("div", {
+					className: "flex flex-col gap-2 pt-1",
+					children: [
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-full" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-11/12" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-2/3" })
+					]
+				})
+			]
+		})]
+	});
+}
+function HomeDoctorCardSkeleton() {
+	return /* @__PURE__ */ jsxs("article", {
+		className: "clinical-card clinical-lift flex h-full flex-col overflow-hidden rounded-[1.6rem]",
+		children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "aspect-[4/3.8] rounded-none" }), /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-1 flex-col gap-3 p-5",
+			children: [
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-6 w-20 rounded-full" }),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-5 w-4/5" }),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-2/3 rounded-full" }),
+				/* @__PURE__ */ jsxs("div", {
+					className: "flex flex-col gap-2",
+					children: [
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-full" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-11/12" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-3/4" })
+					]
+				}),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "mt-auto h-11 w-full rounded-2xl" })
+			]
+		})]
+	});
+}
+function DoctorsGridCardSkeleton() {
+	return /* @__PURE__ */ jsxs("article", {
+		className: "flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-[#D8E2EA] bg-white shadow-[0_18px_55px_rgba(39,64,95,0.055)]",
+		children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "aspect-[4/3.75] rounded-none" }), /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-1 flex-col gap-3 p-5",
+			children: [
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-6 w-20 rounded-full" }),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-5 w-4/5" }),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-2/3 rounded-full" }),
+				/* @__PURE__ */ jsxs("div", {
+					className: "mt-2 flex flex-col gap-3",
+					children: [
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-full" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-10/12" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-8/12" })
+					]
+				})
+			]
+		})]
+	});
+}
+function FeaturedDoctorSkeleton() {
+	return /* @__PURE__ */ jsx("article", {
+		className: "overflow-hidden rounded-[1.5rem] border border-[#D8E2EA] bg-white shadow-[0_20px_60px_rgba(39,64,95,0.07)]",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "grid gap-0 lg:grid-cols-[0.34fr_0.66fr]",
+			children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "min-h-[16rem] rounded-none sm:min-h-[18rem] lg:min-h-[20rem]" }), /* @__PURE__ */ jsxs("div", {
+				className: "flex flex-col justify-center gap-5 p-5 md:p-7 lg:p-8",
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "flex flex-col gap-4",
+					children: [
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-8 w-4/5" }),
+						/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-4 w-2/3 rounded-full" }),
+						/* @__PURE__ */ jsxs("div", {
+							className: "flex flex-col gap-2 pt-2",
+							children: [
+								/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-full" }),
+								/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-11/12" }),
+								/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-3/4" })
+							]
+						}),
+						/* @__PURE__ */ jsxs("div", {
+							className: "mt-1 grid max-w-xl gap-3 sm:grid-cols-2",
+							children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-16 w-full" }), /* @__PURE__ */ jsx(SkeletonBlock, { className: "h-16 w-full" })]
+						})
+					]
+				}), /* @__PURE__ */ jsxs("div", {
+					className: "flex flex-col gap-3 border-t border-[#E4EBF1] pt-4",
+					children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-4 w-32" }), /* @__PURE__ */ jsxs("div", {
+						className: "flex flex-wrap gap-2",
+						children: [
+							/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-8 w-28 rounded-full" }),
+							/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-8 w-32 rounded-full" }),
+							/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-8 w-24 rounded-full" })
+						]
+					})]
+				})]
+			})]
+		})
+	});
+}
+function AdminDoctorListSkeleton() {
+	return /* @__PURE__ */ jsx("div", {
+		className: "grid gap-3",
+		children: Array.from({ length: 5 }).map((_, index) => /* @__PURE__ */ jsxs("div", {
+			className: "grid gap-3 rounded-2xl border border-[#D8E2EA] bg-white p-4 sm:grid-cols-[4rem_1fr_auto] sm:items-center",
+			children: [
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "size-16 rounded-2xl" }),
+				/* @__PURE__ */ jsxs("div", {
+					className: "flex flex-col gap-2",
+					children: [/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-4 w-3/4" }), /* @__PURE__ */ jsx(SkeletonBlock, { className: "h-3 w-1/2" })]
+				}),
+				/* @__PURE__ */ jsx(SkeletonBlock, { className: "h-9 w-28 rounded-full" })
+			]
+		}, index))
+	});
+}
+//#endregion
+//#region src/components/ui/accordion.tsx
+var Accordion = AccordionPrimitive.Root;
+var AccordionItem = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Item, {
+	ref,
+	className: cn("border-b", className),
+	...props
+}));
+AccordionItem.displayName = "AccordionItem";
+var AccordionTrigger = React.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Header, {
+	className: "flex",
+	children: /* @__PURE__ */ jsxs(AccordionPrimitive.Trigger, {
+		ref,
+		className: cn("flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180", className),
+		...props,
+		children: [children, /* @__PURE__ */ jsx(ChevronDown, { className: "h-4 w-4 shrink-0 transition-transform duration-200" })]
+	})
+}));
+AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName;
+var AccordionContent = React.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsx(AccordionPrimitive.Content, {
+	ref,
+	className: "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+	...props,
+	children: /* @__PURE__ */ jsx("div", {
+		className: cn("pb-4 pt-0", className),
+		children
+	})
+}));
+AccordionContent.displayName = AccordionPrimitive.Content.displayName;
+//#endregion
+//#region src/data/dentalDecor.ts
+var tooth = "/assets/levitating-tooth-D3xYFi0n.png";
+function decor(id, className, overrides = {}) {
+	return {
+		id,
+		src: tooth,
+		className,
+		opacity: .22,
+		parallax: 44,
+		float: 22,
+		floatX: 6,
+		rotation: 12,
+		duration: 6.8,
+		sway: 5,
+		...overrides
+	};
+}
+/** Small accent tooth — stays at edges, visible from md+ */
+function accent(id, side, vertical, overrides = {}) {
+	return decor(id, `${side === "left" ? "left-[2%] md:left-[4%]" : "right-[2%] md:right-[4%]"} ${vertical === "top" ? "top-[12%]" : vertical === "mid" ? "top-[48%]" : "bottom-[14%]"} hidden w-16 md:block md:w-20 lg:w-24`, {
+		opacity: .14,
+		parallax: 20,
+		float: 16,
+		floatX: 4,
+		rotation: side === "left" ? -8 : 8,
+		duration: 7.8,
+		delay: 1,
+		sway: 4,
+		...overrides
+	});
+}
+var dentalDecorBySurface = {
+	"home-services": [
+		decor("home-services-tooth-a", "right-[-4rem] top-6 w-36 sm:right-4 sm:top-8 sm:w-52 lg:right-20 lg:top-10 lg:w-72", {
+			opacity: .24,
+			parallax: 56,
+			float: 26,
+			floatX: 8,
+			rotation: 13,
+			duration: 6.4
+		}),
+		decor("home-services-tooth-b", "left-[-3.5rem] bottom-4 w-24 sm:left-4 sm:bottom-10 sm:w-32 lg:left-16 lg:w-40", {
+			opacity: .18,
+			parallax: 32,
+			float: 20,
+			floatX: 5,
+			rotation: -22,
+			duration: 7.6,
+			delay: .5,
+			sway: 6
+		}),
+		decor("home-services-tooth-c", "right-[10%] top-[38%] hidden w-20 sm:block sm:w-28 lg:w-32", {
+			opacity: .15,
+			parallax: 24,
+			float: 18,
+			floatX: 5,
+			rotation: 8,
+			duration: 8.2,
+			delay: 1.2
+		}),
+		accent("home-services-tooth-d", "left", "top", {
+			delay: 1.6,
+			float: 14
+		})
+	],
+	"home-about": [
+		decor("home-about-tooth-a", "left-[-4.5rem] bottom-2 w-40 sm:left-6 sm:bottom-8 sm:w-56 lg:left-24 lg:w-64", {
+			opacity: .23,
+			parallax: 44,
+			float: 24,
+			floatX: 7,
+			rotation: -16,
+			duration: 7.2,
+			delay: .3
+		}),
+		decor("home-about-tooth-b", "right-[-3rem] top-10 w-28 sm:right-8 sm:top-16 sm:w-36 lg:right-28 lg:w-44", {
+			opacity: .17,
+			parallax: 36,
+			float: 19,
+			floatX: 5,
+			rotation: 19,
+			duration: 6.8,
+			delay: .85
+		}),
+		accent("home-about-tooth-c", "right", "bottom", { delay: 1.3 })
+	],
+	"home-reviews": [
+		decor("home-reviews-tooth-a", "right-[-5rem] bottom-8 w-44 sm:right-8 sm:w-56 lg:right-28 lg:w-72", {
+			opacity: .22,
+			parallax: 48,
+			float: 24,
+			floatX: 7,
+			rotation: 22,
+			duration: 6.6,
+			delay: .15
+		}),
+		decor("home-reviews-tooth-b", "left-[-3.5rem] top-20 w-28 sm:left-6 sm:w-36 lg:left-20 lg:w-44", {
+			opacity: .16,
+			parallax: 30,
+			float: 18,
+			floatX: 5,
+			rotation: -11,
+			duration: 7.8,
+			delay: .65
+		}),
+		accent("home-reviews-tooth-c", "left", "mid", { delay: 1.1 })
+	],
+	"home-location": [
+		decor("home-location-tooth-a", "left-[-3.5rem] top-3 w-36 sm:left-8 sm:top-8 sm:w-48 lg:left-16 lg:w-60", {
+			opacity: .22,
+			parallax: 38,
+			float: 23,
+			floatX: 6,
+			rotation: -10,
+			duration: 7.4
+		}),
+		decor("home-location-tooth-b", "right-[-2.5rem] bottom-6 w-24 sm:right-10 sm:w-32 lg:right-24 lg:w-40", {
+			opacity: .17,
+			parallax: 28,
+			float: 18,
+			floatX: 5,
+			rotation: 14,
+			duration: 6.6,
+			delay: .45
+		}),
+		accent("home-location-tooth-c", "right", "top", { delay: 1 })
+	],
+	"doctors-featured": [
+		decor("doctors-featured-tooth-a", "right-[-4rem] top-8 w-36 sm:right-6 sm:w-52 lg:right-24 lg:w-64", {
+			opacity: .23,
+			parallax: 46,
+			float: 23,
+			floatX: 7,
+			rotation: 15,
+			duration: 6.6
+		}),
+		decor("doctors-featured-tooth-b", "left-[-3rem] bottom-16 w-28 sm:left-8 sm:w-36 lg:left-20 lg:w-44", {
+			opacity: .16,
+			parallax: 34,
+			float: 19,
+			floatX: 5,
+			rotation: -18,
+			duration: 7.6,
+			delay: .4
+		}),
+		accent("doctors-featured-tooth-c", "left", "top", { delay: 1.2 })
+	],
+	"doctors-list": [
+		decor("doctors-list-tooth-a", "left-[-5rem] bottom-12 w-44 sm:left-8 sm:w-56 lg:left-24 lg:w-72", {
+			opacity: .23,
+			parallax: 52,
+			float: 26,
+			floatX: 8,
+			rotation: -18,
+			duration: 7,
+			delay: .25
+		}),
+		decor("doctors-list-tooth-b", "right-[-3rem] top-24 w-32 sm:right-12 sm:w-40 lg:right-32 lg:w-48", {
+			opacity: .17,
+			parallax: 38,
+			float: 20,
+			floatX: 6,
+			rotation: 10,
+			duration: 6.8,
+			delay: .7
+		}),
+		decor("doctors-list-tooth-c", "left-[6%] top-[16%] hidden w-20 sm:block sm:w-24 lg:w-28", {
+			opacity: .14,
+			parallax: 22,
+			float: 17,
+			floatX: 4,
+			rotation: 6,
+			duration: 8.4,
+			delay: 1.1
+		}),
+		accent("doctors-list-tooth-d", "right", "bottom", {
+			delay: 1.5,
+			float: 15
+		})
+	],
+	"doctors-trust": [
+		decor("doctors-trust-tooth-a", "right-[-4rem] top-4 w-36 sm:right-8 sm:w-48 lg:right-20 lg:w-60", {
+			opacity: .21,
+			parallax: 36,
+			float: 22,
+			floatX: 6,
+			rotation: 12,
+			duration: 6.8
+		}),
+		decor("doctors-trust-tooth-b", "left-[-3rem] bottom-8 w-28 sm:left-10 sm:w-36 lg:left-28 lg:w-44", {
+			opacity: .16,
+			parallax: 30,
+			float: 18,
+			floatX: 5,
+			rotation: -14,
+			duration: 7.4,
+			delay: .5
+		}),
+		accent("doctors-trust-tooth-c", "left", "mid", { delay: 1.15 })
+	],
+	"doctors-reviews": [
+		decor("doctors-reviews-tooth-a", "left-[-4rem] top-14 w-36 sm:left-6 sm:w-48 lg:left-20 lg:w-60", {
+			opacity: .2,
+			parallax: 42,
+			float: 22,
+			floatX: 6,
+			rotation: -14,
+			duration: 7.2,
+			delay: .45
+		}),
+		decor("doctors-reviews-tooth-b", "right-[-2.5rem] bottom-10 w-28 sm:right-10 sm:w-36 lg:right-24 lg:w-44", {
+			opacity: .16,
+			parallax: 32,
+			float: 18,
+			floatX: 5,
+			rotation: 17,
+			duration: 6.8,
+			delay: .15
+		}),
+		accent("doctors-reviews-tooth-c", "right", "top", { delay: 1.05 })
+	],
+	"doctors-cta": [
+		decor("doctors-cta-tooth-a", "right-[-4rem] bottom-0 w-36 sm:right-6 sm:w-48 lg:right-16 lg:w-56", {
+			opacity: .21,
+			parallax: 34,
+			float: 22,
+			floatX: 6,
+			rotation: 19,
+			duration: 7
+		}),
+		decor("doctors-cta-tooth-b", "left-[-3rem] top-8 w-24 sm:left-8 sm:w-32 lg:left-24 lg:w-40", {
+			opacity: .16,
+			parallax: 26,
+			float: 17,
+			floatX: 4,
+			rotation: -9,
+			duration: 7.6,
+			delay: .55
+		}),
+		accent("doctors-cta-tooth-c", "left", "bottom", { delay: 1.2 })
+	],
+	"service-process": [
+		decor("service-process-tooth-a", "right-[-4rem] top-8 w-36 sm:right-8 sm:w-52 lg:right-28 lg:w-64", {
+			opacity: .22,
+			parallax: 48,
+			float: 24,
+			floatX: 7,
+			rotation: 17,
+			duration: 6.6
+		}),
+		decor("service-process-tooth-b", "left-[-3.5rem] bottom-20 w-32 sm:left-6 sm:w-40 lg:left-20 lg:w-48", {
+			opacity: .17,
+			parallax: 36,
+			float: 19,
+			floatX: 5,
+			rotation: -12,
+			duration: 7.4,
+			delay: .35
+		}),
+		accent("service-process-tooth-c", "left", "top", { delay: 1.1 })
+	],
+	"service-advantages": [
+		decor("service-advantages-tooth-a", "left-[-4.5rem] bottom-4 w-40 sm:left-8 sm:w-52 lg:left-20 lg:w-64", {
+			opacity: .21,
+			parallax: 42,
+			float: 23,
+			floatX: 6,
+			rotation: -15,
+			duration: 7.4,
+			delay: .35
+		}),
+		decor("service-advantages-tooth-b", "right-[-3rem] top-12 w-28 sm:right-10 sm:w-36 lg:right-28 lg:w-44", {
+			opacity: .16,
+			parallax: 30,
+			float: 18,
+			floatX: 5,
+			rotation: 13,
+			duration: 6.8,
+			delay: .75
+		}),
+		accent("service-advantages-tooth-c", "right", "bottom", { delay: 1.2 })
+	],
+	"service-doctors": [
+		decor("service-doctors-tooth-a", "right-[-4rem] top-6 w-36 sm:right-10 sm:w-48 lg:right-24 lg:w-60", {
+			opacity: .2,
+			parallax: 36,
+			float: 22,
+			floatX: 6,
+			rotation: 11,
+			duration: 6.8
+		}),
+		decor("service-doctors-tooth-b", "left-[-3rem] bottom-12 w-28 sm:left-8 sm:w-36 lg:left-24 lg:w-44", {
+			opacity: .16,
+			parallax: 28,
+			float: 18,
+			floatX: 5,
+			rotation: -16,
+			duration: 7.6,
+			delay: .45
+		}),
+		accent("service-doctors-tooth-c", "left", "mid", { delay: 1.05 })
+	],
+	"service-faq": [
+		decor("service-faq-tooth-a", "left-[-4rem] top-16 w-36 sm:left-8 sm:w-48 lg:left-24 lg:w-60", {
+			opacity: .2,
+			parallax: 40,
+			float: 22,
+			floatX: 6,
+			rotation: -12,
+			duration: 7.2,
+			delay: .15
+		}),
+		decor("service-faq-tooth-b", "right-[-2.5rem] bottom-16 w-28 sm:right-12 sm:w-36 lg:right-32 lg:w-44", {
+			opacity: .16,
+			parallax: 32,
+			float: 18,
+			floatX: 5,
+			rotation: 15,
+			duration: 6.8,
+			delay: .6
+		}),
+		accent("service-faq-tooth-c", "right", "top", { delay: 1.15 })
+	],
+	"service-cta": [
+		decor("service-cta-tooth-a", "right-[-4rem] bottom-0 w-36 sm:right-10 sm:w-48 lg:right-24 lg:w-56", {
+			opacity: .21,
+			parallax: 30,
+			float: 22,
+			floatX: 6,
+			rotation: 16,
+			duration: 6.8
+		}),
+		decor("service-cta-tooth-b", "left-[-3rem] top-6 w-24 sm:left-12 sm:w-32 lg:left-28 lg:w-40", {
+			opacity: .16,
+			parallax: 24,
+			float: 17,
+			floatX: 4,
+			rotation: -8,
+			duration: 7.6,
+			delay: .5
+		}),
+		accent("service-cta-tooth-c", "left", "bottom", { delay: 1.1 })
+	]
+};
+//#endregion
+//#region src/components/decor/DentalParallaxBackground.tsx
+function DentalParallaxBackground({ surface, className }) {
+	const ref = useRef(null);
+	const shouldReduceMotion = useReducedMotion();
+	const { scrollYProgress } = useScroll({
+		target: ref,
+		offset: ["start end", "end start"]
+	});
+	const items = dentalDecorBySurface[surface];
+	return /* @__PURE__ */ jsx(motion.div, {
+		ref,
+		"aria-hidden": "true",
+		className: cn("pointer-events-none absolute inset-0 z-0 overflow-hidden", "[mask-image:linear-gradient(to_bottom,transparent,black_6%,black_94%,transparent)]", className),
+		children: items.map((item) => /* @__PURE__ */ jsx(DecorativeTooth, {
+			item,
+			progress: scrollYProgress,
+			shouldReduceMotion: Boolean(shouldReduceMotion)
+		}, item.id))
+	});
+}
+function DecorativeTooth({ item, progress, shouldReduceMotion }) {
+	const y = useTransform(progress, [0, 1], shouldReduceMotion ? [0, 0] : [item.parallax, -item.parallax]);
+	const sway = item.sway ?? 5;
+	const drift = item.floatX ?? 6;
+	const lift = item.float;
+	return /* @__PURE__ */ jsx(motion.div, {
+		className: cn("absolute select-none will-change-transform", item.className),
+		style: {
+			y,
+			rotate: item.rotation,
+			opacity: item.opacity
+		},
+		children: /* @__PURE__ */ jsx(motion.img, {
+			src: item.src,
+			alt: "",
+			className: "block h-auto w-full [filter:drop-shadow(0_20px_32px_rgba(68,45,34,0.22))_drop-shadow(0_6px_16px_rgba(255,255,255,0.4))]",
+			draggable: false,
+			loading: "lazy",
+			decoding: "async",
+			animate: shouldReduceMotion ? void 0 : {
+				y: [
+					0,
+					-lift * .4,
+					-lift,
+					-lift * .55,
+					0
+				],
+				x: [
+					0,
+					drift * .6,
+					drift,
+					drift * .35,
+					0
+				],
+				rotate: [
+					-sway,
+					sway * .6,
+					sway,
+					sway * .35,
+					-sway
+				],
+				scale: [
+					1,
+					1.02,
+					1.05,
+					1.02,
+					1
+				]
+			},
+			transition: shouldReduceMotion ? void 0 : {
+				duration: item.duration,
+				delay: item.delay,
+				repeat: Infinity,
+				ease: [
+					.42,
+					0,
+					.58,
+					1
+				],
+				times: [
+					0,
+					.22,
+					.5,
+					.78,
+					1
+				]
+			}
+		})
+	});
+}
+//#endregion
+//#region src/components/sections/MobileServiceSheet.tsx
+var sheetTitleId = "mobile-service-sheet-title";
+var sheetDescriptionId = "mobile-service-sheet-description";
+var CLOSE_DRAG_OFFSET = 96;
+var CLOSE_VELOCITY = 720;
+var EXPAND_DRAG_OFFSET = -48;
+var EXPAND_VELOCITY = -420;
+var COLLAPSE_DRAG_OFFSET = 56;
+var COLLAPSE_VELOCITY = 420;
+function MobileServiceSheet({ open, onOpenChange, expanded, onExpandedChange, closeLabel, expandLabel, collapseLabel, title, description, children, className }) {
+	const dragControls = useDragControls();
+	const reduceMotion = useReducedMotion();
+	useEffect(() => {
+		if (!open) return;
+		const previousOverflow = document.body.style.overflow;
+		document.body.style.overflow = "hidden";
+		return () => {
+			document.body.style.overflow = previousOverflow;
+		};
+	}, [open]);
+	const sheetTransition = reduceMotion ? { duration: 0 } : {
+		duration: .26,
+		ease: [
+			.32,
+			.72,
+			0,
+			1
+		]
+	};
+	const overlayTransition = reduceMotion ? { duration: 0 } : { duration: .18 };
+	const sheet = /* @__PURE__ */ jsx(AnimatePresence, { children: open && /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(motion.button, {
+		type: "button",
+		"aria-label": closeLabel,
+		className: "fixed inset-0 z-[100] bg-[#1F2528]/50",
+		initial: { opacity: 0 },
+		animate: { opacity: 1 },
+		exit: { opacity: 0 },
+		transition: overlayTransition,
+		onClick: () => onOpenChange(false)
+	}), /* @__PURE__ */ jsxs(motion.div, {
+		role: "dialog",
+		"aria-modal": "true",
+		"aria-labelledby": sheetTitleId,
+		"aria-describedby": sheetDescriptionId,
+		className: cn("fixed inset-x-0 bottom-0 z-[100] flex will-change-transform flex-col overflow-hidden rounded-t-[1.75rem] border border-b-0 border-[#DDE3E7] bg-white shadow-[0_28px_90px_rgba(31,37,40,0.16)] transition-[height] duration-300 ease-out", expanded ? "h-[92dvh]" : "h-[70dvh]", className),
+		initial: { y: "100%" },
+		animate: { y: 0 },
+		exit: { y: "100%" },
+		transition: sheetTransition,
+		drag: "y",
+		dragControls,
+		dragListener: false,
+		dragConstraints: {
+			top: 0,
+			bottom: 0
+		},
+		dragElastic: {
+			top: .08,
+			bottom: .28
+		},
+		onDragEnd: (_, info) => {
+			const { offset, velocity } = info;
+			if (offset.y > CLOSE_DRAG_OFFSET || velocity.y > CLOSE_VELOCITY) {
+				if (!expanded || offset.y > CLOSE_DRAG_OFFSET * 1.35 || velocity.y > CLOSE_VELOCITY * 1.15) {
+					onOpenChange(false);
+					return;
+				}
+				onExpandedChange(false);
+				return;
+			}
+			if (offset.y < EXPAND_DRAG_OFFSET || velocity.y < EXPAND_VELOCITY) {
+				onExpandedChange(true);
+				return;
+			}
+			if (offset.y > COLLAPSE_DRAG_OFFSET || velocity.y > COLLAPSE_VELOCITY) onExpandedChange(false);
+		},
+		children: [
+			/* @__PURE__ */ jsx("button", {
+				type: "button",
+				"aria-label": expanded ? collapseLabel : expandLabel,
+				"aria-expanded": expanded,
+				onPointerDown: (event) => dragControls.start(event),
+				className: "flex h-10 w-full shrink-0 cursor-grab touch-none items-center justify-center text-[#8A949B] active:cursor-grabbing",
+				children: /* @__PURE__ */ jsx("span", { className: "h-1.5 w-14 rounded-full bg-[#C8D3D9]" })
+			}),
+			/* @__PURE__ */ jsx("h2", {
+				id: sheetTitleId,
+				className: "sr-only",
+				children: title
+			}),
+			/* @__PURE__ */ jsx("p", {
+				id: sheetDescriptionId,
+				className: "sr-only",
+				children: description
+			}),
+			/* @__PURE__ */ jsx("button", {
+				type: "button",
+				"aria-label": closeLabel,
+				onClick: () => onOpenChange(false),
+				className: "absolute right-4 top-4 rounded-sm text-[#8A949B] opacity-80 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+				children: /* @__PURE__ */ jsx(X$1, { className: "size-4" })
+			}),
+			/* @__PURE__ */ jsx(motion.div, {
+				className: "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+				children
+			})
+		]
+	})] }) });
+	if (typeof document === "undefined") return null;
+	return createPortal(sheet, document.body);
+}
+//#endregion
+//#region src/components/sections/ServicesConsultationPrompt.tsx
+var PROMPT_DELAY_MS = 3500;
+var AUTO_HIDE_MS = 8e3;
+function ServicesConsultationPrompt() {
+	const { language } = useLanguage();
+	const copy = landingCopy[language].services;
+	const reduceMotion = useReducedMotion();
+	const showTimerRef = useRef(null);
+	const [hasShown, setHasShown] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
+	const [isBookingOpen, setIsBookingOpen] = useState(false);
+	useEffect(() => {
+		if (hasShown || isVisible) return;
+		const clearShowTimer = () => {
+			if (showTimerRef.current) {
+				window.clearTimeout(showTimerRef.current);
+				showTimerRef.current = null;
+			}
+		};
+		const showPrompt = () => {
+			setHasShown(true);
+			setIsVisible(true);
+		};
+		const servicesSection = document.getElementById("services");
+		if (!servicesSection) return;
+		const isServicesReached = () => {
+			const rect = servicesSection.getBoundingClientRect();
+			return rect.top <= window.innerHeight * .65 && rect.bottom >= window.innerHeight * .25;
+		};
+		const schedulePrompt = () => {
+			if (showTimerRef.current) return;
+			showTimerRef.current = window.setTimeout(showPrompt, PROMPT_DELAY_MS);
+		};
+		const syncPromptTimer = () => {
+			if (isServicesReached()) {
+				schedulePrompt();
+				return;
+			}
+			clearShowTimer();
+		};
+		if (typeof IntersectionObserver === "undefined") {
+			window.addEventListener("scroll", syncPromptTimer, { passive: true });
+			window.addEventListener("resize", syncPromptTimer);
+			syncPromptTimer();
+			return () => {
+				clearShowTimer();
+				window.removeEventListener("scroll", syncPromptTimer);
+				window.removeEventListener("resize", syncPromptTimer);
+			};
+		}
+		let isIntersecting = false;
+		const handleViewportChange = () => {
+			if (!isIntersecting) {
+				clearShowTimer();
+				return;
+			}
+			syncPromptTimer();
+		};
+		window.addEventListener("scroll", handleViewportChange, { passive: true });
+		window.addEventListener("resize", handleViewportChange);
+		const observer = new IntersectionObserver(([entry]) => {
+			isIntersecting = entry.isIntersecting;
+			handleViewportChange();
+		});
+		observer.observe(servicesSection);
+		handleViewportChange();
+		return () => {
+			clearShowTimer();
+			window.removeEventListener("scroll", handleViewportChange);
+			window.removeEventListener("resize", handleViewportChange);
+			observer.disconnect();
+		};
+	}, [hasShown, isVisible]);
+	useEffect(() => {
+		if (!isVisible || isBookingOpen) return;
+		const hideTimer = window.setTimeout(() => {
+			setIsVisible(false);
+		}, AUTO_HIDE_MS);
+		return () => window.clearTimeout(hideTimer);
+	}, [isBookingOpen, isVisible]);
+	const handleDismiss = () => {
+		setHasShown(true);
+		setIsVisible(false);
+	};
+	const handleBookingOpenChange = (open) => {
+		setIsBookingOpen(open);
+		if (open) setIsVisible(false);
+	};
+	const handleOpenBooking = () => {
+		setIsBookingOpen(true);
+		setIsVisible(false);
+	};
+	const prompt = /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx(AnimatePresence, { children: isVisible && /* @__PURE__ */ jsxs(motion.aside, {
+		"aria-live": "polite",
+		initial: reduceMotion ? { opacity: 0 } : {
+			opacity: 0,
+			y: 12,
+			scale: .97
+		},
+		animate: {
+			opacity: 1,
+			y: 0,
+			scale: 1
+		},
+		exit: reduceMotion ? { opacity: 0 } : {
+			opacity: 0,
+			y: 8,
+			scale: .97
+		},
+		transition: {
+			duration: reduceMotion ? .12 : .25,
+			ease: "easeOut"
+		},
+		className: "fixed bottom-24 right-4 z-[60] w-[calc(100%-2rem)] max-w-[18rem] rounded-2xl border border-primary/20 bg-white p-4 shadow-[0_12px_40px_rgba(166,58,45,0.12)] md:bottom-8 md:right-8",
+		children: [/* @__PURE__ */ jsx("button", {
+			type: "button",
+			onClick: handleDismiss,
+			className: "absolute right-2 top-2 flex size-7 items-center justify-center rounded-full text-[#8A949B] transition-colors hover:bg-[#F4F8FB] hover:text-[#1F2528]",
+			"aria-label": language === "ru" ? "Закрыть" : "Жабу",
+			children: /* @__PURE__ */ jsx(X, {
+				weight: "bold",
+				className: "size-3.5"
+			})
+		}), /* @__PURE__ */ jsxs("div", {
+			className: "pr-4",
+			children: [
+				/* @__PURE__ */ jsx("h3", {
+					className: "text-sm font-bold leading-tight text-[#1F2528]",
+					children: copy.promptTitle
+				}),
+				/* @__PURE__ */ jsx("p", {
+					className: "mt-1.5 text-[13px] leading-relaxed text-[#606A70]",
+					children: copy.promptText
+				}),
+				/* @__PURE__ */ jsxs("button", {
+					type: "button",
+					onClick: handleOpenBooking,
+					className: "mt-3.5 flex items-center gap-1.5 text-xs font-bold text-primary transition-colors hover:text-[#8F2F25]",
+					children: [copy.book, /* @__PURE__ */ jsx(ArrowRight, {
+						weight: "bold",
+						className: "size-3"
+					})]
+				})
+			]
+		})]
+	}) }), /* @__PURE__ */ jsx(BookingModal, {
+		open: isBookingOpen,
+		onOpenChange: handleBookingOpenChange
+	})] });
+	if (typeof document === "undefined") return null;
+	return createPortal(prompt, document.body);
+}
+//#endregion
+//#region src/hooks/useMediaQuery.ts
+function useMediaQuery(query) {
+	const [matches, setMatches] = useState(() => {
+		if (typeof window === "undefined") return false;
+		return window.matchMedia(query).matches;
+	});
+	useEffect(() => {
+		const mediaQuery = window.matchMedia(query);
+		const handleChange = () => setMatches(mediaQuery.matches);
+		handleChange();
+		mediaQuery.addEventListener("change", handleChange);
+		return () => mediaQuery.removeEventListener("change", handleChange);
+	}, [query]);
+	return matches;
+}
+//#endregion
+//#region src/components/sections/ServicesPreview.tsx
+var IconMap$1 = {
+	Tooth,
+	ShieldCheck,
+	Smiley,
+	FirstAidKit,
+	Sparkle,
+	Heartbeat
+};
+var ServiceIconAssets = {
+	implants: implants_default,
+	crowns: crowns_default,
+	treatment: treatment_default,
+	"tooth-extraction": extraction_default,
+	cleaning: cleaning_default,
+	braces: braces_default,
+	dentures: dentures_default
+};
+function ServicesPreview() {
+	const { language } = useLanguage();
+	const isMobileSheet = useMediaQuery("(max-width: 639px)");
+	const reduceMotion = useReducedMotion();
+	const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
+	const t = landingCopy[language];
+	const [selectedServiceId, setSelectedServiceId] = useState(null);
+	const [isServiceDialogOpen, setIsServiceDialogOpen] = useState(false);
+	const [isServiceSheetExpanded, setIsServiceSheetExpanded] = useState(false);
+	const [isBookingOpen, setIsBookingOpen] = useState(false);
+	const selectedService = useMemo(() => selectedServiceId ? landingServices.find((service) => service.id === selectedServiceId) : void 0, [selectedServiceId]);
+	const handleServiceClick = (serviceId) => {
+		setSelectedServiceId(serviceId);
+		setIsServiceSheetExpanded(false);
+		setIsServiceDialogOpen(true);
+	};
+	const handleServiceDialogOpenChange = (open) => {
+		setIsServiceDialogOpen(open);
+		if (!open) {
+			setIsServiceSheetExpanded(false);
+			setSelectedServiceId(null);
+		}
+	};
+	const handleBookFromService = () => {
+		setIsServiceDialogOpen(false);
+		setIsServiceSheetExpanded(false);
+		setSelectedServiceId(null);
+		setIsBookingOpen(true);
+	};
+	const serviceSheetLabels = {
+		close: language === "ru" ? "Закрыть окно услуги" : "Қызмет терезесін жабу",
+		expand: language === "ru" ? "Развернуть информацию об услуге" : "Қызмет ақпаратын жаю",
+		collapse: language === "ru" ? "Свернуть информацию об услуге" : "Қызмет ақпаратын жию"
+	};
+	return /* @__PURE__ */ jsxs("section", {
+		id: "services",
+		className: "clinical-section relative isolate overflow-hidden px-4 py-12 md:px-8 md:py-16",
+		children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "home-services" }), /* @__PURE__ */ jsxs("div", {
+			className: "relative z-10 mx-auto max-w-[1320px]",
+			children: [
+				/* @__PURE__ */ jsx("div", {
+					className: "mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between",
+					children: /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h2", {
+						className: "font-display text-3xl font-normal text-[#1F2528] md:text-4xl",
+						children: t.services.title
+					}) })
+				}),
+				/* @__PURE__ */ jsx("div", {
+					className: "grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4",
+					children: landingServices.map((service) => {
+						const Icon = IconMap$1[service.iconName] ?? Tooth;
+						const isActive = isServiceDialogOpen && selectedServiceId === service.id;
+						const generatedIcon = ServiceIconAssets[service.serviceId];
+						return /* @__PURE__ */ jsxs(motion.button, {
+							type: "button",
+							"aria-haspopup": "dialog",
+							"aria-expanded": isActive,
+							onClick: () => handleServiceClick(service.id),
+							whileHover: reduceMotion ? void 0 : {
+								y: -4,
+								scale: 1.006
+							},
+							whileTap: reduceMotion ? void 0 : {
+								y: -1,
+								scale: .992
+							},
+							transition: {
+								type: "spring",
+								stiffness: 320,
+								damping: 26
+							},
+							className: cn("group grid min-h-[5.75rem] grid-cols-[auto_1fr] items-center gap-3 rounded-2xl border bg-white p-4 text-left shadow-[0_12px_34px_rgba(31,37,40,0.04)] transition-[border-color,background-color,box-shadow] duration-200 ease-out hover:border-[#C8D3D9] hover:shadow-[0_18px_46px_rgba(31,37,40,0.06)] sm:min-h-[6.6rem] sm:gap-4 sm:p-5", isActive ? "border-primary/55 bg-[#F4E7E4]/45 text-[#1F2528] shadow-[0_18px_44px_rgba(166,58,45,0.08)]" : "border-[#DDE3E7] text-[#606A70]"),
+							children: [/* @__PURE__ */ jsx("span", {
+								className: cn("flex size-11 shrink-0 items-center justify-center rounded-2xl border transition-[border-color,background-color,color,transform] duration-200 sm:size-12 motion-reduce:transform-none", isActive ? "border-primary/20 bg-white text-primary" : "border-[#E8EDF0] bg-[#FAFBFC] text-[#6E7B83] group-hover:scale-[1.03] group-hover:text-primary"),
+								children: /* @__PURE__ */ jsx(ServiceTileIcon, {
+									src: generatedIcon,
+									title: service.shortTitle[language],
+									fallbackIcon: Icon
+								})
+							}), /* @__PURE__ */ jsxs("span", {
+								className: "min-w-0 overflow-hidden",
+								children: [/* @__PURE__ */ jsx("span", {
+									className: "block break-words text-xs font-bold leading-snug text-[#1F2528] sm:text-sm",
+									children: service.shortTitle[language]
+								}), /* @__PURE__ */ jsx("span", {
+									className: "mt-1 hidden text-xs leading-snug text-[#606A70] sm:line-clamp-2 sm:text-sm",
+									children: service.summary[language]
+								})]
+							})]
+						}, service.id);
+					})
+				}),
+				selectedService && isServiceDialogOpen && (isMobileSheet ? /* @__PURE__ */ jsx(MobileServiceSheet, {
+					open: isServiceDialogOpen,
+					onOpenChange: handleServiceDialogOpenChange,
+					expanded: isServiceSheetExpanded,
+					onExpandedChange: setIsServiceSheetExpanded,
+					closeLabel: serviceSheetLabels.close,
+					expandLabel: serviceSheetLabels.expand,
+					collapseLabel: serviceSheetLabels.collapse,
+					title: selectedService.title[language],
+					description: selectedService.summary[language],
+					children: /* @__PURE__ */ jsx(ServiceSheetBody, {
+						service: selectedService,
+						language,
+						doctors,
+						doctorsLoading,
+						onBook: handleBookFromService,
+						deferHeavyContent: true
+					})
+				}) : /* @__PURE__ */ jsx(Dialog, {
+					open: isServiceDialogOpen,
+					onOpenChange: handleServiceDialogOpenChange,
+					children: /* @__PURE__ */ jsxs(DialogContent, {
+						overlayClassName: "bg-[#1F2528]/50",
+						className: "max-h-[calc(100dvh-3rem)] overflow-hidden p-0 sm:max-w-[1120px] sm:rounded-[2rem]",
+						closeLabel: serviceSheetLabels.close,
+						children: [/* @__PURE__ */ jsxs(DialogHeader, {
+							className: "sr-only",
+							children: [/* @__PURE__ */ jsx(DialogTitle, { children: selectedService.title[language] }), /* @__PURE__ */ jsx(DialogDescription, { children: selectedService.summary[language] })]
+						}), /* @__PURE__ */ jsx("div", {
+							className: "max-h-[calc(100dvh-3rem)] overflow-y-auto",
+							children: /* @__PURE__ */ jsx(ServiceSheetBody, {
+								service: selectedService,
+								language,
+								doctors,
+								doctorsLoading,
+								onBook: handleBookFromService
+							})
+						})]
+					})
+				})),
+				/* @__PURE__ */ jsx(BookingModal, {
+					open: isBookingOpen,
+					onOpenChange: setIsBookingOpen,
+					children: /* @__PURE__ */ jsx("button", {
+						type: "button",
+						className: "sr-only",
+						children: t.services.book
+					})
+				}),
+				/* @__PURE__ */ jsx(ServicesConsultationPrompt, {})
+			]
+		})]
+	});
+}
+var ServiceSheetBody = memo(function ServiceSheetBody({ service, language, doctors, doctorsLoading, onBook, deferHeavyContent = false }) {
+	return /* @__PURE__ */ jsx("div", {
+		className: "p-4 sm:max-h-[calc(100dvh-3rem)] sm:p-6 lg:p-7",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8",
+			children: [/* @__PURE__ */ jsx(ServiceMainPanel, {
+				service,
+				language,
+				onBook
+			}), /* @__PURE__ */ jsx(ServiceSheetExtraSections, {
+				service,
+				language,
+				doctors,
+				doctorsLoading,
+				deferMount: deferHeavyContent
+			})]
+		})
+	});
+});
+function ServiceSheetExtraSections({ service, language, doctors, doctorsLoading, deferMount = false }) {
+	const t = landingCopy[language];
+	const [readyServiceId, setReadyServiceId] = useState(null);
+	useEffect(() => {
+		if (!deferMount) return;
+		let secondFrame = 0;
+		const firstFrame = requestAnimationFrame(() => {
+			secondFrame = requestAnimationFrame(() => setReadyServiceId(service.id));
+		});
+		return () => {
+			cancelAnimationFrame(firstFrame);
+			if (secondFrame) cancelAnimationFrame(secondFrame);
+		};
+	}, [deferMount, service.id]);
+	const isReady = !deferMount || readyServiceId === service.id;
+	const serviceDoctors = useMemo(() => doctors.filter((doctor) => doctor.serviceIds.includes(service.serviceId)).slice(0, 2), [doctors, service.serviceId]);
+	if (!isReady) return /* @__PURE__ */ jsxs("div", {
+		className: "grid content-start gap-5",
+		"aria-hidden": "true",
+		children: [/* @__PURE__ */ jsx("div", { className: "motion-skeleton h-48 rounded-[1.35rem]" }), /* @__PURE__ */ jsx("div", { className: "motion-skeleton h-36 rounded-[1.35rem]" })]
+	});
+	return /* @__PURE__ */ jsxs("div", {
+		className: "grid content-start gap-5",
+		children: [/* @__PURE__ */ jsxs("section", {
+			"aria-labelledby": "landing-specialists-title",
+			children: [/* @__PURE__ */ jsx("h4", {
+				id: "landing-specialists-title",
+				className: "font-display mb-4 text-2xl font-normal text-[#1F2528]",
+				children: t.services.specialistsTitle
+			}), /* @__PURE__ */ jsx("div", {
+				className: cn("grid gap-4", doctorsLoading || serviceDoctors.length > 1 ? "sm:grid-cols-2" : "sm:grid-cols-1"),
+				children: /* @__PURE__ */ jsx(AnimatePresence, {
+					initial: false,
+					children: doctorsLoading ? Array.from({ length: 2 }).map((_, index) => /* @__PURE__ */ jsx(MotionListItem, {
+						index,
+						children: /* @__PURE__ */ jsx(CompactDoctorCardSkeleton, {})
+					}, `service-sheet-doctor-skeleton-${index}`)) : serviceDoctors.map((doctor, index) => /* @__PURE__ */ jsx(MotionListItem, {
+						index,
+						interactive: true,
+						children: /* @__PURE__ */ jsxs("article", {
+							"data-doctor-card": doctor.id,
+							className: "clinical-card-soft overflow-hidden rounded-[1.35rem]",
+							children: [/* @__PURE__ */ jsx("div", {
+								className: "aspect-square bg-[#EEF2F4]",
+								children: /* @__PURE__ */ jsx(DoctorPhoto, {
+									doctor,
+									language,
+									initialsClassName: "size-14 text-base"
+								})
+							}), /* @__PURE__ */ jsxs("div", {
+								className: "p-5",
+								children: [
+									/* @__PURE__ */ jsx("p", {
+										className: "mb-2 text-xs font-bold uppercase tracking-[0.12em] text-primary",
+										children: getDoctorExperience(doctor, language)
+									}),
+									/* @__PURE__ */ jsx("h5", {
+										className: "mb-2 text-lg font-bold leading-tight text-[#1F2528]",
+										children: doctor.name[language]
+									}),
+									/* @__PURE__ */ jsx("p", {
+										className: "mb-3 text-xs font-bold uppercase tracking-[0.08em] text-[#606A70]",
+										children: doctor.specialty[language]
+									}),
+									/* @__PURE__ */ jsx("p", {
+										className: "line-clamp-4 text-sm leading-relaxed text-[#606A70]",
+										children: doctor.description[language]
+									})
+								]
+							})]
+						})
+					}, doctor.id))
+				})
+			})]
+		}), /* @__PURE__ */ jsxs("section", {
+			"aria-labelledby": "landing-faq-title",
+			className: "rounded-[1.35rem] border border-[#DDE3E7] bg-white px-4 shadow-[0_18px_55px_rgba(31,37,40,0.045)]",
+			children: [
+				/* @__PURE__ */ jsx("h4", {
+					id: "landing-faq-title",
+					className: "sr-only",
+					children: t.services.faqTitle
+				}),
+				/* @__PURE__ */ jsx("div", {
+					className: "border-b border-[#DDE3E7] py-4",
+					children: /* @__PURE__ */ jsx("p", {
+						className: "font-display text-2xl font-normal text-[#1F2528]",
+						children: t.services.faqTitle
+					})
+				}),
+				/* @__PURE__ */ jsx(Accordion, {
+					type: "single",
+					collapsible: true,
+					children: service.faqs.map((faq, idx) => /* @__PURE__ */ jsxs(AccordionItem, {
+						value: `${service.id}-${idx}`,
+						className: "border-[#DDE3E7]",
+						children: [/* @__PURE__ */ jsx(AccordionTrigger, {
+							className: "text-left text-sm font-bold text-[#1F2528] hover:text-primary hover:no-underline",
+							children: faq.question[language]
+						}), /* @__PURE__ */ jsx(AccordionContent, {
+							className: "text-sm leading-relaxed text-[#606A70]",
+							children: faq.answer[language]
+						})]
+					}, faq.question.ru))
+				})
+			]
+		})]
+	});
+}
+function ServiceTileIcon({ src, title, fallbackIcon: FallbackIcon }) {
+	const [hasImageError, setHasImageError] = useState(false);
+	if (!src || hasImageError) return /* @__PURE__ */ jsx(FallbackIcon, {
+		weight: "duotone",
+		className: "size-7 sm:size-8"
+	});
+	return /* @__PURE__ */ jsx("img", {
+		src,
+		alt: "",
+		"aria-hidden": "true",
+		title,
+		className: "size-8 object-contain sm:size-9",
+		onError: () => setHasImageError(true)
+	});
+}
+function ServiceMainPanel({ service, language, onBook }) {
+	const t = landingCopy[language];
+	const ActiveIcon = IconMap$1[service.iconName] ?? Tooth;
+	return /* @__PURE__ */ jsxs("div", {
+		className: "flex flex-col gap-7",
+		children: [
+			/* @__PURE__ */ jsxs("div", { children: [
+				/* @__PURE__ */ jsx(Badge, {
+					variant: "secondary",
+					className: "mb-4 rounded-full border border-primary/15 bg-[#F4E7E4]/60 px-4 py-1.5 text-primary hover:bg-[#F4E7E4]/60",
+					children: service.shortTitle[language]
+				}),
+				/* @__PURE__ */ jsx("h3", {
+					className: "font-display mb-4 text-3xl font-normal leading-tight text-[#1F2528] md:text-5xl",
+					children: service.title[language]
+				}),
+				/* @__PURE__ */ jsx("p", {
+					className: "max-w-xl text-base leading-8 text-[#606A70]",
+					children: service.summary[language]
+				})
+			] }),
+			/* @__PURE__ */ jsx("div", {
+				className: "grid gap-3",
+				children: service.bullets[language].map((bullet) => /* @__PURE__ */ jsxs("div", {
+					className: "flex items-center gap-3",
+					children: [/* @__PURE__ */ jsx("span", {
+						className: "flex size-6 shrink-0 items-center justify-center rounded-full border border-[#DDE3E7] bg-[#FAFBFC] text-primary",
+						children: /* @__PURE__ */ jsx(CheckCircle, {
+							weight: "fill",
+							className: "size-4"
+						})
+					}), /* @__PURE__ */ jsx("span", {
+						className: "text-sm font-semibold leading-relaxed text-[#1F2528]/80",
+						children: bullet
+					})]
+				}, bullet))
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				className: "rounded-[1.4rem] border border-[#DDE3E7] bg-[#FAFBFC] p-4 md:p-5",
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "mb-4 flex items-center gap-3",
+					children: [/* @__PURE__ */ jsx("span", {
+						className: "flex size-11 items-center justify-center rounded-2xl bg-white text-primary shadow-[0_12px_30px_rgba(31,37,40,0.05)]",
+						children: /* @__PURE__ */ jsx(ActiveIcon, {
+							weight: "duotone",
+							className: "size-6"
+						})
+					}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("p", {
+						className: "text-xs font-bold uppercase tracking-[0.14em] text-primary",
+						children: t.services.pricesTitle
+					}), /* @__PURE__ */ jsx("p", {
+						className: "mt-1 text-xs text-[#8A949B]",
+						children: t.services.consultationNote
+					})] })]
+				}), /* @__PURE__ */ jsx("div", {
+					className: "divide-y divide-[#DDE3E7]",
+					children: service.prices.map((price) => /* @__PURE__ */ jsxs("div", {
+						className: "grid gap-2 py-3 sm:grid-cols-[1fr_auto] sm:items-center",
+						children: [
+							/* @__PURE__ */ jsx("span", {
+								className: "text-sm font-medium leading-snug text-[#606A70]",
+								children: price.label[language]
+							}),
+							/* @__PURE__ */ jsx("span", {
+								className: "text-left text-base font-bold text-[#1F2528] sm:text-right",
+								children: price.value[language]
+							}),
+							price.note && /* @__PURE__ */ jsx("span", {
+								className: "text-xs font-semibold text-primary sm:col-span-2 sm:text-right",
+								children: price.note[language]
+							})
+						]
+					}, `${price.label.ru}-${price.value.ru}`))
+				})]
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				className: "flex flex-col gap-3 sm:flex-row",
+				children: [/* @__PURE__ */ jsxs(Button, {
+					onClick: onBook,
+					className: "group accent-button-shadow inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-primary px-7 text-sm font-bold leading-none text-white transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px]",
+					children: [/* @__PURE__ */ jsx("span", { children: t.services.book }), /* @__PURE__ */ jsx(ArrowRight, { className: "size-4 shrink-0 transition-transform group-hover:translate-x-1 motion-reduce:transform-none" })]
+				}), /* @__PURE__ */ jsx(Button, {
+					asChild: true,
+					variant: "outline",
+					className: "group h-14 rounded-2xl border-[#DDE3E7] bg-white px-7 text-sm font-bold text-[#1F2528] hover:border-[#C8D3D9] hover:bg-[#FAFBFC]",
+					children: /* @__PURE__ */ jsx(Link, {
+						to: `/services/${service.serviceId}`,
+						children: t.services.details
+					})
+				})]
+			})
+		]
+	});
+}
+function getDoctorExperience(doctor, language) {
+	if (typeof doctor.experienceYears === "number" && doctor.experienceYears > 0) return language === "ru" ? `${doctor.experienceYears} лет` : `${doctor.experienceYears} жыл`;
+	return doctor.description[language].match(/(?:Стаж работы|Опыт работы|Жұмыс тәжірибесі):?\s*([^..]+[.)]?)/i)?.[1]?.replace(/\.$/, "") ?? (language === "ru" ? "Опытный специалист" : "Тәжірибелі маман");
+}
+//#endregion
+//#region src/assets/services/implants-hero.webp
+var implants_hero_default = "/assets/implants-hero-pGMqlnGF.webp";
+//#endregion
+//#region src/assets/before-after/implants-all-on-4-before.jpg
+var implants_all_on_4_before_default = "/assets/implants-all-on-4-before-K_DUQO4c.jpg";
+//#endregion
+//#region src/assets/before-after/implants-all-on-4-after.jpg
+var implants_all_on_4_after_default = "/assets/implants-all-on-4-after-1vlmCljd.jpg";
+//#endregion
+//#region src/assets/services/bone-augmentation-hero.webp
+var bone_augmentation_hero_default = "/assets/bone-augmentation-hero-DJNP2VSM.webp";
+//#endregion
+//#region src/assets/services/bone-augmentation-before.webp
+var bone_augmentation_before_default = "/assets/bone-augmentation-before-DmdPoBx-.webp";
+//#endregion
+//#region src/assets/services/bone-augmentation-after.webp
+var bone_augmentation_after_default = "/assets/bone-augmentation-after-BuBNVH-y.webp";
+//#endregion
+//#region src/assets/services/frenectomy-hero.webp
+var frenectomy_hero_default = "/assets/frenectomy-hero-Ca9kd78U.webp";
+//#endregion
+//#region src/assets/services/frenectomy-before.webp
+var frenectomy_before_default = "/assets/frenectomy-before-D2cmdula.webp";
+//#endregion
+//#region src/assets/services/frenectomy-after.webp
+var frenectomy_after_default = "/assets/frenectomy-after-CKbbu-Fj.webp";
+//#endregion
+//#region src/assets/services/tooth-extraction-hero.webp
+var tooth_extraction_hero_default = "/assets/tooth-extraction-hero-Bxbsh1il.webp";
+//#endregion
+//#region src/assets/before-after/extraction-before.png
+var extraction_before_default = "/assets/extraction-before-B85TuyC_.png";
+//#endregion
+//#region src/assets/before-after/extraction-after.png
+var extraction_after_default = "/assets/extraction-after-Dx-DtmqY.png";
+//#endregion
+//#region src/assets/services/wisdom-tooth-removal-hero.webp
+var wisdom_tooth_removal_hero_default = "/assets/wisdom-tooth-removal-hero-vmUAcefj.webp";
+//#endregion
+//#region src/assets/services/wisdom-tooth-removal-before.webp
+var wisdom_tooth_removal_before_default = "/assets/wisdom-tooth-removal-before-T5JaRitK.webp";
+//#endregion
+//#region src/assets/services/wisdom-tooth-removal-after.webp
+var wisdom_tooth_removal_after_default = "/assets/wisdom-tooth-removal-after-BtMUMRNA.webp";
+//#endregion
+//#region src/assets/services/crowns-hero.webp
+var crowns_hero_default = "/assets/crowns-hero-UmS4I-dv.webp";
+//#endregion
+//#region src/assets/before-after/crowns-new-before.jpg
+var crowns_new_before_default = "/assets/crowns-new-before-DjAzwSA0.jpg";
+//#endregion
+//#region src/assets/before-after/crowns-new-after.jpg
+var crowns_new_after_default = "/assets/crowns-new-after-DGlN6iZV.jpg";
+//#endregion
+//#region src/assets/services/dentures-hero.webp
+var dentures_hero_default = "/assets/dentures-hero-CZyvQNJ1.webp";
+//#endregion
+//#region src/assets/services/dentures-before.webp
+var dentures_before_default = "/assets/dentures-before-C8buqj7r.webp";
+//#endregion
+//#region src/assets/services/dentures-after.webp
+var dentures_after_default = "/assets/dentures-after-CZG8h2O3.webp";
+//#endregion
+//#region src/assets/services/braces-hero.webp
+var braces_hero_default = "/assets/braces-hero--8Bgd-3V.webp";
+//#endregion
+//#region src/assets/before-after/braces-before.jpg
+var braces_before_default = "/assets/braces-before-B7XVz__r.jpg";
+//#endregion
+//#region src/assets/before-after/braces-after.jpg
+var braces_after_default = "/assets/braces-after-DRcVGjIM.jpg";
+//#endregion
+//#region src/assets/services/treatment-hero.webp
+var treatment_hero_default = "/assets/treatment-hero-CIf4vfx3.webp";
+//#endregion
+//#region src/assets/before-after/treatment-before.jpg
+var treatment_before_default = "/assets/treatment-before-SpW-Ta3J.jpg";
+//#endregion
+//#region src/assets/before-after/treatment-after.jpg
+var treatment_after_default = "/assets/treatment-after-BLudOoBf.jpg";
+//#endregion
+//#region src/assets/services/cleaning-hero.webp
+var cleaning_hero_default = "/assets/cleaning-hero-qvN8m06G.webp";
+//#endregion
+//#region src/assets/before-after/cleaning-before.jpg
+var cleaning_before_default = "/assets/cleaning-before-DgMFh6Uj.jpg";
+//#endregion
+//#region src/assets/before-after/cleaning-after.jpg
+var cleaning_after_default = "/assets/cleaning-after-DUmWp7jY.jpg";
+//#endregion
+//#region src/data/services.ts
+var text = (ru, kk) => ({
+	ru,
+	kk
+});
+var baseServices = [
+	{
+		id: "implants",
+		iconName: "Tooth",
+		title: {
+			ru: "Имплантация зубов",
+			kk: "Тіс имплантациясы"
+		},
+		shortDescription: {
+			ru: "Восстановление зубов, удаленных из-за невозможности лечения, с помощью надежных имплантов.",
+			kk: "Емге жарамсыз болып жұлынған тістерді сенімді импланттар арқылы қалпына келтіру."
+		},
+		benefits: {
+			ru: [
+				"Зуб ощущается как свой",
+				"Не нужно обтачивать соседние зубы",
+				"Долговечность 10+ лет",
+				"Эстетика, комфорт и уверенность в улыбке"
+			],
+			kk: [
+				"Табиғи тіс сияқты сезіледі",
+				"Көрші тістерді егеудің қажеті жоқ",
+				"10+ жылға дейін қызмет етеді",
+				"Эстетика, ыңғайлылық және күлкіге деген сенімділік"
+			]
+		},
+		explanation: {
+			ru: "Имплант — это искусственная опора, устанавливаемая вместо корня зуба. Он крепится в челюстной кости, после чего сверху устанавливается коронка. В результате формируется полноценный новый зуб.",
+			kk: "Имплант - тіс түбірінің орнына қойылатын жасанды тірек. Ол жақ сүйегіне бекітіледі, кейін үстіне қаптама орнатылады. Нәтижесінде толыққанды жаңа тіс қалыптасады."
+		},
+		steps: {
+			ru: [
+				"Диагностика и 3D-снимок",
+				"Установка импланта",
+				"Установка коронки после приживления через 2–3 месяца"
+			],
+			kk: [
+				"Диагностика және 3D рентген",
+				"Имплант орнату",
+				"2–3 айдан кейін қаптама орнату"
+			]
+		},
+		timeline: {
+			ru: "2–6 месяцев",
+			kk: "2–6 ай"
+		},
+		priceNote: {
+			ru: "Имплантация от 89 000 ₸. Скидки от 15% до 40%. Возможна необходимость костной пластики.",
+			kk: "Имплантация 89 000 ₸ бастап. 15–40% дейін жеңілдік. Сүйек пластикасы қажет болуы мүмкін."
+		},
+		faq: [
+			{
+				question: {
+					ru: "Больно ли устанавливать имплант?",
+					kk: "Имплант орнату ауырта ма?"
+				},
+				answer: {
+					ru: "Процедура проходит под качественной местной анестезией, поэтому вы не почувствуете боли.",
+					kk: "Процедура сапалы жергілікті анестезиямен өтеді, сондықтан сіз ауырсынуды сезбейсіз."
+				}
+			},
+			{
+				question: {
+					ru: "Сколько длится установка импланта?",
+					kk: "Имплант орнату қанша уақыт алады?"
+				},
+				answer: {
+					ru: "Установка одного импланта обычно занимает от 15 минут до часа. Если имплантов несколько, процедура длится от часа.",
+					kk: "Бір имплант орнату әдетте 15 минуттан 1 сағатқа дейін. Импланттар бірнеше болса, процедура 1 сағаттан басталады."
+				}
+			},
+			{
+				question: {
+					ru: "Сколько стоит имплантация?",
+					kk: "Имплантация бағасы қанша?"
+				},
+				answer: {
+					ru: "Стоимость начинается от 89 000 ₸ и зависит от выбранного импланта (Швейцария, Южная Корея) и индивидуальной ситуации.",
+					kk: "Бағасы 89 000 ₸ басталады және таңдалған имплантқа (Швейцария, Оңтүстік Корея) байланысты."
+				}
+			},
+			{
+				question: {
+					ru: "Сколько длится приживление импланта?",
+					kk: "Импланттың бітуі қанша уақыт алады?"
+				},
+				answer: {
+					ru: "Обычно процесс занимает от 2 до 6 месяцев в зависимости от особенностей костной ткани.",
+					kk: "Әдетте процесс сүйек тінінің ерекшеліктеріне байланысты 2-ден 6 айға дейін созылады."
+				}
+			},
+			{
+				question: {
+					ru: "Какие импланты используются?",
+					kk: "Қандай импланттар қолданылады?"
+				},
+				answer: {
+					ru: "Мы используем только проверенные системы имплантов из Швейцарии и Южной Кореи.",
+					kk: "Біз тек Швейцария мен Оңтүстік Кореяның тексерілген имплант жүйелерін қолданамыз."
+				}
+			}
+		],
+		relatedIds: ["bone-augmentation", "crowns"]
+	},
+	{
+		id: "bone-augmentation",
+		iconName: "ShieldCheck",
+		title: {
+			ru: "Костная пластика",
+			kk: "Сүйек пластикасы"
+		},
+		shortDescription: {
+			ru: "Создание надежной опоры для импланта.",
+			kk: "Имплант үшін сенімді тірек жасау."
+		},
+		benefits: {
+			ru: [
+				"Помогает импланту держаться надёжно",
+				"Материалы совместимы с организмом",
+				"Врач оценивает ситуацию по 3D-снимку"
+			],
+			kk: [
+				"Импланттың мықты бекітілуіне көмектеседі",
+				"Материалдар ағзаға үйлесімді",
+				"Дәрігер 3D рентген арқылы жоспар жасайды"
+			]
+		},
+		explanation: {
+			ru: "Костная пластика проводится, если костной ткани недостаточно для надёжной установки импланта.",
+			kk: "Сүйек пластикасы имплантты сенімді орнатуға сүйек тіні жеткіліксіз болған жағдайда жасалады."
+		},
+		steps: {
+			ru: [
+				"3D-диагностика",
+				"Процедура костной пластики",
+				"Период восстановления"
+			],
+			kk: [
+				"3D диагностика",
+				"Сүйек пластикасы процедурасы",
+				"Қалпына келу кезеңі"
+			]
+		},
+		timeline: {
+			ru: "Восстановление 4–6 месяцев",
+			kk: "Қалпына келу 4–6 ай"
+		},
+		faq: [{
+			question: {
+				ru: "Зачем нужна костная пластика?",
+				kk: "Сүйек пластикасы неге қажет?"
+			},
+			answer: {
+				ru: "Если костной ткани недостаточно, имплант может плохо держаться. Наращивание создаёт надёжную опору для установки.",
+				kk: "Сүйек тіні жеткіліксіз болса, имплант нашар тұруы мүмкін. Сүйек пластикасы сенімді тірек жасайды."
+			}
+		}, {
+			question: {
+				ru: "Сколько длится восстановление кости?",
+				kk: "Сүйек қалпына келуі қанша уақыт алады?"
+			},
+			answer: {
+				ru: "Обычно 4–6 месяцев. Точные сроки врач назовёт после 3D-снимка и осмотра.",
+				kk: "Әдетте 4–6 ай. Нақты мерзімді дәрігер 3D рентген мен тексеруден кейін айтады."
+			}
+		}],
+		relatedIds: ["implants"]
+	},
+	{
+		id: "frenectomy",
+		iconName: "Smiley",
+		title: {
+			ru: "Пластика уздечки",
+			kk: "Жүгеншені кесу"
+		},
+		shortDescription: {
+			ru: "Быстрая процедура для здоровья десен и речи.",
+			kk: "Қызыл иек пен сөйлеу саулығына арналған жылдам процедура."
+		},
+		benefits: {
+			ru: [
+				"Местная анестезия",
+				"Несколько минут",
+				"Безболезненно",
+				"Быстрое возвращение к обычной жизни"
+			],
+			kk: [
+				"Жергілікті анестезия",
+				"Бірнеше минут",
+				"Ауыртпалықсыз",
+				"Күнделікті өмірге тез оралуға болады"
+			]
+		},
+		explanation: {
+			ru: "Пластика уздечки — небольшая процедура, если уздечка мешает речи, прикусу или движению губы/языка.",
+			kk: "Жүгеншені кесу — жүгенше сөйлеуге, тістемге немесе тіл/ерін қозғалысына кедергі келтірсе жасалатын шағын процедура."
+		},
+		steps: {
+			ru: [
+				"Консультация",
+				"Анестезия",
+				"Подрезание",
+				"Заживление"
+			],
+			kk: [
+				"Кеңес",
+				"Анестезия",
+				"Кесу",
+				"Жазылу"
+			]
+		},
+		timeline: {
+			ru: "10-15 минут",
+			kk: "10-15 минут"
+		},
+		faq: [{
+			question: {
+				ru: "Когда нужна пластика уздечки?",
+				kk: "Жүгеншені кесу қашан қажет?"
+			},
+			answer: {
+				ru: "Если уздечка мешает речи, прикусу или движению губы/языка. Процедура быстрая и проводится под анестезией.",
+				kk: "Жүгенше сөйлеуге, тістемге немесе ерін/тіл қозғалысына кедергі келтірсе. Процедура жылдам және анестезиямен жасалады."
+			}
+		}],
+		relatedIds: ["treatment"]
+	},
+	{
+		id: "tooth-extraction",
+		iconName: "FirstAidKit",
+		title: {
+			ru: "Удаление зуба",
+			kk: "Тісті ұқыпты жұлу"
+		},
+		shortDescription: {
+			ru: "Бережное удаление зубов без боли.",
+			kk: "Ауыртпалықсыз тіс жұлу."
+		},
+		benefits: {
+			ru: [
+				"Под анестезией",
+				"Пациент чувствует давление, но не боль",
+				"Дискомфорт обычно 3–5 дней",
+				"Полное заживление 1–2 недели"
+			],
+			kk: [
+				"Анестезиямен жасалады",
+				"Пациент ауырсынуды емес, жеңіл қысымды сезеді",
+				"Жеңіл ыңғайсыздық 3–5 күн болуы мүмкін",
+				"Толық жазылу 1–2 апта"
+			]
+		},
+		explanation: {
+			ru: "Удаление может потребоваться, если зуб сильно разрушен, воспалён, мешает прикусу.",
+			kk: "Тіс қатты бұзылғанда, қабынғанда немесе тістемге кедергі келтіргенде жұлу қажет болуы мүмкін."
+		},
+		steps: {
+			ru: [
+				"Осмотр и снимок",
+				"Анестезия",
+				"Бережное удаление",
+				"Рекомендации по уходу"
+			],
+			kk: [
+				"Тексеру және рентген",
+				"Анестезия",
+				"Ұқыпты жұлу",
+				"Күтім бойынша ұсыныстар"
+			]
+		},
+		timeline: {
+			ru: "20-40 минут",
+			kk: "20-40 минут"
+		},
+		faq: [{
+			question: {
+				ru: "Когда нужно удаление зуба?",
+				kk: "Тісті қашан жұлу керек?"
+			},
+			answer: {
+				ru: "Если зуб сильно разрушен, воспалён, мешает прикусу или ортодонтическому лечению.",
+				kk: "Тіс қатты бұзылғанда, қабынғанда, тістемге немесе ортодонтиялық емге кедергі келтіргенде."
+			}
+		}, {
+			question: {
+				ru: "Сколько длится восстановление?",
+				kk: "Қалпына келу қанша уақыт алады?"
+			},
+			answer: {
+				ru: "Лёгкий дискомфорт обычно 3–5 дней, полное заживление 1–2 недели.",
+				kk: "Жеңіл ыңғайсыздық әдетте 3–5 күн, толық жазылу 1–2 апта."
+			}
+		}],
+		relatedIds: ["implants", "wisdom-tooth-removal"]
+	},
+	{
+		id: "wisdom-tooth-removal",
+		iconName: "FirstAidKit",
+		title: {
+			ru: "Удаление зуба мудрости",
+			kk: "Ақыл тісін жұлу"
+		},
+		shortDescription: {
+			ru: "Сложные удаления с минимальным дискомфортом.",
+			kk: "Минималды ыңғайсыздықпен күрделі жұлу."
+		},
+		benefits: {
+			ru: [
+				"Под анестезией",
+				"Предотвращает смещение других зубов",
+				"Избавляет от боли и воспаления"
+			],
+			kk: [
+				"Анестезиямен жасалады",
+				"Басқа тістердің жылжуын болдырмайды",
+				"Ауру мен қабынудан арылтады"
+			]
+		},
+		explanation: {
+			ru: "Зубы мудрости часто растут неправильно, вызывая воспаление, боль и смещение зубного ряда. Их удаление предотвращает эти проблемы.",
+			kk: "Ақыл тістер көбіне дұрыс шықпай, қабыну, ауырсыну және тіс қатарының жылжуын тудыруы мүмкін. Оларды жұлу осы мәселелердің алдын алады."
+		},
+		steps: {
+			ru: [
+				"Осмотр и 3D-снимок",
+				"Анестезия",
+				"Удаление зуба",
+				"Наложение швов при необходимости"
+			],
+			kk: [
+				"Тексеру және 3D рентген",
+				"Анестезия",
+				"Тісті жұлу",
+				"Қажет болса тігіс салу"
+			]
+		},
+		timeline: {
+			ru: "30-60 минут",
+			kk: "30-60 минут"
+		},
+		faq: [{
+			question: {
+				ru: "Зачем удалять зуб мудрости?",
+				kk: "Ақыл тісін неге жұлу керек?"
+			},
+			answer: {
+				ru: "Если он растёт неправильно, вызывает боль, воспаление или смещение зубного ряда.",
+				kk: "Дұрыс шықпай, ауырсыну, қабыну немесе тіс қатарын жылжыту тудырса."
+			}
+		}, {
+			question: {
+				ru: "Сколько длится процедура?",
+				kk: "Процедура қанша уақыт алады?"
+			},
+			answer: {
+				ru: "Обычно 15–30 минут под анестезией, врач даст рекомендации для восстановления.",
+				kk: "Әдетте анестезиямен 15–30 минут, дәрігер қалпына келу бойынша ұсыныс береді."
+			}
+		}],
+		relatedIds: ["tooth-extraction"]
+	},
+	{
+		id: "crowns",
+		iconName: "Smiley",
+		title: {
+			ru: "Ортопедия и эстетичные коронки",
+			kk: "Ортопедия және эстетикалық тіс қаптамалары"
+		},
+		shortDescription: {
+			ru: "Восстановление формы и эстетики зуба.",
+			kk: "Эстетика мен тіс қызметін қалпына келтіру."
+		},
+		benefits: {
+			ru: [
+				"Металлокерамика — надёжный и более доступный вариант",
+				"Цирконий — прочный, эстетичный, гипоаллергенный",
+				"E-max — максимально эстетичный вариант",
+				"Съемные протезы и виниры",
+				"Средний срок службы 10–15 лет"
+			],
+			kk: [
+				"Металлокерамика — сенімді және қолжетімді",
+				"Цирконий — берік, әдемі, аллергия тудырмайды",
+				"E-max — өте эстетикалық нұсқа",
+				"Кәдімгі протездер мен винирлер",
+				"Орташа қызмет ету мерзімі 10–15 жыл"
+			]
+		},
+		explanation: {
+			ru: "Коронки помогают восстановить форму, функцию и эстетику зуба, если он разрушен или изменил цвет. Материал подбирается врачом индивидуально под клиническую ситуацию.",
+			kk: "Тіс қатты зақымдалған немесе түсі өзгерген жағдайда қаптамалар тістің пішінін, қызметін және эстетикасын қалпына келтіруге көмектеседі. Материал әр пациентке жеке таңдалады."
+		},
+		steps: {
+			ru: [
+				"Подготовка зуба",
+				"Снятие слепков",
+				"Изготовление коронки в лаборатории",
+				"Примерка и фиксация"
+			],
+			kk: [
+				"Тісті дайындау",
+				"Қалып алу",
+				"Зертханада қаптама жасау",
+				"Өлшеп көру және бекіту"
+			]
+		},
+		timeline: {
+			ru: "1-2 недели",
+			kk: "1-2 апта"
+		},
+		priceNote: {
+			ru: "Виниры от 100 000 ₸. Съемные протезы от 50 000 ₸ на одну челюсть.",
+			kk: "Винирлер 100 000 ₸ бастап. Кәдімгі протездер бір жаққа 50 000 ₸ бастап."
+		},
+		faq: [
+			{
+				question: {
+					ru: "Чем коронка отличается от винира?",
+					kk: "Қаптама винирден несімен ерекшеленеді?"
+				},
+				answer: {
+					ru: "Коронка полностью покрывает зуб и подходит при сильном разрушении или после лечения каналов. Винир — тонкая накладка на переднюю поверхность, её чаще выбирают для эстетики передних зубов.",
+					kk: "Қаптама тісті толығымен жабады және қатты бұзылған немесе түбір емделген жағдайда қолданылады. Винир — алдыңғы бетке қойылатын жұқа қабат, көбіне алдыңғы тістердің эстетикасы үшін таңдалады."
+				}
+			},
+			{
+				question: {
+					ru: "Что лучше для передних зубов — коронка или винир?",
+					kk: "Алдыңғы тістерге қаптама ма, винир ме жақсы?"
+				},
+				answer: {
+					ru: "Если зуб здоров и нужно улучшить форму или цвет — чаще подходят виниры. Если зуб сильно разрушен или ослаблен — надёжнее коронка. Окончательное решение принимает врач после осмотра.",
+					kk: "Тіс сау болса және пішіні мен түсін жақсарту керек болса — жиі винир таңдалады. Тіс қатты бұзылған немесе әлсіреген болса — қаптама сенімдірек. Соңғы шешімді дәрігер тексеруден кейін қабылдайды."
+				}
+			},
+			{
+				question: {
+					ru: "Чем отличается циркон от металлокерамики?",
+					kk: "Циркон металлокерамикадан несімен ерекшеленеді?"
+				},
+				answer: {
+					ru: "Циркон эстетичнее и гипоаллергенен, металлокерамика обычно доступнее и прочнее при высокой жевательной нагрузке.",
+					kk: "Циркон әдемірек және аллергия тудырмайды, металлокерамика көбіне қолжетімді әрі жоғары шайнау жүктемесінде берік."
+				}
+			}
+		],
+		relatedIds: ["implants", "dentures"]
+	},
+	{
+		id: "dentures",
+		iconName: "Smiley",
+		title: {
+			ru: "Протезы",
+			kk: "Тіс протездері"
+		},
+		shortDescription: {
+			ru: "Удобное жевание и красивая улыбка.",
+			kk: "Ыңғайлы шайнау және әдемі күлкі."
+		},
+		benefits: {
+			ru: [
+				"Акриловый протез",
+				"Бюгельный протез",
+				"Valplast-протез",
+				"Вакуумный протез"
+			],
+			kk: [
+				"Акрил протезі",
+				"Бюгельді протез",
+				"Valplast протезі",
+				"Вакуумды протез"
+			]
+		},
+		explanation: {
+			ru: "Протезы помогают восстановить утраченные зубы, вернуть удобное жевание и эстетику улыбки.",
+			kk: "Тіс протездері жоғалған тістерді қалпына келтіреді, шайнауды ыңғайлы етеді және күлкінің эстетикасын қайтарады."
+		},
+		steps: {
+			ru: [
+				"Снятие слепков",
+				"Примерка конструкции",
+				"Изготовление протеза",
+				"Коррекция для идеальной посадки"
+			],
+			kk: [
+				"Қалып алу",
+				"Конструкцияны өлшеп көру",
+				"Протез жасау",
+				"Мінсіз отыруы үшін түзету"
+			]
+		},
+		timeline: {
+			ru: "2-3 недели",
+			kk: "2-3 апта"
+		},
+		priceNote: {
+			ru: "Съёмные протезы от 50 000 ₸ на челюсть. Бюгельные и имплант-протезы — по индивидуальному плану.",
+			kk: "Алмалы протездер бір жаққа 50 000 ₸ бастап. Бюгельді және импланттағы протездер — жеке жоспар бойынша."
+		},
+		faq: [
+			{
+				question: {
+					ru: "Чем отличается съёмный протез от несъёмного?",
+					kk: "Алмалы протез тұрақты протезден несімен ерекшеленеді?"
+				},
+				answer: {
+					ru: "Съёмный протез можно снимать для ухода, несъёмный фиксируется на имплантах и ощущается стабильнее при жевании.",
+					kk: "Алмалы протезді күтім үшін шешуге болады, тұрақтысы имплантқа бекітіледі және шайнауда тұрақтырақ сезіледі."
+				}
+			},
+			{
+				question: {
+					ru: "Какой протез выбрать — акриловый, бюгельный или Valplast?",
+					kk: "Қай протезді таңдау керек — акрил, бюгель немесе Valplast?"
+				},
+				answer: {
+					ru: "Акриловый доступнее, бюгельный надёжнее при опорных зубах, Valplast мягкий и эстетичный. Врач подскажет после осмотра.",
+					kk: "Акрил қолжетімдірек, бюгель тіректі тіс болса сенімдірек, Valplast жұмсақ әрі эстетикалық. Дәрігер тексеруден кейін айтады."
+				}
+			},
+			{
+				question: {
+					ru: "Сколько длится изготовление протеза?",
+					kk: "Протез жасау қанша уақыт алады?"
+				},
+				answer: {
+					ru: "Обычно 2–3 недели с учётом слепков, примерки и коррекции.",
+					kk: "Әдетте қалып алу, өлшеп көру және түзетумен 2–3 апта."
+				}
+			}
+		],
+		relatedIds: ["crowns", "implants"]
+	},
+	{
+		id: "braces",
+		iconName: "Smiley",
+		title: {
+			ru: "Брекеты",
+			kk: "Күлкі үшін арналған брекеттер"
+		},
+		shortDescription: {
+			ru: "Исправление прикуса и выравнивание зубов.",
+			kk: "Тістемді түзету және тістерді тегістеу."
+		},
+		benefits: {
+			ru: [
+				"Металлические, керамические, самолигирующие",
+				"Индивидуальный план лечения",
+				"Возможность рассрочки",
+				"Скидка до 30%"
+			],
+			kk: [
+				"Металл, керамикалық, өздігінен байланатын",
+				"Жеке емдеу жоспары",
+				"Бөліп төлеу мүмкіндігі",
+				"30%-ға дейін жеңілдік"
+			]
+		},
+		explanation: {
+			ru: "Брекеты помогают выровнять зубы, исправить прикус и улучшить здоровье зубов и дёсен.",
+			kk: "Брекеттер тістерді түзетуге, тістемді жақсартуға және тіс пен қызыл иек саулығын сақтауға көмектеседі."
+		},
+		steps: {
+			ru: [
+				"Консультация ортодонта",
+				"Диагностика и план",
+				"Установка брекет-системы",
+				"Регулярная коррекция"
+			],
+			kk: [
+				"Ортодонт кеңесі",
+				"Диагностика және жоспар",
+				"Брекет жүйесін орнату",
+				"Тұрақты түзету"
+			]
+		},
+		timeline: {
+			ru: "1-2 года",
+			kk: "1-2 жыл"
+		},
+		priceNote: {
+			ru: "Скидка до 30%. Доступна оплата в рассрочку.",
+			kk: "30%-ға дейін жеңілдік. Бөліп төлеуге болады."
+		},
+		faq: [{
+			question: {
+				ru: "Можно ли поставить брекеты в рассрочку?",
+				kk: "Брекетті бөліп төлеуге бола ма?"
+			},
+			answer: {
+				ru: "Да, в нашей клинике доступна беспроцентная рассрочка.",
+				kk: "Иә, біздің клиникада пайызсыз бөліп төлеу мүмкіндігі бар."
+			}
+		}],
+		relatedIds: ["cleaning"]
+	},
+	{
+		id: "treatment",
+		iconName: "Heartbeat",
+		title: {
+			ru: "Лечение зубов",
+			kk: "Тісті ауырсынусыз емдеу"
+		},
+		shortDescription: {
+			ru: "Лечение кариеса и сохранение здоровья зубов.",
+			kk: "Тіс жегісін емдеу және тіс саулығын сақтау."
+		},
+		benefits: {
+			ru: [
+				"Лечение кариеса",
+				"Пломбы из качественных материалов",
+				"Лечение корневых каналов при необходимости",
+				"Индивидуальный план лечения"
+			],
+			kk: [
+				"Тіс жегісін емдеу",
+				"Сапалы материалдардан жасалған пломба",
+				"Қажет болса түбір өзектерін емдеу",
+				"Жеке емдеу жоспары"
+			]
+		},
+		explanation: {
+			ru: "Лечение зубов помогает восстановить повреждённый зуб, остановить разрушение и сохранить здоровье полости рта.",
+			kk: "Тісті емдеу зақымдалған тісті қалпына келтіруге, бұзылуды тоқтатуға және ауыз қуысының саулығын сақтауға көмектеседі."
+		},
+		steps: {
+			ru: [
+				"Диагностика и снимок",
+				"Анестезия",
+				"Очистка пораженных тканей",
+				"Установка пломбы"
+			],
+			kk: [
+				"Диагностика және рентген",
+				"Анестезия",
+				"Зақымдалған тіндерді тазалау",
+				"Пломба орнату"
+			]
+		},
+		timeline: {
+			ru: "40-60 минут",
+			kk: "40-60 минут"
+		},
+		faq: [{
+			question: {
+				ru: "Когда нужно лечить кариес?",
+				kk: "Кариесті қашан емдеу керек?"
+			},
+			answer: {
+				ru: "При первых признаках дискомфорта, реакции на холодное или сладкое — чем раньше, тем проще лечение.",
+				kk: "Ыңғайсыздық, суыққа немесе тәттіге сезімталдық пайда болса — неғұрлым ерте, соғұрлым оңай."
+			}
+		}, {
+			question: {
+				ru: "Всегда ли нужен снимок?",
+				kk: "Әрқашан рентген керек пе?"
+			},
+			answer: {
+				ru: "Врач решает после осмотра, но снимок помогает увидеть глубину поражения.",
+				kk: "Дәрігер тексеруден кейін шешеді, бірақ рентген зақымдану тереңдігін көрсетеді."
+			}
+		}],
+		relatedIds: ["cleaning", "crowns"]
+	},
+	{
+		id: "cleaning",
+		iconName: "Sparkle",
+		title: {
+			ru: "Чистка зубов",
+			kk: "Тіс тазалау"
+		},
+		shortDescription: {
+			ru: "Профессиональная гигиена и свежее дыхание.",
+			kk: "Кәсіби гигиена және таза тыныс."
+		},
+		benefits: {
+			ru: [
+				"Снятие отложений ультразвуком",
+				"Очистка налета «Air Flow»",
+				"Полировка специальной пастой",
+				"Свежее дыхание и здоровье"
+			],
+			kk: [
+				"Ультрадыбыспен тіс тасын кетіру",
+				"«Air Flow» арқылы тіс қағын кетіру",
+				"Арнайы пастамен жылтырату",
+				"Таза тыныс және саулық"
+			]
+		},
+		explanation: {
+			ru: "Профессиональная чистка удаляет зубной камень и налёт, которые невозможно полностью убрать обычной щёткой. Это абсолютно безболезненно.",
+			kk: "Кәсіби тіс тазалау кәдімгі щеткамен толық кетпейтін тіс тасы мен тіс қағын жояды. Бұл мүлдем ауыртпалықсыз."
+		},
+		steps: {
+			ru: [
+				"Ультразвуковое снятие отложений",
+				"Снятие налета «Air Flow»",
+				"Полировка специальной пастой"
+			],
+			kk: [
+				"Ультрадыбыспен тіс тасын кетіру",
+				"«Air Flow»-мен тіс қағын кетіру",
+				"Арнайы пастамен жылтырату"
+			]
+		},
+		timeline: {
+			ru: "30–40 минут",
+			kk: "30–40 минут"
+		},
+		faq: [{
+			question: {
+				ru: "Сколько длится профессиональная чистка?",
+				kk: "Кәсіби тіс тазалау қанша уақыт алады?"
+			},
+			answer: {
+				ru: "Обычно процедура занимает 30-40 минут.",
+				kk: "Әдетте процедура 30-40 минутты алады."
+			}
+		}],
+		relatedIds: ["treatment", "braces"]
+	}
+];
+var serviceDetails = {
+	implants: {
+		heroAccent: text("", ""),
+		heroImage: implants_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Tooth",
+				title: text("Премиум-импланты", "Премиум импланттар"),
+				text: text("Система подбирается под клиническую ситуацию", "Жағдайға сай жүйе таңдалады")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Бережная хирургия", "Ұқыпты хирургия"),
+				text: text("Минимальная травматичность и контроль боли", "Жарақат аз, ауырсыну бақылауда болады")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Гарантия до 10 лет", "10 жылға дейін кепілдік"),
+				text: text("При соблюдении рекомендаций врача", "Дәрігер кеңесі сақталса")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Естественный вид", "Табиғи көрініс"),
+				text: text("Коронка выглядит как собственный зуб", "Қаптама өз тісіңіздей көрінеді")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"При отсутствии одного, нескольких или всех зубов",
+				"При неудобстве съемного протеза",
+				"При нарушении жевательной функции",
+				"Если важны эстетика и уверенность в улыбке"
+			],
+			kk: [
+				"Бір, бірнеше немесе барлық тіс жетіспесе",
+				"Алмалы протез ыңғайсыз болса",
+				"Шайнау қызметі бұзылса",
+				"Күлкі эстетикасы мен сенімділік маңызды болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Диагностика", "Диагностика"),
+				text: text("Осмотр, снимки и составление плана лечения.", "Тексеру, рентген түсірілімі және ем жоспарын құру.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Установка импланта", "Имплант орнату"),
+				text: text("Безопасная установка под местной анестезией.", "Жергілікті анестезиямен қауіпсіз орнату.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Остеоинтеграция", "Остеоинтеграция"),
+				text: text("Имплант приживается и формирует надежную основу.", "Имплант сүйекке бекіп, мықты негіз қалыптастырады.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Коронка", "Қаптама"),
+				text: text("Установка коронки, подобранной по форме и оттенку зубов.", "Тіс пішіні мен түсіне сай қаптама орнатылады.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "ShieldCheck",
+				title: text("Долговечность", "Ұзақ қызмет ету"),
+				text: text("Служит десятилетиями при правильном уходе.", "Дұрыс күтім жасағанда ұзақ жылдар қызмет етеді.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Комфорт", "Жайлылық"),
+				text: text("Ощущается как собственный зуб.", "Өз тісіңіздей сезіледі.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Сохранение соседних зубов", "Көрші тістер сақталады"),
+				text: text("Не требуется обтачивать здоровые зубы.", "Сау тістерді егеудің қажеті жоқ.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Прогнозируемый результат", "Болжамды нәтиже"),
+				text: text("План лечения строится на основе диагностики и снимков.", "Ем жоспары диагностика мен түсірілімдерге негізделеді.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Эстетика улыбки", "Күлкі эстетикасы"),
+				text: text("Возвращает уверенность в общении и улыбке.", "Күлкіге деген сенімділікті қайтарады.")
+			}
+		],
+		startingPrice: text("от 89 000 до 500 000 ₸", "89 000-нан 500 000 ₸ дейін"),
+		priceCaption: text("Консультация бесплатная, 3D-рентген оплачивается отдельно", "Кеңес алу тегін, 3D-рентген бөлек төленеді"),
+		beforeAfterCases: [{
+			title: text("Полное восстановление улыбки", "Күлкіні толық қалпына келтіру"),
+			beforeImage: implants_all_on_4_before_default,
+			afterImage: implants_all_on_4_after_default,
+			useSlider: true
+		}]
+	},
+	"bone-augmentation": {
+		heroAccent: text("для импланта", "имплантқа"),
+		heroImage: bone_augmentation_hero_default,
+		heroHighlights: [
+			{
+				iconName: "ShieldCheck",
+				title: text("Надежная опора", "Сенімді тірек"),
+				text: text("Подготовка к стабильной имплантации", "Имплантацияға берік негіз")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("3D-планирование", "3D жоспарлау"),
+				text: text("Оценка объема кости по снимку", "Сүйек көлемі сурет арқылы бағаланады")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Совместимые материалы", "Үйлесімді материалдар"),
+				text: text("Материалы подбираются индивидуально", "Материал жеке таңдалады")
+			},
+			{
+				iconName: "Clock",
+				title: text("Контроль восстановления", "Қалпына келуді бақылау"),
+				text: text("Врач сопровождает этап заживления", "Дәрігер жазылу кезеңін бақылайды")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"Если костной ткани недостаточно для импланта",
+				"После длительного отсутствия зуба",
+				"Перед синус-лифтингом или имплантацией",
+				"Когда нужен устойчивый долгосрочный результат"
+			],
+			kk: [
+				"Имплантқа сүйек тіні жеткіліксіз болса",
+				"Тіс ұзақ уақыт жоқ болғанда",
+				"Синус-лифтинг немесе имплантация алдында",
+				"Ұзақ мерзімді тұрақты нәтиже қажет болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Диагностика", "Диагностика"),
+				text: text("3D-снимок и расчет необходимого объема.", "3D сурет және қажет көлемді есептеу.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("План", "Жоспар"),
+				text: text("Врач выбирает материал и методику.", "Дәрігер материал мен әдісті таңдайды.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Пластика", "Пластика"),
+				text: text("Бережное восстановление объема кости.", "Сүйек көлемін ұқыпты қалпына келтіру.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Заживление", "Жазылу"),
+				text: text("Период восстановления перед следующим этапом.", "Келесі кезең алдындағы қалпына келу.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Tooth",
+				title: text("Готовит к имплантации", "Имплантацияға дайындайды"),
+				text: text("Создает основу для будущего зуба.", "Болашақ тіс үшін негіз жасайды.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Стабильность", "Тұрақтылық"),
+				text: text("Помогает импланту надежно держаться.", "Импланттың мықты бекінуіне көмектеседі.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Индивидуальный подход", "Жеке тәсіл"),
+				text: text("Объем и методика зависят от ситуации.", "Көлем мен әдіс жағдайға байланысты.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Планируемые сроки", "Жоспарлы мерзім"),
+				text: text("Пациент заранее понимает этапы.", "Пациент кезеңдерді алдын ала түсінеді.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Основа эстетики", "Эстетика негізі"),
+				text: text("Поддерживает форму десны и улыбки.", "Қызыл иек пен күлкі пішінін қолдайды.")
+			}
+		],
+		startingPrice: text("от 120 000 ₸", "120 000 ₸ бастап"),
+		priceCaption: text("Стоимость зависит от объема пластики", "Баға пластика көлеміне байланысты"),
+		beforeAfterCases: [{
+			title: text("Подготовка к имплантации", "Имплантацияға дайындық"),
+			beforeImage: bone_augmentation_before_default,
+			afterImage: bone_augmentation_after_default
+		}]
+	},
+	frenectomy: {
+		heroAccent: text("бережно", "ұқыпты"),
+		heroImage: frenectomy_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Clock",
+				title: text("Быстро", "Жылдам"),
+				text: text("Обычно процедура занимает несколько минут", "Әдетте бірнеше минутқа созылады")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Под анестезией", "Анестезиямен"),
+				text: text("Комфортно и без лишнего стресса", "Жайлы әрі артық стресссіз")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Для речи и прикуса", "Сөйлеу мен тістемге"),
+				text: text("Помогает убрать функциональное ограничение", "Қызметтік шектеуді азайтады")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Аккуратное заживление", "Ұқыпты жазылу"),
+				text: text("Врач дает понятные рекомендации", "Дәрігер нақты кеңес береді")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"Если уздечка ограничивает движение губы или языка",
+				"При ортодонтических показаниях",
+				"Если есть натяжение десны",
+				"Когда врач рекомендует подготовку к лечению"
+			],
+			kk: [
+				"Жүгенше ерін немесе тіл қозғалысын шектесе",
+				"Ортодонтиялық көрсетілім болса",
+				"Қызыл иек тартылуы байқалса",
+				"Дәрігер емге дайындық ұсынса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Осмотр", "Тексеру"),
+				text: text("Врач оценивает положение уздечки.", "Дәрігер жүгеншенің орналасуын бағалайды.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Анестезия", "Анестезия"),
+				text: text("Область процедуры обезболивается.", "Процедура аймағы жансыздандырылады.")
+			},
+			{
+				iconName: "Smiley",
+				title: text("Коррекция", "Түзету"),
+				text: text("Уздечка аккуратно корректируется.", "Жүгенше ұқыпты түзетіледі.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Контроль", "Бақылау"),
+				text: text("Пациент получает рекомендации по уходу.", "Пациент күтім бойынша кеңес алады.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Clock",
+				title: text("Короткий прием", "Қысқа қабылдау"),
+				text: text("Не требует долгого пребывания в клинике.", "Клиникада ұзақ болуды қажет етпейді.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Без боли", "Ауырсынусыз"),
+				text: text("Местная анестезия сохраняет комфорт.", "Жергілікті анестезия жайлылық береді.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Помогает функции", "Қызметті жақсартады"),
+				text: text("Может улучшить движение губы или языка.", "Ерін немесе тіл қозғалысын жақсарта алады.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Понятный уход", "Түсінікті күтім"),
+				text: text("Рекомендации легко соблюдать дома.", "Үйде орындауға жеңіл кеңестер.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Эстетика десны", "Қызыл иек эстетикасы"),
+				text: text("Снижает лишнее натяжение тканей.", "Тіндердің артық тартылуын азайтады.")
+			}
+		],
+		startingPrice: text("от 25 000 ₸", "25 000 ₸ бастап"),
+		priceCaption: text("Точная стоимость после осмотра", "Нақты баға тексеруден кейін"),
+		beforeAfterCases: [{
+			title: text("Комфорт движения губы", "Ерін қозғалысының жайлылығы"),
+			beforeImage: frenectomy_before_default,
+			afterImage: frenectomy_after_default
+		}]
+	},
+	"tooth-extraction": {
+		heroAccent: text("бережно", ""),
+		heroImage: tooth_extraction_hero_default,
+		heroHighlights: [
+			{
+				iconName: "FirstAidKit",
+				title: text("Без боли", "Ауырсынусыз"),
+				text: text("Удаление проводится под анестезией", "Жұлу анестезиямен өтеді")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Бережно", "Ұқыпты"),
+				text: text("Сохраняем окружающие ткани насколько возможно", "Қоршаған тіндерді барынша сақтаймыз")
+			},
+			{
+				iconName: "Clock",
+				title: text("Понятные сроки", "Түсінікті мерзім"),
+				text: text("Врач объясняет восстановление заранее", "Дәрігер жазылуды алдын ала түсіндіреді")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Послеоперационный уход", "Кейінгі күтім"),
+				text: text("Рекомендации для спокойного заживления", "Жайлы жазылуға арналған кеңес")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"Если зуб сильно разрушен и не подлежит лечению",
+				"При воспалении или боли",
+				"Если зуб мешает прикусу",
+				"Когда удаление нужно перед дальнейшим лечением"
+			],
+			kk: [
+				"Тіс қатты бұзылып, емдеуге келмесе",
+				"Қабыну немесе ауырсыну болса",
+				"Тіс тістемге кедергі келтірсе",
+				"Келесі ем алдында жұлу қажет болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Осмотр", "Тексеру"),
+				text: text("Врач оценивает зуб и снимок.", "Дәрігер тіс пен суретті бағалайды.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Анестезия", "Анестезия"),
+				text: text("Пациент не чувствует боли.", "Пациент ауырсынуды сезбейді.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Удаление", "Жұлу"),
+				text: text("Зуб удаляется максимально бережно.", "Тіс барынша ұқыпты жұлынады.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Рекомендации", "Кеңестер"),
+				text: text("Памятка по уходу и восстановлению.", "Күтім және жазылу бойынша нұсқаулық.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "FirstAidKit",
+				title: text("Комфорт", "Жайлылық"),
+				text: text("Анестезия снижает стресс процедуры.", "Анестезия процедура стрессін азайтады.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Контроль риска", "Қауіпті бақылау"),
+				text: text("Врач оценивает ситуацию до удаления.", "Дәрігер жағдайды алдын ала бағалайды.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Быстрое решение", "Жылдам шешім"),
+				text: text("Прием обычно не занимает много времени.", "Қабылдау әдетте көп уақыт алмайды.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Спокойное заживление", "Жайлы жазылу"),
+				text: text("Пациент знает, что делать после.", "Пациент кейін не істеуді біледі.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Путь к восстановлению", "Қалпына келу жолы"),
+				text: text("После заживления можно планировать замену зуба.", "Жазылған соң тісті қалпына келтіру жоспарланады.")
+			}
+		],
+		startingPrice: text("от 18 000 ₸", "18 000 ₸ бастап"),
+		priceCaption: text("Зависит от сложности удаления", "Баға жұлу күрделілігіне байланысты"),
+		beforeAfterCases: [{
+			title: text("Бережное удаление зуба", "Тісті ұқыпты жұлу"),
+			beforeImage: extraction_before_default,
+			afterImage: extraction_after_default,
+			useSlider: true
+		}]
+	},
+	"wisdom-tooth-removal": {
+		heroAccent: text("бережно", "ұқыпты"),
+		heroImage: wisdom_tooth_removal_hero_default,
+		heroHighlights: [
+			{
+				iconName: "CalendarCheck",
+				title: text("3D-оценка", "3D бағалау"),
+				text: text("Понимаем положение зуба до процедуры", "Тістің орналасуын алдын ала білеміз")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Анестезия", "Анестезия"),
+				text: text("Удаление проходит без боли", "Жұлу ауырсынусыз өтеді")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Сложные случаи", "Күрделі жағдайлар"),
+				text: text("Врач планирует доступ и восстановление", "Дәрігер қолжетімділік пен жазылуды жоспарлайды")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Профилактика осложнений", "Асқынудың алдын алу"),
+				text: text("Помогает убрать воспаление и давление", "Қабыну мен қысымды азайтуға көмектеседі")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"Если зуб мудрости растет неправильно",
+				"При боли, воспалении или отеке",
+				"Если зуб давит на соседние зубы",
+				"Когда ортодонт рекомендует удаление"
+			],
+			kk: [
+				"Ақыл тіс дұрыс шықпаса",
+				"Ауырсыну, қабыну немесе ісіну болса",
+				"Тіс көрші тістерге қысым түсірсе",
+				"Ортодонт жұлуға кеңес берсе"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Снимок", "Сурет"),
+				text: text("Определяем положение корней и зуба.", "Тіс пен түбір орналасуын анықтаймыз.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Обезболивание", "Жансыздандыру"),
+				text: text("Процедура проводится под анестезией.", "Процедура анестезиямен жүргізіледі.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Удаление", "Жұлу"),
+				text: text("Зуб удаляется по заранее выбранному плану.", "Тіс алдын ала жоспар бойынша жұлынады.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Восстановление", "Қалпына келу"),
+				text: text("При необходимости назначается контроль.", "Қажет болса бақылау тағайындалады.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "ShieldCheck",
+				title: text("Меньше неопределенности", "Белгісіздік азаяды"),
+				text: text("План строится по диагностике.", "Жоспар диагностикаға негізделеді.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Контроль боли", "Ауырсынуды бақылау"),
+				text: text("Анестезия помогает пройти прием спокойно.", "Анестезия қабылдауды жайлы етеді.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Снижает воспаление", "Қабынуды азайтады"),
+				text: text("Убирает источник хронического дискомфорта.", "Созылмалы жайсыздық көзін жояды.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Защищает ряд", "Тіс қатарын қорғайды"),
+				text: text("Может предотвратить смещение соседних зубов.", "Көрші тістердің жылжуын болдырмауы мүмкін.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Понятный уход", "Түсінікті күтім"),
+				text: text("Пациент получает план восстановления.", "Пациент қалпына келу жоспарын алады.")
+			}
+		],
+		startingPrice: text("от 35 000 ₸", "35 000 ₸ бастап"),
+		priceCaption: text("Стоимость зависит от положения зуба", "Баға тістің орналасуына байланысты"),
+		beforeAfterCases: [{
+			title: text("Удаление источника дискомфорта", "Жайсыздық себебін жою"),
+			beforeImage: wisdom_tooth_removal_before_default,
+			afterImage: wisdom_tooth_removal_after_default
+		}]
+	},
+	crowns: {
+		heroAccent: text("", ""),
+		heroImage: crowns_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Sparkle",
+				title: text("Естественная эстетика", "Табиғи эстетика"),
+				text: text("Форма и оттенок подбираются индивидуально", "Пішіні мен түсі жеке таңдалады")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Защита зуба", "Тісті қорғау"),
+				text: text("Коронка укрепляет восстановленный зуб", "Қаптама қалпына келтірілген тісті нығайтады")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Разные материалы", "Әртүрлі материалдар"),
+				text: text("Металлокерамика, цирконий, E-max", "Металлокерамика, цирконий, E-max")
+			},
+			{
+				iconName: "Clock",
+				title: text("Понятный процесс", "Түсінікті процесс"),
+				text: text("От диагностики до фиксации — поэтапно и понятно", "Диагностикадан бекітуге дейін кезең-кезеңімен")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"Если зуб разрушен, но его можно сохранить",
+				"После лечения корневых каналов",
+				"При сколах, трещинах или изменении цвета",
+				"Когда нужно восстановить форму и эстетику зуба"
+			],
+			kk: [
+				"Тіс зақымдалған, бірақ сақтауға болатын жағдайда",
+				"Түбір өзектерін емдегеннен кейін",
+				"Сынық, жарық немесе түс өзгерісі болғанда",
+				"Тістің пішіні мен эстетикасын қалпына келтіру қажет болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Подготовка", "Дайындау"),
+				text: text("Врач оценивает состояние зуба и подбирает материал.", "Дәрігер тісті тексеріп, материалды таңдайды.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Снятие слепков", "Қалып алу"),
+				text: text("Параметры передаются в лабораторию.", "Өлшемдер зертханаға жіберіледі.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Изготовление", "Жасау"),
+				text: text("Коронка создается по индивидуальным параметрам.", "Қаптама жеке пішін бойынша жасалады.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Фиксация", "Бекіту"),
+				text: text("Готовая коронка фиксируется на зубе.", "Дайын қаптама тіске бекітіледі.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Sparkle",
+				title: text("Эстетичный вид", "Әдемі көрініс"),
+				text: text("Возвращает естественную форму зуба.", "Тістің табиғи пішінін қайтарады.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Прочность", "Беріктік"),
+				text: text("Помогает выдерживать жевательную нагрузку.", "Шайнау жүктемесін көтеруге көмектеседі.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Сохранение зуба", "Тісті сақтау"),
+				text: text("Позволяет восстановить сильно поврежденный зуб.", "Қатты зақымдалған тісті қалпына келтіруге мүмкіндік береді.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Индивидуальный подбор", "Жеке таңдау"),
+				text: text("Материал выбирается под задачу и бюджет.", "Материал мақсат пен бюджетке сай таңдалады.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Долговечность", "Ұзақ қызмет ету"),
+				text: text("При правильном уходе служит много лет.", "Дұрыс күтіммен ұзақ жылдар қызмет етеді.")
+			}
+		],
+		startingPrice: text("от 45 000 ₸", "45 000 ₸ бастап"),
+		priceCaption: text("Цена зависит от материала коронки", "Баға қаптама материалына байланысты"),
+		beforeAfterCases: [{
+			title: text("Восстановление формы зуба", "Тіс пішінін қалпына келтіру"),
+			beforeImage: crowns_new_before_default,
+			afterImage: crowns_new_after_default,
+			useSlider: true
+		}]
+	},
+	dentures: {
+		heroAccent: text("для улыбки", "күлкі үшін"),
+		heroImage: dentures_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Smiley",
+				title: text("Комфортная улыбка", "Жайлы күлкі"),
+				text: text("Возвращает эстетику и уверенность", "Эстетика мен сенімділікті қайтарады")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Разные конструкции", "Әртүрлі құрылымдар"),
+				text: text("Подбираем по ситуации и привычкам", "Жағдай мен әдетке сай таңдаймыз")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Жевательная функция", "Шайнау қызметі"),
+				text: text("Помогает вернуться к привычной еде", "Үйреншікті тағамға оралуға көмектеседі")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Коррекция посадки", "Отыруын түзету"),
+				text: text("Доводим протез до удобной посадки", "Протезді ыңғайлы отырғызамыз")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"При отсутствии нескольких зубов",
+				"Если нужен съемный или частичный протез",
+				"Когда важно восстановить жевание",
+				"Если нужна доступная альтернатива имплантации"
+			],
+			kk: [
+				"Бірнеше тіс жоқ болса",
+				"Алмалы немесе жартылай протез қажет болса",
+				"Шайнауды қалпына келтіру маңызды болса",
+				"Имплантацияға қолжетімді балама керек болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Осмотр", "Тексеру"),
+				text: text("Определяем тип протеза и опоры.", "Протез түрі мен тірегі анықталады.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Слепки", "Қалып алу"),
+				text: text("Снимаем точные параметры челюсти.", "Жақтың нақты параметрлері алынады.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Примерка", "Өлшеп көру"),
+				text: text("Проверяем форму, цвет и посадку.", "Пішін, түс және отыруы тексеріледі.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Коррекция", "Түзету"),
+				text: text("Настраиваем протез для удобства.", "Протез ыңғайға қарай түзетіледі.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Smiley",
+				title: text("Улыбка", "Күлкі"),
+				text: text("Помогает свободнее улыбаться.", "Еркін күлуге көмектеседі.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Жевание", "Шайнау"),
+				text: text("Возвращает повседневный комфорт.", "Күнделікті жайлылықты қайтарады.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Выбор вариантов", "Нұсқа таңдау"),
+				text: text("Есть решения под разные задачи.", "Әртүрлі мақсатқа арналған шешімдер бар.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Подгонка", "Дәлдеу"),
+				text: text("Посадку можно корректировать.", "Отыруын түзетуге болады.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Пошагово", "Кезеңмен"),
+				text: text("Пациент заранее понимает процесс.", "Пациент процесті алдын ала түсінеді.")
+			}
+		],
+		startingPrice: text("от 50 000 ₸", "50 000 ₸ бастап"),
+		priceCaption: text("Цена зависит от вида протеза", "Баға протез түріне байланысты"),
+		beforeAfterCases: [{
+			title: text("Восстановление улыбки протезом", "Протезбен күлкіні қалпына келтіру"),
+			beforeImage: dentures_before_default,
+			afterImage: dentures_after_default
+		}]
+	},
+	braces: {
+		heroAccent: text("для улыбки", ""),
+		heroImage: braces_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Smiley",
+				title: text("Ровная улыбка", "Тегіс күлкі"),
+				text: text("Коррекция прикуса и положения зубов", "Тістем мен тіс орналасуын түзету")
+			},
+			{
+				iconName: "CalendarCheck",
+				title: text("План ортодонта", "Ортодонт жоспары"),
+				text: text("Лечение строится по диагностике", "Ем диагностика бойынша құрылады")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Системный контроль", "Жүйелі бақылау"),
+				text: text("Регулярные коррекции по графику", "Кесте бойынша тұрақты түзету")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Эстетика и здоровье", "Эстетика және саулық"),
+				text: text("Улучшает улыбку и гигиену", "Күлкі мен гигиенаны жақсартады")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"При скученности или промежутках между зубами",
+				"Если прикус требует коррекции",
+				"Для подростков и взрослых",
+				"Когда важны эстетика и долгосрочный результат"
+			],
+			kk: [
+				"Тістер тығыз немесе арасы ашық болса",
+				"Тістемді түзету қажет болса",
+				"Жасөспірімдер мен ересектерге",
+				"Эстетика және ұзақ нәтиже маңызды болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Консультация", "Кеңес"),
+				text: text("Ортодонт оценивает прикус и цели.", "Ортодонт тістем мен мақсатты бағалайды.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Диагностика", "Диагностика"),
+				text: text("Снимки, анализ и план лечения.", "Суреттер, талдау және ем жоспары.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Установка", "Орнату"),
+				text: text("Брекет-система фиксируется на зубах.", "Брекет жүйесі тістерге бекітіледі.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Коррекции", "Түзетулер"),
+				text: text("Регулярные визиты двигают зубы по плану.", "Тұрақты келу тістерді жоспармен жылжытады.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Smiley",
+				title: text("Эстетика", "Эстетика"),
+				text: text("Помогает сформировать ровную улыбку.", "Тегіс күлкі қалыптастыруға көмектеседі.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Здоровый прикус", "Сау тістем"),
+				text: text("Улучшает смыкание зубов.", "Тістердің жабылуын жақсартады.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Контроль врача", "Дәрігер бақылауы"),
+				text: text("Движение зубов идет под наблюдением.", "Тістер қозғалысы бақылаумен жүреді.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Выбор систем", "Жүйе таңдауы"),
+				text: text("Есть разные варианты брекетов.", "Брекеттің әртүрлі нұсқалары бар.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Рассрочка", "Бөліп төлеу"),
+				text: text("Можно обсудить удобный формат оплаты.", "Ыңғайлы төлем форматын талқылауға болады.")
+			}
+		],
+		startingPrice: text("от 70 000 ₸", "70 000 ₸ бастап"),
+		priceCaption: text("Доступна рассрочка, цена зависит от системы", "Бөліп төлеу бар, баға жүйеге байланысты"),
+		beforeAfterCases: [{
+			title: text("Выравнивание зубного ряда", "Тіс қатарын тегістеу"),
+			beforeImage: braces_before_default,
+			afterImage: braces_after_default,
+			useSlider: true
+		}]
+	},
+	treatment: {
+		heroAccent: text("Без боли и лишнего стресса", ""),
+		heroImage: treatment_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Heartbeat",
+				title: text("Сохранение зуба", "Тісті сақтау"),
+				text: text("Лечим кариес и повреждения зуба", "Тіс жегісі мен зақымдарды емдейміз")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Комфорт", "Жайлылық"),
+				text: text("Анестезия применяется при необходимости", "Қажет болған жағдайда анестезия жасалады")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Качественные материалы", "Сапалы материалдар"),
+				text: text("Пломба подбирается индивидуально", "Пломба жеке таңдалады")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Естественный оттенок", "Табиғи түс"),
+				text: text("Восстановление под цвет зуба", "Тіс түсіне сай қалпына келтіру")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"При кариесе и чувствительности зубов",
+				"Если пломба требует замены",
+				"При сколах и небольших дефектах",
+				"Когда важно сохранить собственный зуб"
+			],
+			kk: [
+				"Тіс жегісі мен сезімталдық болғанда",
+				"Пломбаны ауыстыру қажет болса",
+				"Сынық немесе шағын ақаулар болғанда",
+				"Өз тісіңізді сақтау маңызды болса"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Диагностика", "Диагностика"),
+				text: text("Осмотр и снимок при необходимости.", "Қажет болған жағдайда тексеру және рентген түсірілімі жасалады.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Комфорт", "Жайлылық"),
+				text: text("Проводим обезболивание по показаниям.", "Көрсетілім бойынша жансыздандыру жүргізіледі.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Лечение", "Емдеу"),
+				text: text("Удаляем пораженные ткани и сохраняем здоровые.", "Зақымдалған тіндер алынып, сау бөлігі сақталады.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Реставрация", "Реставрация"),
+				text: text("Восстанавливаем форму и оттенок зуба.", "Тістің пішіні мен түсі қалпына келтіріледі.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Heartbeat",
+				title: text("Сохранение зуба", "Тісті сақтау"),
+				text: text("Помогает остановить разрушение.", "Тістің бұзылуын тоқтатуға көмектеседі.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Эстетичная реставрация", "Эстетикалық реставрация"),
+				text: text("Пломба подбирается под оттенок зуба.", "Пломба тіс түсіне сай таңдалады.")
+			},
+			{
+				iconName: "FirstAidKit",
+				title: text("Без стресса", "Стресссіз ем"),
+				text: text("Врач контролирует комфорт пациента на всех этапах.", "Дәрігер пациент жайлылығын барлық кезеңде бақылайды.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Профилактика осложнений", "Асқынудың алдын алу"),
+				text: text("Раннее лечение помогает избежать сложных процедур.", "Ерте ем күрделі процедуралардың алдын алады.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Быстрое лечение", "Жылдам ем"),
+				text: text("Многие случаи решаются за один прием.", "Көп жағдай бір қабылдауда шешіледі.")
+			}
+		],
+		startingPrice: text("от 20 000 ₸", "20 000 ₸ бастап"),
+		priceCaption: text("Цена зависит от сложности лечения", "Баға емдеу күрделілігіне байланысты"),
+		beforeAfterCases: [{
+			title: text("Реставрация жевательного зуба", "Тісті қалпына келтіру"),
+			beforeImage: treatment_before_default,
+			afterImage: treatment_after_default,
+			useSlider: true
+		}]
+	},
+	cleaning: {
+		heroAccent: text("и свежесть", "және сергектік"),
+		heroImage: cleaning_hero_default,
+		heroHighlights: [
+			{
+				iconName: "Sparkle",
+				title: text("Свежая улыбка", "Таза күлкі"),
+				text: text("Удаление налета и камня", "Қақ пен тасты кетіру")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Профилактика", "Алдын алу"),
+				text: text("Помогает защитить зубы и десны", "Тіс пен қызыл иекті қорғауға көмектеседі")
+			},
+			{
+				iconName: "Clock",
+				title: text("30-40 минут", "30-40 минут"),
+				text: text("Обычно процедура проходит за один прием", "Әдетте бір қабылдауда өтеді")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Безболезненно", "Ауырсынусыз"),
+				text: text("Комфортная профессиональная гигиена", "Жайлы кәсіби гигиена")
+			}
+		],
+		suitableFor: {
+			ru: [
+				"Если есть налет или зубной камень",
+				"При кровоточивости десен",
+				"Перед лечением, брекетами или протезированием",
+				"Для регулярной профилактики каждые 6 месяцев"
+			],
+			kk: [
+				"Қақ немесе тіс тасы болса",
+				"Қызыл иек қанаса",
+				"Ем, брекет немесе протездеу алдында",
+				"Әр 6 ай сайын профилактика үшін"
+			]
+		},
+		processDetails: [
+			{
+				iconName: "CalendarCheck",
+				title: text("Осмотр", "Тексеру"),
+				text: text("Оцениваем состояние зубов и десен.", "Тіс пен қызыл иек жағдайы бағаланады.")
+			},
+			{
+				iconName: "Sparkle",
+				title: text("Ультразвук", "Ультрадыбыс"),
+				text: text("Снятие зубных отложений ультразвуковым аппаратом.", "Ультрадыбыстық аппаратпен тіс қалдықтарын алу.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Air Flow", "Air Flow"),
+				text: text("Снятие зубного налета аппаратом «Air Flow».", "«Air Flow» аппаратымен тіс қағын кетіру.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Полировка", "Жылтырату"),
+				text: text("Полировка зубов специальной пастой.", "Тістерді арнайы пастамен жылтырату.")
+			}
+		],
+		advantages: [
+			{
+				iconName: "Sparkle",
+				title: text("Чистота", "Тазалық"),
+				text: text("Улыбка выглядит свежее.", "Күлкі сергек көрінеді.")
+			},
+			{
+				iconName: "ShieldCheck",
+				title: text("Профилактика кариеса", "Тіс жегісінің алдын алу"),
+				text: text("Удаление налета снижает риски.", "Қақты кетіру қауіптерді азайтады.")
+			},
+			{
+				iconName: "Heartbeat",
+				title: text("Здоровье десен", "Қызыл иек саулығы"),
+				text: text("Помогает контролировать воспаление.", "Қабынуды бақылауға көмектеседі.")
+			},
+			{
+				iconName: "Clock",
+				title: text("Быстрый прием", "Жылдам қабылдау"),
+				text: text("Подходит для регулярного ухода.", "Тұрақты күтімге ыңғайлы.")
+			},
+			{
+				iconName: "Tooth",
+				title: text("Перед лечением", "Ем алдында"),
+				text: text("Создает чистую основу для процедур.", "Процедураға таза негіз жасайды.")
+			}
+		],
+		startingPrice: text("30 000 ₸", "30 000 ₸"),
+		priceCaption: text("Комплекс из 3 этапов", "3 кезеңдік кешен"),
+		beforeAfterCases: [{
+			title: text("Профессиональная чистка улыбки", "Күлкіні кәсіби тазалау"),
+			beforeImage: cleaning_before_default,
+			afterImage: cleaning_after_default,
+			useSlider: true
+		}]
+	}
+};
+var services = baseServices.map((service) => {
+	const details = serviceDetails[service.id];
+	if (!details) throw new Error(`Missing service details for ${service.id}`);
+	return {
+		...service,
+		...details
+	};
+});
+//#endregion
+//#region src/pages/Home.tsx
+var AboutClinic = lazy(() => import("./assets/AboutClinic-Bn-2ZS3f.js").then((module) => ({ default: module.AboutClinic })));
+var DoctorsSection = lazy(() => import("./assets/DoctorsSection-cAgu1oIS.js").then((module) => ({ default: module.DoctorsSection })));
+var ReviewsSection$1 = lazy(() => import("./assets/ReviewsSection-v0enkEsk.js").then((module) => ({ default: module.ReviewsSection })));
+var LocationSection = lazy(() => import("./assets/LocationSection-CpFoPnUN.js").then((module) => ({ default: module.LocationSection })));
+function Home() {
+	const { language } = useLanguage();
+	useSeo({
+		title: homeSeo.title[language],
+		description: homeSeo.description[language],
+		keywords: homeSeo.keywords,
+		path: "/",
+		jsonLd: [buildClinicJsonLd(getSiteOrigin(), services.map((service) => service.title.ru))]
+	});
+	return /* @__PURE__ */ jsxs("main", {
+		className: "flex-1 w-full overflow-hidden bg-[#F5F7F8]",
+		children: [
+			/* @__PURE__ */ jsx(Hero, {}),
+			/* @__PURE__ */ jsx(Reveal, { children: /* @__PURE__ */ jsx(ServicesPreview, {}) }),
+			/* @__PURE__ */ jsx(LazyPublicSection, { children: /* @__PURE__ */ jsx(AboutClinic, {}) }),
+			/* @__PURE__ */ jsx(LazyPublicSection, { children: /* @__PURE__ */ jsx(DoctorsSection, {}) }),
+			/* @__PURE__ */ jsx(LazyPublicSection, { children: /* @__PURE__ */ jsx(ReviewsSection$1, {}) }),
+			/* @__PURE__ */ jsx(LazyPublicSection, { children: /* @__PURE__ */ jsx(LocationSection, {}) })
+		]
+	});
+}
+function LazyPublicSection({ children }) {
+	return /* @__PURE__ */ jsx(Suspense, {
+		fallback: null,
+		children: /* @__PURE__ */ jsx(Reveal, { children })
+	});
+}
+//#endregion
+//#region src/assets/doctors/hero-clinic-room.png
+var hero_clinic_room_default = "/assets/hero-clinic-room-CSmWrkHT.png";
+//#endregion
+//#region src/pages/Doctors.tsx
+var doctorPageCopy = {
+	ru: {
+		title: "Наши специалисты",
+		eyebrow: "Врачи IMPLANTIUM",
+		breadcrumbHome: "Главная",
+		breadcrumbCurrent: "Врачи",
+		intro: "На этой странице представлены специалисты клиники, их опыт, специализация и оказываемые услуги.",
+		specialistsLabel: "специалистов",
+		experienceLabel: "клинический опыт",
+		directionsLabel: "направлений лечения",
+		appointmentLabel: "прием по записи",
+		appointmentValue: "по записи",
+		featuredKicker: "Ведущий специалист",
+		featuredTitle: "Специалист крупным планом",
+		competenceTitle: "Связанные направления",
+		allDoctorsTitle: "Команда врачей",
+		allDoctorsText: "В клинике IMPLANTIUM работают опытные специалисты по всем основным направлениям. В этом разделе указаны их квалификация, стаж и ключевые услуги.",
+		chooseDoctor: "Записаться к специалисту",
+		trustTitle: "Почему нам доверяют",
+		reviewsTitle: "Отзывы о наших врачах",
+		reviewsLink: "Смотреть все отзывы",
+		ctaTitle: "Запишитесь на консультацию к любому специалисту",
+		ctaText: "Мы подберем удобное время и предложим оптимальный план лечения после осмотра.",
+		phoneCaption: "Ежедневно по графику клиники",
+		photoSoon: "Фото скоро",
+		fallbackExperience: "стаж уточняется",
+		years: "лет",
+		trustCards: [
+			{
+				title: "Опытные специалисты",
+				text: "Стаж указан в профиле каждого врача.",
+				icon: UsersThree
+			},
+			{
+				title: "Командный подход",
+				text: "Врачи разных направлений помогают подобрать маршрут лечения.",
+				icon: Heartbeat
+			},
+			{
+				title: "Понятные рекомендации",
+				text: "Пациент получает объяснение этапов до начала процедур.",
+				icon: CheckCircle
+			},
+			{
+				title: "Современная клиника",
+				text: "Диагностика и прием проходят в аккуратной клинической среде.",
+				icon: ShieldCheck
+			}
+		]
+	},
+	kk: {
+		title: "Біздің мамандар",
+		eyebrow: "IMPLANTIUM дәрігерлері",
+		breadcrumbHome: "Басты бет",
+		breadcrumbCurrent: "Дәрігерлер",
+		intro: "Бұл бетте клиника мамандары, олардың тәжірибесі, бағыты және көрсететін қызметтері берілген.",
+		specialistsLabel: "маман",
+		experienceLabel: "клиникалық тәжірибе",
+		directionsLabel: "емдеу бағыты",
+		appointmentLabel: "қабылдау жазылу арқылы",
+		appointmentValue: "жазылу арқылы",
+		featuredKicker: "Жетекші маман",
+		featuredTitle: "Маман туралы қысқаша",
+		competenceTitle: "Байланысты бағыттар",
+		allDoctorsTitle: "Дәрігерлер командасы",
+		allDoctorsText: "IMPLANTIUM клиникасында әр бағыт бойынша тәжірибелі мамандар жұмыс істейді. Бұл бөлімде дәрігерлердің кәсіби бағыты, тәжірибесі және көрсететін негізгі қызметтері көрсетілген",
+		chooseDoctor: "Маманға жазылу",
+		trustTitle: "Неліктен бізге сенеді",
+		reviewsTitle: "Дәрігерлер туралы пікірлер",
+		reviewsLink: "Барлық пікірлерді көру",
+		ctaTitle: "Кез келген маманға консультацияға жазылыңыз",
+		ctaText: "Біз ыңғайлы уақытты таңдап, тексеруден кейін оңтайлы ем жоспарын ұсынамыз.",
+		phoneCaption: "Клиника кестесі бойынша күн сайын",
+		photoSoon: "Фото кейін қосылады",
+		fallbackExperience: "тәжірибе нақтыланады",
+		years: "жыл",
+		trustCards: [
+			{
+				title: "Тәжірибелі мамандар",
+				text: "Әр дәрігердің тәжірибесі профилінде көрсетілген.",
+				icon: UsersThree
+			},
+			{
+				title: "Командалық тәсіл",
+				text: "Әртүрлі бағыттағы дәрігерлер ем жолын таңдауға көмектеседі.",
+				icon: Heartbeat
+			},
+			{
+				title: "Түсінікті ұсыныстар",
+				text: "Пациент процедураларға дейін кезеңдерді түсінеді.",
+				icon: CheckCircle
+			},
+			{
+				title: "Заманауи клиника",
+				text: "Диагностика мен қабылдау ұқыпты клиникалық ортада өтеді.",
+				icon: ShieldCheck
+			}
+		]
+	}
+};
+var serviceMap = new Map(services.map((service) => [service.id, service]));
+var ReviewsSection = lazy(() => import("./assets/ReviewsSection-v0enkEsk.js").then((module) => ({ default: module.ReviewsSection })));
+function Doctors() {
+	const { language } = useLanguage();
+	const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
+	const copy = doctorPageCopy[language];
+	const featuredDoctor = doctors[0];
+	useSeo({
+		title: doctorsSeo.title[language],
+		description: doctorsSeo.description[language],
+		keywords: doctorsSeo.keywords,
+		path: "/doctors",
+		jsonLd: [buildClinicJsonLd(getSiteOrigin(), services.map((service) => service.title.ru)), buildBreadcrumbJsonLd(getSiteOrigin(), [{
+			name: language === "ru" ? "Главная" : "Басты бет",
+			path: "/"
+		}, {
+			name: copy.title,
+			path: "/doctors"
+		}])]
+	});
+	return /* @__PURE__ */ jsxs("main", {
+		className: "flex-1 overflow-hidden bg-[#F4F8FB] text-[#17243B]",
+		children: [
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden border-b border-[#D8E2EA] px-4 pb-10 pt-24 md:px-8 md:pb-14 md:pt-32",
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "absolute inset-0 -z-10",
+					children: [
+						/* @__PURE__ */ jsx("img", {
+							src: hero_clinic_room_default,
+							alt: "",
+							"aria-hidden": "true",
+							className: "size-full object-cover object-[62%_center]",
+							loading: "eager",
+							fetchPriority: "high",
+							decoding: "async"
+						}),
+						/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-[linear-gradient(90deg,#F5F9FC_0%,#F5F9FC_34%,rgba(245,249,252,0.9)_50%,rgba(245,249,252,0.42)_74%,rgba(245,249,252,0.18)_100%)]" }),
+						/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.22)_48%,#F4F8FB_100%)]" })
+					]
+				}), /* @__PURE__ */ jsx("div", {
+					className: "mx-auto max-w-[1360px]",
+					children: /* @__PURE__ */ jsxs(Reveal, { children: [
+						/* @__PURE__ */ jsxs("nav", {
+							className: "mb-7 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#66788D]",
+							children: [
+								/* @__PURE__ */ jsx(Link, {
+									to: "/",
+									className: "transition-colors hover:text-primary",
+									children: copy.breadcrumbHome
+								}),
+								/* @__PURE__ */ jsx("span", { children: "/" }),
+								/* @__PURE__ */ jsx("span", {
+									className: "text-[#17243B]",
+									children: copy.breadcrumbCurrent
+								})
+							]
+						}),
+						/* @__PURE__ */ jsx(TextReveal, { children: /* @__PURE__ */ jsx("h1", {
+							className: "max-w-2xl text-4xl font-bold leading-[1.04] tracking-tight text-[#15233A] sm:text-5xl md:text-6xl",
+							children: copy.title
+						}) }),
+						/* @__PURE__ */ jsx("p", {
+							className: "mt-6 max-w-2xl text-base leading-8 text-[#52657B] md:text-lg",
+							children: copy.intro
+						})
+					] })
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden px-4 py-10 md:px-8 md:py-14",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "doctors-featured" }), /* @__PURE__ */ jsx(Reveal, {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: /* @__PURE__ */ jsx(AnimatePresence, {
+						mode: "wait",
+						initial: false,
+						children: doctorsLoading ? /* @__PURE__ */ jsx(MotionListItem, {
+							layout: false,
+							children: /* @__PURE__ */ jsx(FeaturedDoctorSkeleton, {})
+						}, "featured-doctor-loading") : featuredDoctor ? /* @__PURE__ */ jsx(MotionListItem, {
+							layout: false,
+							children: /* @__PURE__ */ jsx(FeaturedDoctor, {
+								doctor: featuredDoctor,
+								language,
+								copy
+							})
+						}, featuredDoctor.id) : null
+					})
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden px-4 pb-10 md:px-8 md:pb-14",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "doctors-list" }), /* @__PURE__ */ jsxs("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: [/* @__PURE__ */ jsx(Reveal, {
+						className: "mb-7 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between",
+						children: /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+							className: "text-3xl font-bold tracking-tight text-[#15233A] md:text-4xl",
+							children: copy.allDoctorsTitle
+						}), /* @__PURE__ */ jsx("p", {
+							className: "mt-3 max-w-3xl text-sm leading-7 text-[#52657B] md:text-base",
+							children: copy.allDoctorsText
+						})] })
+					}), /* @__PURE__ */ jsx("div", {
+						className: "grid gap-4 sm:grid-cols-2 xl:grid-cols-4",
+						children: /* @__PURE__ */ jsx(AnimatePresence, {
+							initial: false,
+							children: doctorsLoading ? Array.from({ length: 8 }).map((_, index) => /* @__PURE__ */ jsx(MotionListItem, {
+								index,
+								children: /* @__PURE__ */ jsx(DoctorsGridCardSkeleton, {})
+							}, `doctor-grid-skeleton-${index}`)) : doctors.map((doctor, index) => /* @__PURE__ */ jsx(MotionListItem, {
+								index,
+								interactive: true,
+								children: /* @__PURE__ */ jsx(DoctorCard, {
+									doctor,
+									language,
+									copy
+								})
+							}, doctor.id))
+						})
+					})]
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 pb-16 pt-10 md:px-8 md:pb-24 md:pt-16",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "doctors-trust" }), /* @__PURE__ */ jsxs("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: [/* @__PURE__ */ jsxs(Reveal, {
+						className: "mb-10 max-w-2xl",
+						children: [/* @__PURE__ */ jsx("h2", {
+							className: "text-3xl font-bold tracking-tight text-[#15233A] md:text-4xl",
+							children: copy.trustTitle
+						}), /* @__PURE__ */ jsx("div", { className: "mt-4 h-1 w-16 rounded-full bg-primary/20" })]
+					}), /* @__PURE__ */ jsx(Stagger, {
+						className: "grid gap-5 md:grid-cols-2 xl:grid-cols-4",
+						children: copy.trustCards.map((card) => /* @__PURE__ */ jsx(StaggerItem, { children: /* @__PURE__ */ jsx(TrustCard, { ...card }) }, card.title))
+					})]
+				})]
+			}),
+			/* @__PURE__ */ jsx(Suspense, {
+				fallback: null,
+				children: /* @__PURE__ */ jsx(ReviewsSection, {
+					title: copy.reviewsTitle,
+					variant: "doctors"
+				})
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden px-4 pb-14 md:px-8 md:pb-20",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "doctors-cta" }), /* @__PURE__ */ jsx("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: /* @__PURE__ */ jsxs(Reveal, {
+						className: "grid min-w-0 gap-6 overflow-hidden rounded-[1.7rem] border border-[#D8E2EA] bg-white p-5 shadow-[0_24px_80px_rgba(39,64,95,0.07)] md:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center",
+						children: [/* @__PURE__ */ jsxs("div", {
+							className: "flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center",
+							children: [/* @__PURE__ */ jsx("span", {
+								className: "flex size-16 shrink-0 items-center justify-center rounded-full border border-[#D8E2EA] bg-[#F4F8FB] text-primary md:size-20",
+								children: /* @__PURE__ */ jsx(Tooth, {
+									weight: "duotone",
+									className: "size-8"
+								})
+							}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+								className: "text-2xl font-bold tracking-tight text-[#15233A] md:text-3xl",
+								children: copy.ctaTitle
+							}), /* @__PURE__ */ jsx("p", {
+								className: "mt-2 max-w-2xl text-sm leading-7 text-[#52657B] md:text-base",
+								children: copy.ctaText
+							})] })]
+						}), /* @__PURE__ */ jsxs("div", {
+							className: "grid min-w-0 gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center",
+							children: [hasContactValue(clinicContact.phoneHref) && /* @__PURE__ */ jsxs("a", {
+								href: clinicContact.phoneHref,
+								className: "flex min-h-14 min-w-0 items-center gap-3 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-4 text-[#15233A] transition-all hover:-translate-y-0.5 hover:border-[#C3D2DF] active:translate-y-[1px]",
+								children: [/* @__PURE__ */ jsx("span", {
+									className: "flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm",
+									children: /* @__PURE__ */ jsx(Phone, {
+										weight: "fill",
+										className: "size-5"
+									})
+								}), /* @__PURE__ */ jsxs("span", {
+									className: "flex flex-col gap-0.5 min-w-0",
+									children: [clinicContact.phoneDisplay?.split(",").map((phone, i) => /* @__PURE__ */ jsx("span", {
+										className: "block truncate text-[13px] font-bold leading-tight",
+										children: phone.trim()
+									}, i)), /* @__PURE__ */ jsx("span", {
+										className: "block truncate text-[11px] font-medium text-[#6B7C90]",
+										children: copy.phoneCaption
+									})]
+								})]
+							}), /* @__PURE__ */ jsx(BookingModal, { children: /* @__PURE__ */ jsxs(Button, {
+								className: "group h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(166,58,45,0.18)] transition-all hover:-translate-y-0.5 hover:bg-[#8F2F25] active:translate-y-[1px] sm:w-auto",
+								children: [copy.chooseDoctor, /* @__PURE__ */ jsx(ArrowRight, {
+									weight: "bold",
+									className: "size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+								})]
+							}) })]
+						})]
+					})
+				})]
+			})
+		]
+	});
+}
+function FeaturedDoctor({ doctor, language, copy }) {
+	const experience = getExperienceText(doctor, language, copy);
+	const serviceTitles = getServiceTitles(doctor, language);
+	return /* @__PURE__ */ jsx("article", {
+		className: "overflow-hidden rounded-[2.5rem] border border-[#D8E2EA] bg-white shadow-[0_42px_120px_rgba(39,64,95,0.12)]",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "grid gap-0 lg:grid-cols-[0.45fr_0.55fr]",
+			children: [/* @__PURE__ */ jsxs("div", {
+				className: "relative min-h-[26rem] overflow-hidden bg-[#EFF5F9] sm:min-h-[32rem] lg:min-h-[40rem]",
+				children: [
+					/* @__PURE__ */ jsx(DoctorPhoto, {
+						doctor,
+						language,
+						className: "absolute inset-0 object-cover bg-[linear-gradient(145deg,#F9FCFE,#E8F0F6)] text-[#27405F]",
+						style: { objectPosition: "center 15%" },
+						initialsClassName: "size-28 border-[#D8E2EA] text-3xl",
+						labelClassName: "text-[#6B7C90]"
+					}),
+					/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-gradient-to-t from-[#15233A]/10 to-transparent" }),
+					/* @__PURE__ */ jsx("span", {
+						className: "absolute left-7 top-7 rounded-full border border-white/80 bg-white/95 px-6 py-3 text-[13px] font-bold text-[#27405F] shadow-sm backdrop-blur-sm",
+						children: copy.featuredKicker
+					})
+				]
+			}), /* @__PURE__ */ jsxs("div", {
+				className: "flex min-w-0 flex-col justify-center gap-8 p-7 md:p-12 lg:p-16",
+				children: [/* @__PURE__ */ jsxs("div", { children: [
+					/* @__PURE__ */ jsx("h2", {
+						className: "max-w-2xl text-3xl font-bold leading-tight tracking-tight text-[#15233A] md:text-4xl lg:text-[2.75rem]",
+						children: doctor.name[language]
+					}),
+					/* @__PURE__ */ jsx("p", {
+						className: "mt-3 text-sm font-bold uppercase tracking-[0.12em] text-primary md:text-base",
+						children: doctor.specialty[language]
+					}),
+					/* @__PURE__ */ jsx("div", { className: "mt-7 h-1 w-20 rounded-full bg-primary/10" }),
+					/* @__PURE__ */ jsx("p", {
+						className: "mt-7 max-w-3xl text-[15px] font-medium leading-relaxed text-[#52657B] md:text-lg md:leading-8",
+						children: doctor.description[language]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "mt-8 grid max-w-xl gap-4 sm:grid-cols-2",
+						children: [/* @__PURE__ */ jsx(MetricTile, {
+							value: experience,
+							label: copy.experienceLabel
+						}), /* @__PURE__ */ jsx(MetricTile, {
+							value: `${serviceTitles.length}`,
+							label: copy.directionsLabel
+						})]
+					})
+				] }), /* @__PURE__ */ jsxs("div", {
+					className: "border-t border-[#E4EBF1] pt-6",
+					children: [/* @__PURE__ */ jsx("h3", {
+						className: "text-sm font-bold uppercase tracking-wider text-[#15233A]",
+						children: copy.competenceTitle
+					}), /* @__PURE__ */ jsx("div", {
+						className: "mt-4 flex flex-wrap gap-2.5",
+						children: serviceTitles.map((title) => /* @__PURE__ */ jsxs("div", {
+							className: "inline-flex max-w-full items-center gap-2.5 rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-4 py-2.5 text-xs font-bold leading-none text-[#52657B] shadow-sm transition-colors hover:border-[#C3D2DF]",
+							children: [/* @__PURE__ */ jsx("span", {
+								className: "flex size-4.5 shrink-0 items-center justify-center rounded-full text-primary",
+								children: /* @__PURE__ */ jsx(CheckCircle, {
+									weight: "fill",
+									className: "size-4"
+								})
+							}), /* @__PURE__ */ jsx("span", {
+								className: "truncate",
+								children: title
+							})]
+						}, title))
+					})]
+				})]
+			})]
+		})
+	});
+}
+function DoctorCard({ doctor, language, copy }) {
+	const serviceTitles = getServiceTitles(doctor, language).slice(0, 3);
+	const experience = getExperienceText(doctor, language, copy);
+	return /* @__PURE__ */ jsxs("article", {
+		className: "group flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-[#D8E2EA] bg-white shadow-[0_18px_55px_rgba(39,64,95,0.055)] transition-[border-color,box-shadow] duration-300 hover:border-[#C3D2DF] hover:shadow-[0_24px_70px_rgba(39,64,95,0.08)]",
+		children: [/* @__PURE__ */ jsx("div", {
+			className: "aspect-[4/3.75] overflow-hidden bg-[#EFF5F9]",
+			children: /* @__PURE__ */ jsx(DoctorPhoto, {
+				doctor,
+				language,
+				className: "bg-[linear-gradient(145deg,#F9FCFE,#E8F0F6)] text-[#27405F]",
+				initialsClassName: "size-20 border-[#D8E2EA] text-xl",
+				labelClassName: "text-[#6B7C90]"
+			})
+		}), /* @__PURE__ */ jsxs("div", {
+			className: "flex flex-1 flex-col p-5",
+			children: [
+				/* @__PURE__ */ jsx("span", {
+					className: "mb-3 w-fit rounded-full border border-[#D8E2EA] bg-[#F7FAFC] px-3 py-1 text-xs font-bold text-[#52657B]",
+					children: experience
+				}),
+				/* @__PURE__ */ jsx("h3", {
+					className: "text-lg font-bold leading-tight text-[#15233A]",
+					children: doctor.name[language]
+				}),
+				/* @__PURE__ */ jsx("p", {
+					className: "mt-2 text-xs font-bold uppercase tracking-[0.08em] text-primary",
+					children: doctor.specialty[language]
+				}),
+				/* @__PURE__ */ jsx("div", {
+					className: "mt-4 flex flex-1 flex-col gap-2",
+					children: serviceTitles.map((title) => /* @__PURE__ */ jsxs("div", {
+						className: "flex items-start gap-2 text-xs font-semibold leading-5 text-[#52657B]",
+						children: [/* @__PURE__ */ jsx(CheckCircle, {
+							weight: "fill",
+							className: "mt-0.5 size-4 shrink-0 text-primary/80"
+						}), /* @__PURE__ */ jsx("span", { children: title })]
+					}, title))
+				})
+			]
+		})]
+	});
+}
+function MetricTile({ value, label }) {
+	return /* @__PURE__ */ jsxs("div", {
+		className: "flex flex-col gap-1",
+		children: [/* @__PURE__ */ jsx("p", {
+			className: "text-xl font-bold tracking-tight text-[#15233A]",
+			children: value
+		}), /* @__PURE__ */ jsx("p", {
+			className: "mt-1 text-xs font-semibold leading-snug text-[#6B7C90]",
+			children: label
+		})]
+	});
+}
+function TrustCard({ title, text, icon: Icon }) {
+	return /* @__PURE__ */ jsxs("article", {
+		className: "group flex flex-col gap-5 rounded-[2rem] border border-[#D8E2EA] bg-white p-6 shadow-[0_12px_45px_rgba(39,64,95,0.045)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C3D2DF] hover:shadow-[0_20px_60px_rgba(39,64,95,0.07)] sm:p-7",
+		children: [/* @__PURE__ */ jsx("div", {
+			className: "flex size-14 shrink-0 items-center justify-center rounded-full border border-primary/10 bg-[#F4E7E4] text-primary transition-transform duration-300 group-hover:scale-105",
+			children: /* @__PURE__ */ jsx(Icon, {
+				weight: "duotone",
+				className: "size-7"
+			})
+		}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h3", {
+			className: "text-lg font-bold leading-tight text-[#15233A]",
+			children: title
+		}), /* @__PURE__ */ jsx("p", {
+			className: "mt-3 text-[13px] font-medium leading-relaxed text-[#52657B] md:text-sm",
+			children: text
+		})] })]
+	});
+}
+function getServiceTitles(doctor, language) {
+	return doctor.serviceIds.map((serviceId) => serviceMap.get(serviceId)?.title[language]).filter((title) => Boolean(title));
+}
+function getExperienceYears(doctor) {
+	if (typeof doctor.experienceYears === "number") return doctor.experienceYears;
+	const match = `${doctor.description.ru} ${doctor.description.kk}`.match(/(\d+)\s*(?:лет|года|год|жыл)/i);
+	return match ? Number(match[1]) : 0;
+}
+function getExperienceText(doctor, language, copy) {
+	const years = getExperienceYears(doctor);
+	if (!years) return copy.fallbackExperience;
+	return formatExperience(years, language, copy);
+}
+function formatExperience(years, language, copy) {
+	if (language === "kk") return `${years} ${copy.years}`;
+	const mod10 = years % 10;
+	const mod100 = years % 100;
+	return `${years} ${mod10 === 1 && mod100 !== 11 ? "год" : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14) ? "года" : "лет"}`;
+}
+//#endregion
+//#region src/components/ui/card.tsx
+var Card = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", {
+	ref,
+	className: cn("rounded-lg border bg-card text-card-foreground shadow-sm", className),
+	...props
+}));
+Card.displayName = "Card";
+var CardHeader = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", {
+	ref,
+	className: cn("flex flex-col space-y-1.5 p-6", className),
+	...props
+}));
+CardHeader.displayName = "CardHeader";
+var CardTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", {
+	ref,
+	className: cn("text-2xl font-semibold leading-none tracking-tight", className),
+	...props
+}));
+CardTitle.displayName = "CardTitle";
+var CardDescription = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", {
+	ref,
+	className: cn("text-sm text-muted-foreground", className),
+	...props
+}));
+CardDescription.displayName = "CardDescription";
+var CardContent = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", {
+	ref,
+	className: cn("p-6 pt-0", className),
+	...props
+}));
+CardContent.displayName = "CardContent";
+var CardFooter = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", {
+	ref,
+	className: cn("flex items-center p-6 pt-0", className),
+	...props
+}));
+CardFooter.displayName = "CardFooter";
+//#endregion
+//#region src/components/common/CompactHorizontalDoctorCard.tsx
+var CARD_HEIGHT = "h-[11.75rem]";
+function CompactHorizontalDoctorCard({ doctor, language, className }) {
+	const experience = getDoctorExperienceLine(doctor, language);
+	return /* @__PURE__ */ jsx(Card, {
+		className: cn("h-full overflow-hidden rounded-[1.2rem] border-border/70 bg-white shadow-[0_16px_42px_rgba(68,45,34,0.06)]", className),
+		children: /* @__PURE__ */ jsxs("div", {
+			className: cn("flex", CARD_HEIGHT),
+			children: [/* @__PURE__ */ jsx("div", {
+				className: "relative h-full w-36 shrink-0 overflow-hidden bg-secondary",
+				children: /* @__PURE__ */ jsx(DoctorPhoto, {
+					doctor,
+					language,
+					className: "absolute inset-0 size-full object-cover object-top"
+				})
+			}), /* @__PURE__ */ jsxs("div", {
+				className: "flex min-w-0 flex-1 flex-col justify-center gap-2 p-5",
+				children: [
+					/* @__PURE__ */ jsx("h3", {
+						className: "line-clamp-2 text-base font-bold leading-snug text-foreground",
+						children: doctor.name[language]
+					}),
+					/* @__PURE__ */ jsx("p", {
+						className: "line-clamp-2 text-sm leading-relaxed text-muted-foreground",
+						children: doctor.specialty[language]
+					}),
+					/* @__PURE__ */ jsx("p", {
+						className: "line-clamp-1 text-sm font-medium text-muted-foreground",
+						children: experience
+					})
+				]
+			})]
+		})
+	});
+}
+function getDoctorExperienceLine(doctor, language) {
+	if (typeof doctor.experienceYears === "number" && doctor.experienceYears > 0) return language === "ru" ? `${doctor.experienceYears} лет опыта` : `${doctor.experienceYears} жылдық тәжірибесі бар`;
+	const firstSentence = doctor.description[language].split(".")[0]?.trim();
+	return firstSentence ? `${firstSentence}.` : language === "ru" ? "Специалист" : "Маман";
+}
+//#endregion
+//#region src/components/ui/image-slider.tsx
+function ImageSlider({ beforeImage, afterImage, beforeLabel = "Before", afterLabel = "After", className }) {
+	const [sliderPosition, setSliderPosition] = useState(50);
+	const [isDragging, setIsDragging] = useState(false);
+	const containerRef = useRef(null);
+	const handleMove = useCallback((clientX) => {
+		if (!containerRef.current) return;
+		const rect = containerRef.current.getBoundingClientRect();
+		setSliderPosition(Math.max(0, Math.min(clientX - rect.left, rect.width)) / rect.width * 100);
+	}, []);
+	const onMouseDown = (e) => {
+		setIsDragging(true);
+		if ("clientX" in e) handleMove(e.clientX);
+		else handleMove(e.touches[0].clientX);
+	};
+	const onMouseUp = () => setIsDragging(false);
+	const onMouseMove = (e) => {
+		if (isDragging) handleMove(e.clientX);
+	};
+	const onTouchMove = (e) => {
+		if (isDragging) handleMove(e.touches[0].clientX);
+	};
+	useEffect(() => {
+		const handleGlobalMouseUp = () => setIsDragging(false);
+		const handleGlobalMouseMove = (e) => {
+			if (isDragging) handleMove(e.clientX);
+		};
+		if (isDragging) {
+			window.addEventListener("mouseup", handleGlobalMouseUp);
+			window.addEventListener("mousemove", handleGlobalMouseMove);
+		}
+		return () => {
+			window.removeEventListener("mouseup", handleGlobalMouseUp);
+			window.removeEventListener("mousemove", handleGlobalMouseMove);
+		};
+	}, [isDragging, handleMove]);
+	return /* @__PURE__ */ jsxs("div", {
+		ref: containerRef,
+		className: cn("relative aspect-[4/3] w-full overflow-hidden rounded-xl select-none bg-secondary", className),
+		onMouseMove,
+		onMouseDown,
+		onMouseUp,
+		onTouchMove,
+		onTouchStart: onMouseDown,
+		onTouchEnd: onMouseUp,
+		children: [
+			/* @__PURE__ */ jsx("img", {
+				src: afterImage,
+				alt: afterLabel,
+				className: "absolute inset-0 size-full object-cover object-[center_42%]",
+				draggable: false
+			}),
+			/* @__PURE__ */ jsx("div", {
+				className: "absolute inset-0 overflow-hidden border-r-2 border-white/80 shadow-[4px_0_24px_rgba(0,0,0,0.25)]",
+				style: { width: `${sliderPosition}%` },
+				children: /* @__PURE__ */ jsx("img", {
+					src: beforeImage,
+					alt: beforeLabel,
+					className: "absolute inset-0 h-full object-cover object-center",
+					style: {
+						width: `${1e4 / sliderPosition}%`,
+						maxWidth: "none"
+					},
+					draggable: false
+				})
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				className: "pointer-events-none absolute inset-x-3 top-3 z-10 flex items-center justify-between gap-3",
+				children: [/* @__PURE__ */ jsx("span", {
+					className: "rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-primary shadow-sm backdrop-blur",
+					children: beforeLabel
+				}), /* @__PURE__ */ jsx("span", {
+					className: "rounded-full bg-white/85 px-3 py-1 text-xs font-semibold text-primary shadow-sm backdrop-blur",
+					children: afterLabel
+				})]
+			}),
+			/* @__PURE__ */ jsx("div", {
+				className: "absolute bottom-0 top-0 z-20 w-0.5 bg-white shadow-[0_0_10px_rgba(0,0,0,0.3)]",
+				style: { left: `${sliderPosition}%` },
+				children: /* @__PURE__ */ jsx("div", {
+					className: "absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-[3px] border-white bg-primary text-white shadow-xl transition-transform hover:scale-110 active:scale-95 cursor-ew-resize",
+					children: /* @__PURE__ */ jsxs("div", {
+						className: "flex items-center justify-center gap-0.5",
+						children: [/* @__PURE__ */ jsx(CaretLeft, {
+							weight: "bold",
+							className: "size-4"
+						}), /* @__PURE__ */ jsx(CaretRight, {
+							weight: "bold",
+							className: "size-4"
+						})]
+					})
+				})
+			})
+		]
+	});
+}
+//#endregion
+//#region src/components/services/ServiceDetailTemplate.tsx
+var IconMap = {
+	CalendarCheck,
+	Check,
+	Clock,
+	FirstAidKit,
+	Heartbeat,
+	ShieldCheck,
+	Smiley,
+	Sparkle,
+	Tooth
+};
+var CrownVeneerComparison = lazy(() => import("./assets/CrownVeneerComparison-Djn7u28T.js").then((module) => ({ default: module.CrownVeneerComparison })));
+var DentureTypesEducation = lazy(() => import("./assets/DentureTypesEducation-DOKf878I.js").then((module) => ({ default: module.DentureTypesEducation })));
+var OrthopedicSectionNav = lazy(() => import("./assets/OrthopedicSectionNav-C9lCdMxK.js").then((module) => ({ default: module.OrthopedicSectionNav })));
+var detailCopy = {
+	ru: {
+		home: "Главная",
+		service: "Услуги",
+		suitableTitle: "Кому подходит услуга",
+		processTitle: "Как проходит лечение",
+		advantagesTitle: "Преимущества",
+		doctorsTitle: "Наши специалисты",
+		allDoctors: "Смотреть всех врачей",
+		faqTitle: "Частые вопросы",
+		beforeAfterTitle: "До и после",
+		moreCases: "Смотреть больше",
+		learnMore: "Узнать больше",
+		phoneCaption: "Позвоните нам",
+		whatsappCaption: "Ответим быстро",
+		phonePending: "Телефон скоро появится",
+		whatsappPending: "WhatsApp скоро появится",
+		readyTitle: "Готовы восстановить уверенность в своей улыбке?",
+		readyText: "Запишитесь на бесплатную консультацию и получите персональный план лечения.",
+		consultationNote: "Только консультация бесплатная, 3D рентген платный",
+		naturalResultTitle: "Естественный результат",
+		naturalResultText: "Прогнозируемый и безопасный результат на долгие годы.",
+		fallbackFaq: [
+			{
+				question: "Больно ли проходит процедура?",
+				answer: "Процедура проводится с комфортным обезболиванием по показаниям, врач заранее объясняет каждый этап."
+			},
+			{
+				question: "Сколько длится лечение?",
+				answer: "Срок зависит от услуги и клинической ситуации. Ориентир врач назовет после диагностики."
+			},
+			{
+				question: "Есть ли противопоказания?",
+				answer: "Да, они оцениваются индивидуально на консультации с учетом состояния здоровья и снимков."
+			}
+		]
+	},
+	kk: {
+		home: "Басты бет",
+		service: "Қызметтер",
+		suitableTitle: "Қызмет кімге арналған",
+		processTitle: "Ем қалай өтеді",
+		advantagesTitle: "Артықшылықтары",
+		doctorsTitle: "Біздің мамандар",
+		allDoctors: "Барлық дәрігерлерді көру",
+		faqTitle: "Жиі қойылатын сұрақтар",
+		beforeAfterTitle: "Дейін және кейін",
+		moreCases: "Көбірек көру",
+		learnMore: "Толығырақ",
+		phoneCaption: "Бізге қоңырау шалыңыз",
+		whatsappCaption: "Тез жауап береміз",
+		phonePending: "Телефон кейін қосылады",
+		whatsappPending: "WhatsApp кейін қосылады",
+		readyTitle: "Күлкіңізге сенімділікті қайтаруға дайынсыз ба?",
+		readyText: "Тегін консультацияға жазылып, жеке ем жоспарын алыңыз.",
+		consultationNote: "Тек кеңес алу тегін, 3D рентген ақылы",
+		naturalResultTitle: "Табиғи нәтиже",
+		naturalResultText: "Ұзақ жылдарға болжамды әрі қауіпсіз нәтиже.",
+		fallbackFaq: [
+			{
+				question: "Процедура ауырта ма?",
+				answer: "Көрсетілім бойынша жайлы жансыздандыру жасалады, дәрігер әр кезеңді алдын ала түсіндіреді."
+			},
+			{
+				question: "Ем қанша уақыт алады?",
+				answer: "Мерзім қызмет түрі мен клиникалық жағдайға байланысты. Нақты бағдар диагностикадан кейін айтылады."
+			},
+			{
+				question: "Қарсы көрсетілімдер бар ма?",
+				answer: "Иә, олар консультацияда денсаулық жағдайы мен суреттерге қарап жеке бағаланады."
+			}
+		]
+	}
+};
+function ServiceDetailTemplate({ service, doctors, doctorsLoading, language }) {
+	const t = content$2[language];
+	const copy = detailCopy[language];
+	const seo = getServiceSeo(service);
+	const serviceFaq = getFaqItems(service, language);
+	const hasPhone = hasContactValue(clinicContact.phoneHref);
+	const hasWhatsapp = hasContactValue(clinicContact.whatsappUrl);
+	return /* @__PURE__ */ jsxs("main", {
+		className: "flex-1 overflow-hidden bg-[#fdfaf7]",
+		children: [
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden border-b border-border/70 bg-[#f6f9fb] px-4 pt-24 pb-10 md:px-8 md:pt-32 md:pb-16 lg:min-h-[720px]",
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "absolute inset-0 z-0",
+					children: [
+						/* @__PURE__ */ jsx("img", {
+							src: service.heroImage,
+							alt: "",
+							"aria-hidden": "true",
+							className: "size-full object-cover object-[66%_center] opacity-55 md:object-[72%_center] md:opacity-100",
+							loading: "eager",
+							fetchPriority: "high",
+							decoding: "async"
+						}),
+						/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-[linear-gradient(90deg,#f8fbfd_0%,#f8fbfd_32%,rgba(248,251,253,0.92)_48%,rgba(248,251,253,0.54)_66%,rgba(248,251,253,0.12)_84%,rgba(248,251,253,0)_100%)]" }),
+						/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.82)_0%,rgba(255,255,255,0.42)_46%,#f6f9fb_100%)]" }),
+						/* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(164,58,40,0.08),transparent_32%)]" })
+					]
+				}), /* @__PURE__ */ jsxs("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: [/* @__PURE__ */ jsxs("nav", {
+						className: "mb-8 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground md:mb-10",
+						children: [
+							/* @__PURE__ */ jsx(Link, {
+								to: "/",
+								className: "transition-colors hover:text-primary",
+								children: copy.home
+							}),
+							/* @__PURE__ */ jsx("span", { children: "/" }),
+							/* @__PURE__ */ jsx("a", {
+								href: "/#services",
+								className: "transition-colors hover:text-primary",
+								children: copy.service
+							}),
+							/* @__PURE__ */ jsx("span", { children: "/" }),
+							/* @__PURE__ */ jsx("span", {
+								className: "text-foreground/70",
+								children: service.title[language]
+							})
+						]
+					}), /* @__PURE__ */ jsxs("div", {
+						className: "grid min-h-[520px] items-center gap-10 lg:grid-cols-[0.56fr_0.44fr] lg:gap-16",
+						children: [/* @__PURE__ */ jsxs(Reveal, {
+							className: "max-w-3xl py-2 md:py-6",
+							children: [
+								/* @__PURE__ */ jsx(TextReveal, { children: /* @__PURE__ */ jsxs("h1", {
+									className: "font-display max-w-[10ch] text-5xl font-normal leading-[0.95] text-[#23201f] sm:text-6xl lg:text-7xl",
+									children: [service.title[language], /* @__PURE__ */ jsx("span", {
+										className: "mt-1 block text-primary",
+										children: service.heroAccent[language]
+									})]
+								}) }),
+								/* @__PURE__ */ jsxs("p", {
+									className: "mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg",
+									children: [
+										service.shortDescription[language],
+										" ",
+										service.explanation[language]
+									]
+								}),
+								/* @__PURE__ */ jsx("p", {
+									className: "mt-4 max-w-2xl text-sm font-medium leading-7 text-[#52657B] md:text-base",
+									children: seo.intro[language]
+								}),
+								/* @__PURE__ */ jsx("div", {
+									className: "mt-8 grid gap-4 sm:grid-cols-2",
+									children: service.heroHighlights.map((item) => /* @__PURE__ */ jsx(MiniFeature, {
+										item,
+										language
+									}, item.title.ru))
+								}),
+								/* @__PURE__ */ jsxs("div", {
+									className: "mt-8 flex flex-wrap items-center gap-3 sm:gap-4",
+									children: [/* @__PURE__ */ jsx(BookingModal, { children: /* @__PURE__ */ jsxs(Button, {
+										size: "lg",
+										className: "group h-12 shrink-0 rounded-full bg-primary px-5 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] sm:h-14 sm:px-8",
+										children: [t.common.bookConsultation, /* @__PURE__ */ jsx(ArrowRight, {
+											weight: "bold",
+											className: "ml-2 size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+										})]
+									}) }), /* @__PURE__ */ jsx(Button, {
+										asChild: true,
+										variant: "outline",
+										size: "lg",
+										className: "group h-12 shrink-0 rounded-full border-primary/15 bg-white px-5 text-sm font-bold text-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:bg-secondary active:translate-y-[1px] sm:h-14 sm:px-8",
+										children: /* @__PURE__ */ jsxs("a", {
+											href: "#service-process",
+											children: [copy.learnMore, /* @__PURE__ */ jsx(ArrowRight, {
+												weight: "fill",
+												className: "size-4 text-primary transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+											})]
+										})
+									})]
+								}),
+								/* @__PURE__ */ jsxs("p", {
+									className: "mt-6 inline-flex items-center gap-2 text-xs font-medium text-muted-foreground",
+									children: [/* @__PURE__ */ jsx(ShieldCheck, {
+										weight: "fill",
+										className: "size-4 text-primary"
+									}), copy.consultationNote]
+								})
+							]
+						}), /* @__PURE__ */ jsx("div", {
+							"aria-hidden": "true",
+							className: "hidden lg:block"
+						})]
+					})]
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				id: "service-process",
+				className: "relative isolate overflow-hidden bg-white px-4 py-10 md:px-8 md:py-14",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-process" }), /* @__PURE__ */ jsxs("div", {
+					className: "relative z-10 mx-auto grid max-w-[1360px] gap-10 lg:grid-cols-[0.62fr_1.38fr] lg:gap-12",
+					children: [/* @__PURE__ */ jsxs(Reveal, { children: [/* @__PURE__ */ jsx("h2", {
+						className: "font-display text-3xl font-normal text-foreground md:text-4xl",
+						children: copy.suitableTitle
+					}), /* @__PURE__ */ jsx(Stagger, {
+						className: "mt-6 grid gap-4",
+						children: service.suitableFor[language].map((item) => /* @__PURE__ */ jsxs(StaggerItem, {
+							className: "flex items-center gap-3 text-sm leading-relaxed text-muted-foreground",
+							children: [/* @__PURE__ */ jsx("span", {
+								className: "flex size-6 shrink-0 items-center justify-center rounded-full border border-primary/15 bg-[#fff8f3] text-primary",
+								children: /* @__PURE__ */ jsx(Check, {
+									weight: "bold",
+									className: "size-3.5"
+								})
+							}), /* @__PURE__ */ jsx("span", { children: item })]
+						}, item))
+					})] }), /* @__PURE__ */ jsxs(Reveal, {
+						className: "border-t border-border/70 pt-8 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12",
+						children: [/* @__PURE__ */ jsx("h2", {
+							className: "font-display text-3xl font-normal text-foreground md:text-4xl",
+							children: copy.processTitle
+						}), /* @__PURE__ */ jsx(Stagger, {
+							className: "mt-7 grid gap-5 sm:grid-cols-2 xl:grid-cols-4",
+							children: service.processDetails.map((step, index) => /* @__PURE__ */ jsx(StaggerItem, { children: /* @__PURE__ */ jsx(ProcessStep, {
+								step,
+								index,
+								language
+							}) }, step.title.ru))
+						})]
+					})]
+				})]
+			}),
+			service.id === "crowns" && /* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-advantages" }), /* @__PURE__ */ jsx("div", {
+					className: "relative z-10 mx-auto max-w-[1360px] space-y-6",
+					children: /* @__PURE__ */ jsxs(Suspense, {
+						fallback: null,
+						children: [
+							/* @__PURE__ */ jsx(OrthopedicSectionNav, { language }),
+							/* @__PURE__ */ jsx(CrownVeneerComparison, { language }),
+							/* @__PURE__ */ jsx("div", {
+								id: "prosthetics",
+								className: "scroll-mt-28",
+								children: /* @__PURE__ */ jsx(DentureTypesEducation, { language })
+							})
+						]
+					})
+				})]
+			}),
+			service.id === "dentures" && /* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-advantages" }), /* @__PURE__ */ jsx("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: /* @__PURE__ */ jsx(Suspense, {
+						fallback: null,
+						children: /* @__PURE__ */ jsx(DentureTypesEducation, { language })
+					})
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-advantages" }), /* @__PURE__ */ jsxs(Reveal, {
+					className: "relative z-10 mx-auto max-w-[1360px] border-t border-border/70 pt-10",
+					children: [/* @__PURE__ */ jsx("h2", {
+						className: "font-display text-3xl font-normal text-foreground md:text-4xl",
+						children: copy.advantagesTitle
+					}), /* @__PURE__ */ jsx(Stagger, {
+						className: "mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-5",
+						children: service.advantages.map((item) => /* @__PURE__ */ jsx(StaggerItem, { children: /* @__PURE__ */ jsx(AdvantageCard, {
+							item,
+							language
+						}) }, item.title.ru))
+					})]
+				})]
+			}),
+			(doctorsLoading || doctors.length > 0) && /* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-12",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-doctors" }), /* @__PURE__ */ jsxs("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: [/* @__PURE__ */ jsxs(Reveal, {
+						className: "mb-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between",
+						children: [/* @__PURE__ */ jsx("h2", {
+							className: "font-display text-3xl font-normal text-foreground md:text-4xl",
+							children: copy.doctorsTitle
+						}), /* @__PURE__ */ jsxs("a", {
+							href: "/doctors",
+							className: "group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary/80",
+							children: [copy.allDoctors, /* @__PURE__ */ jsx(ArrowRight, {
+								weight: "bold",
+								className: "size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+							})]
+						})]
+					}), /* @__PURE__ */ jsx("div", {
+						className: "grid items-stretch gap-5 lg:grid-cols-3",
+						children: /* @__PURE__ */ jsx(AnimatePresence, {
+							initial: false,
+							children: doctorsLoading ? Array.from({ length: 3 }).map((_, index) => /* @__PURE__ */ jsx(MotionListItem, {
+								index,
+								className: "h-full",
+								children: /* @__PURE__ */ jsx(CompactDoctorCardSkeleton, { variant: "horizontal" })
+							}, `service-doctor-skeleton-${index}`)) : doctors.slice(0, 3).map((doctor, index) => /* @__PURE__ */ jsx(MotionListItem, {
+								index,
+								className: "h-full",
+								interactive: true,
+								children: /* @__PURE__ */ jsx(CompactHorizontalDoctorCard, {
+									doctor,
+									language
+								})
+							}, doctor.id))
+						})
+					})]
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 py-8 md:px-8 md:py-14",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-faq" }), /* @__PURE__ */ jsxs(Reveal, {
+					className: "relative z-10 mx-auto grid max-w-[1360px] gap-10 border-t border-border/70 pt-10 lg:grid-cols-[0.9fr_1.1fr]",
+					children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+						className: "font-display mb-6 text-3xl font-normal text-foreground md:text-4xl",
+						children: copy.faqTitle
+					}), /* @__PURE__ */ jsx(Accordion, {
+						type: "single",
+						collapsible: true,
+						className: "grid gap-3",
+						children: serviceFaq.map((faqItem, index) => /* @__PURE__ */ jsxs(AccordionItem, {
+							value: `faq-${index}`,
+							className: "rounded-xl border border-border/70 bg-white px-4 shadow-sm",
+							children: [/* @__PURE__ */ jsx(AccordionTrigger, {
+								className: "text-left text-sm font-semibold text-foreground hover:text-primary hover:no-underline",
+								children: faqItem.question[language]
+							}), /* @__PURE__ */ jsx(AccordionContent, {
+								className: "text-sm leading-relaxed text-muted-foreground",
+								children: faqItem.answer[language]
+							})]
+						}, `${faqItem.question.ru}-${index}`))
+					})] }), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
+						className: "mb-6",
+						children: /* @__PURE__ */ jsx("h2", {
+							className: "font-display text-3xl font-normal text-foreground md:text-4xl",
+							children: copy.beforeAfterTitle
+						})
+					}), /* @__PURE__ */ jsx("div", {
+						className: cn("grid gap-5", (service.beforeAfterCases ?? []).some((c) => c.useSlider) ? "grid-cols-1" : "sm:grid-cols-2"),
+						children: (service.beforeAfterCases ?? []).map((caseItem) => /* @__PURE__ */ jsxs(Card, {
+							className: "overflow-hidden rounded-[1.2rem] border-border/70 bg-white p-3 shadow-[0_16px_42px_rgba(68,45,34,0.06)]",
+							children: [caseItem.useSlider ? /* @__PURE__ */ jsx(ImageSlider, {
+								beforeImage: caseItem.beforeImage,
+								afterImage: caseItem.afterImage,
+								beforeLabel: language === "ru" ? "До" : "Дейін",
+								afterLabel: language === "ru" ? "После" : "Кейін"
+							}) : /* @__PURE__ */ jsxs("div", {
+								className: "grid gap-1 overflow-hidden rounded-xl sm:grid-cols-2",
+								children: [/* @__PURE__ */ jsx(ResultImage, {
+									src: caseItem.beforeImage,
+									alt: copy.beforeAfterTitle,
+									label: language === "ru" ? "До" : "Дейін"
+								}), /* @__PURE__ */ jsx(ResultImage, {
+									src: caseItem.afterImage,
+									alt: caseItem.title[language],
+									label: language === "ru" ? "После" : "Кейін"
+								})]
+							}), /* @__PURE__ */ jsx("p", {
+								className: "mt-4 text-center text-sm font-medium text-muted-foreground",
+								children: caseItem.title[language]
+							})]
+						}, caseItem.title.ru))
+					})] })]
+				})]
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative isolate overflow-hidden bg-white px-4 pb-12 md:px-8 md:pb-16",
+				children: [/* @__PURE__ */ jsx(DentalParallaxBackground, { surface: "service-cta" }), /* @__PURE__ */ jsxs("div", {
+					className: "relative z-10 mx-auto max-w-[1360px]",
+					children: [/* @__PURE__ */ jsxs(Reveal, {
+						className: "grid min-w-0 gap-5 overflow-hidden rounded-[1.7rem] border border-primary/10 bg-[linear-gradient(135deg,#fff8f3,#fffdfb)] p-5 shadow-[0_18px_55px_rgba(68,45,34,0.08)] md:p-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center",
+						children: [/* @__PURE__ */ jsxs("div", {
+							className: "flex min-w-0 items-center gap-5",
+							children: [/* @__PURE__ */ jsx("span", {
+								className: "hidden size-20 shrink-0 items-center justify-center rounded-full border border-primary/10 bg-white text-primary shadow-sm sm:flex",
+								children: /* @__PURE__ */ jsx(Phone, {
+									weight: "fill",
+									className: "size-8"
+								})
+							}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+								className: "font-display text-2xl font-normal leading-tight text-foreground md:text-3xl",
+								children: copy.readyTitle
+							}), /* @__PURE__ */ jsx("p", {
+								className: "mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base",
+								children: copy.readyText
+							})] })]
+						}), /* @__PURE__ */ jsxs("div", {
+							className: "grid min-w-0 gap-3 lg:grid-cols-[auto_auto_auto] lg:items-center",
+							children: [
+								/* @__PURE__ */ jsx(ContactPill, {
+									icon: /* @__PURE__ */ jsx(Phone, {
+										weight: "fill",
+										className: "size-5"
+									}),
+									href: clinicContact.phoneHref,
+									title: clinicContact.phoneDisplay ?? copy.phonePending,
+									caption: copy.phoneCaption,
+									disabled: !hasPhone
+								}),
+								/* @__PURE__ */ jsx(ContactPill, {
+									icon: /* @__PURE__ */ jsx(WhatsappLogo, {
+										weight: "fill",
+										className: "size-5"
+									}),
+									href: getWhatsAppUrl(language),
+									title: hasWhatsapp ? "WhatsApp" : copy.whatsappPending,
+									caption: copy.whatsappCaption,
+									disabled: !hasWhatsapp,
+									external: true
+								}),
+								/* @__PURE__ */ jsx(BookingModal, { children: /* @__PURE__ */ jsxs(Button, {
+									size: "lg",
+									className: "group h-14 w-full min-w-0 justify-center rounded-full bg-primary px-7 text-sm font-bold text-white shadow-[0_18px_38px_rgba(164,58,40,0.22)] transition-all hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-[1px] lg:w-auto",
+									children: [t.common.bookConsultation, /* @__PURE__ */ jsx(ArrowRight, {
+										weight: "bold",
+										className: "ml-2 size-4 transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+									})]
+								}) })
+							]
+						})]
+					}), /* @__PURE__ */ jsxs("p", {
+						className: "mt-4 flex items-center justify-center gap-2 text-xs font-medium text-muted-foreground",
+						children: [/* @__PURE__ */ jsx(ShieldCheck, {
+							weight: "fill",
+							className: "size-4 text-primary"
+						}), copy.consultationNote]
+					})]
+				})]
+			})
+		]
+	});
+}
+function MiniFeature({ item, language }) {
+	return /* @__PURE__ */ jsxs("div", {
+		className: "flex items-center gap-3",
+		children: [/* @__PURE__ */ jsx("span", {
+			className: "flex size-10 shrink-0 items-center justify-center rounded-2xl border border-primary/10 bg-white text-primary shadow-sm",
+			children: /* @__PURE__ */ jsx(IconMap[item.iconName] ?? Tooth, {
+				weight: "duotone",
+				className: "size-5"
+			})
+		}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h3", {
+			className: "text-sm font-bold leading-snug text-foreground",
+			children: item.title[language]
+		}), /* @__PURE__ */ jsx("p", {
+			className: "mt-1 text-sm leading-relaxed text-muted-foreground",
+			children: item.text[language]
+		})] })]
+	});
+}
+function ProcessStep({ step, index, language }) {
+	return /* @__PURE__ */ jsxs("div", {
+		className: "relative text-center",
+		children: [
+			/* @__PURE__ */ jsx("div", {
+				className: "mx-auto flex size-20 items-center justify-center rounded-full border border-primary/15 bg-white text-primary shadow-sm",
+				children: /* @__PURE__ */ jsx(IconMap[step.iconName] ?? Tooth, {
+					weight: "duotone",
+					className: "size-9"
+				})
+			}),
+			/* @__PURE__ */ jsxs("p", {
+				className: "mt-5 text-sm font-bold text-foreground",
+				children: [
+					index + 1,
+					". ",
+					step.title[language]
+				]
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "mx-auto mt-2 max-w-[14rem] text-xs leading-relaxed text-muted-foreground",
+				children: step.text[language]
+			})
+		]
+	});
+}
+function AdvantageCard({ item, language }) {
+	return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsxs(Card, {
+		className: "h-full rounded-[1.15rem] border-border/70 bg-white p-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-[0_18px_45px_rgba(164,58,40,0.08)]",
+		children: [
+			/* @__PURE__ */ jsx("span", {
+				className: "mx-auto flex size-12 items-center justify-center rounded-2xl bg-[#fff8f3] text-primary",
+				children: /* @__PURE__ */ jsx(IconMap[item.iconName] ?? ShieldCheck, {
+					weight: "duotone",
+					className: "size-7"
+				})
+			}),
+			/* @__PURE__ */ jsx("h3", {
+				className: "mt-5 text-sm font-bold leading-snug text-foreground",
+				children: item.title[language]
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "mt-2 text-xs leading-relaxed text-muted-foreground",
+				children: item.text[language]
+			})
+		]
+	}) });
+}
+function ResultImage({ src, alt, label }) {
+	return /* @__PURE__ */ jsxs("div", {
+		className: "relative min-h-[8.5rem] overflow-hidden bg-secondary",
+		children: [/* @__PURE__ */ jsx("img", {
+			src,
+			alt,
+			className: "size-full object-cover",
+			loading: "lazy",
+			decoding: "async"
+		}), /* @__PURE__ */ jsx("span", {
+			className: "absolute left-3 top-3 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-primary shadow-sm backdrop-blur",
+			children: label
+		})]
+	});
+}
+function ContactPill({ icon, href, title, caption, disabled, external = false }) {
+	const titleLines = title.split(",").map((line) => line.trim()).filter(Boolean);
+	const contentNode = /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("span", {
+		className: "flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm",
+		children: icon
+	}), /* @__PURE__ */ jsxs("span", {
+		className: "min-w-0",
+		children: [titleLines.map((line) => /* @__PURE__ */ jsx("span", {
+			className: "block truncate text-[13px] font-bold leading-tight text-foreground",
+			children: line
+		}, line)), /* @__PURE__ */ jsx("span", {
+			className: "block truncate text-xs font-medium text-muted-foreground",
+			children: caption
+		})]
+	})] });
+	if (!disabled && href) return /* @__PURE__ */ jsx("a", {
+		href,
+		className: "flex h-14 w-full min-w-0 items-center gap-3 rounded-full border border-border/70 bg-white px-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/20 active:translate-y-[1px] lg:w-auto",
+		...external ? {
+			target: "_blank",
+			rel: "noopener noreferrer"
+		} : {},
+		children: contentNode
+	});
+	return /* @__PURE__ */ jsx("button", {
+		type: "button",
+		disabled: true,
+		className: "flex h-14 w-full min-w-0 cursor-not-allowed items-center gap-3 rounded-full border border-border/70 bg-white/75 px-4 opacity-80 shadow-sm lg:w-auto",
+		children: contentNode
+	});
+}
+function getFaqItems(service, language) {
+	if (service.faq.length > 0) return service.faq;
+	return detailCopy[language].fallbackFaq.map((item) => ({
+		question: {
+			ru: language === "ru" ? item.question : detailCopy.ru.fallbackFaq[0].question,
+			kk: language === "kk" ? item.question : detailCopy.kk.fallbackFaq[0].question
+		},
+		answer: {
+			ru: language === "ru" ? item.answer : detailCopy.ru.fallbackFaq[0].answer,
+			kk: language === "kk" ? item.answer : detailCopy.kk.fallbackFaq[0].answer
+		}
+	}));
+}
+//#endregion
+//#region src/pages/ServiceDetail.tsx
+function ServiceDetail() {
+	const { id } = useParams();
+	const { language } = useLanguage();
+	const { doctors, isLoading: doctorsLoading } = usePublicDoctors();
+	const service = services.find((item) => item.id === id);
+	const serviceId = service?.id;
+	const seo = service ? getServiceSeo(service) : void 0;
+	const siteOrigin = getSiteOrigin();
+	const servicePath = serviceId ? `/services/${serviceId}` : "/404";
+	const serviceDoctors = serviceId ? doctors.filter((doctor) => doctor.serviceIds.includes(serviceId)) : [];
+	useSeo({
+		title: seo?.title[language] ?? "Страница не найдена | IMPLANTIUM",
+		description: seo?.description[language] ?? "Страница не найдена на сайте стоматологической клиники IMPLANTIUM.",
+		keywords: seo?.keywords ?? [],
+		path: servicePath,
+		noindex: !service,
+		jsonLd: service && seo ? [
+			buildClinicJsonLd(siteOrigin, services.map((item) => item.title.ru)),
+			buildServiceJsonLd(siteOrigin, servicePath, service, seo, language),
+			buildBreadcrumbJsonLd(siteOrigin, [
+				{
+					name: language === "ru" ? "Главная" : "Басты бет",
+					path: "/"
+				},
+				{
+					name: language === "ru" ? "Услуги" : "Қызметтер",
+					path: "/#services"
+				},
+				{
+					name: service.title[language],
+					path: servicePath
+				}
+			]),
+			...service.faq.length > 0 ? [buildFaqJsonLd(service.faq, language)] : []
+		] : []
+	});
+	if (!service) return /* @__PURE__ */ jsx(Navigate, {
+		to: "/404",
+		replace: true
+	});
+	return /* @__PURE__ */ jsx(ServiceDetailTemplate, {
+		service,
+		doctors: serviceDoctors,
+		doctorsLoading,
+		language
+	});
+}
+//#endregion
+//#region src/pages/NotFound.tsx
+function NotFound() {
+	const { language } = useLanguage();
+	const t = content$2[language];
+	useSeo({
+		title: language === "ru" ? "Страница не найдена | IMPLANTIUM" : "Бет табылмады | IMPLANTIUM",
+		description: language === "ru" ? "Страница не найдена на сайте стоматологической клиники IMPLANTIUM в Актау." : "Ақтаудағы IMPLANTIUM стоматологиясының сайтында бұл бет табылмады.",
+		path: "/404",
+		noindex: true,
+		canonical: false
+	});
+	return /* @__PURE__ */ jsx("main", {
+		className: "flex-1 flex items-center justify-center pt-32 pb-24",
+		children: /* @__PURE__ */ jsxs("div", {
+			className: "container mx-auto px-4 text-center max-w-md",
+			children: [
+				/* @__PURE__ */ jsx("h1", {
+					className: "text-6xl font-bold text-primary mb-4",
+					children: "404"
+				}),
+				/* @__PURE__ */ jsx("h2", {
+					className: "text-2xl font-semibold mb-2",
+					children: t.common.notFoundTitle
+				}),
+				/* @__PURE__ */ jsx("p", {
+					className: "text-muted-foreground mb-8",
+					children: t.common.notFoundText
+				}),
+				/* @__PURE__ */ jsx(Button, {
+					asChild: true,
+					size: "lg",
+					className: "rounded-full bg-primary hover:bg-primary/90 text-white",
+					children: /* @__PURE__ */ jsx(Link, {
+						to: "/",
+						children: t.common.backToHome
+					})
+				})
+			]
+		})
+	});
+}
+//#endregion
+//#region src/components/ui/input.tsx
+var Input = React.forwardRef(({ className, type, ...props }, ref) => {
+	return /* @__PURE__ */ jsx("input", {
+		type,
+		className: cn("flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
+		ref,
+		...props
+	});
+});
+Input.displayName = "Input";
+//#endregion
+//#region src/components/ui/textarea.tsx
+var Textarea = React.forwardRef(({ className, ...props }, ref) => {
+	return /* @__PURE__ */ jsx("textarea", {
+		className: cn("flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm", className),
+		ref,
+		...props
+	});
+});
+Textarea.displayName = "Textarea";
+//#endregion
+//#region src/components/ui/tabs.tsx
+var Tabs = TabsPrimitive.Root;
+var TabsList = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(TabsPrimitive.List, {
+	ref,
+	className: cn("inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground", className),
+	...props
+}));
+TabsList.displayName = TabsPrimitive.List.displayName;
+var TabsTrigger = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(TabsPrimitive.Trigger, {
+	ref,
+	className: cn("inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm", className),
+	...props
+}));
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+var TabsContent = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(TabsPrimitive.Content, {
+	ref,
+	className: cn("mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", className),
+	...props
+}));
+TabsContent.displayName = TabsPrimitive.Content.displayName;
+//#endregion
+//#region src/pages/Admin.tsx
+var ADMIN_TOKEN_KEY = "implantium_admin_token";
+var MAX_UPLOAD_IMAGE_EDGE = 1800;
+var UPLOAD_JPEG_QUALITY = .86;
+var supportedImageTypes = new Set([
+	"image/jpeg",
+	"image/png",
+	"image/webp"
+]);
+function Admin() {
+	const [token, setToken] = useState(() => typeof localStorage !== "undefined" ? localStorage.getItem(ADMIN_TOKEN_KEY) ?? "" : "");
+	const [password, setPassword] = useState("");
+	const [loginError, setLoginError] = useState("");
+	const [selectedId, setSelectedId] = useState(null);
+	const [editor, setEditor] = useState(() => createBlankDoctor());
+	const [activeLanguage, setActiveLanguage] = useState("ru");
+	const [photoFile, setPhotoFile] = useState(null);
+	const [photoPreview, setPhotoPreview] = useState("");
+	const [formErrors, setFormErrors] = useState([]);
+	const [saveStatus, setSaveStatus] = useState("idle");
+	const [statusMessage, setStatusMessage] = useState("");
+	const loadedEditorKey = useRef(null);
+	const login = useMutation(api.admin.login);
+	const logout = useMutation(api.admin.logout);
+	const createDoctor = useMutation(api.doctors.createDoctor);
+	const updateDoctor = useMutation(api.doctors.updateDoctor);
+	const hideDoctor = useMutation(api.doctors.hideDoctor);
+	const deleteDoctor = useMutation(api.doctors.deleteDoctor);
+	const reorderDoctors = useMutation(api.doctors.reorderDoctors);
+	const generateDoctorPhotoUploadUrl = useMutation(api.doctors.generateDoctorPhotoUploadUrl);
+	const viewer = useQuery_experimental({
+		query: api.admin.viewer,
+		args: isConvexConfigured && token ? { token } : "skip"
+	});
+	const doctorsResult = useQuery_experimental({
+		query: api.doctors.listAllDoctors,
+		args: isConvexConfigured && token ? { token } : "skip"
+	});
+	const doctors = useMemo(() => {
+		if (doctorsResult.status !== "success") return [];
+		return doctorsResult.data.slice().sort((left, right) => left.sortOrder - right.sortOrder);
+	}, [doctorsResult]);
+	const isSessionInvalid = viewer.status === "success" && !viewer.data.isAdmin;
+	const isAdminLoading = Boolean(token) && (viewer.status === "pending" || doctorsResult.status === "pending");
+	useSeo({
+		title: "Управление врачами | IMPLANTIUM",
+		description: "Внутренний раздел управления врачами стоматологической клиники IMPLANTIUM.",
+		path: "/admin",
+		noindex: true
+	});
+	useEffect(() => {
+		if (viewer.status === "success" && !viewer.data.isAdmin) {
+			if (typeof localStorage !== "undefined") localStorage.removeItem(ADMIN_TOKEN_KEY);
+			setToken("");
+			setLoginError("Сессия истекла. Войдите снова.");
+		}
+	}, [viewer]);
+	useEffect(() => {
+		if (doctors.length === 0 || selectedId !== null) return;
+		setSelectedId(doctors[0]._id);
+	}, [doctors, selectedId]);
+	useEffect(() => {
+		if (selectedId === "new") {
+			if (loadedEditorKey.current === "new") return;
+			loadedEditorKey.current = "new";
+			setEditor(createBlankDoctor(doctors.length));
+			setPhotoFile(null);
+			setFormErrors([]);
+			setSaveStatus("idle");
+			setStatusMessage("");
+			return;
+		}
+		const selectedDoctor = doctors.find((doctor) => doctor._id === selectedId);
+		if (selectedDoctor) {
+			if (loadedEditorKey.current === selectedDoctor._id) return;
+			loadedEditorKey.current = selectedDoctor._id;
+			setEditor(toEditorState(selectedDoctor));
+			setPhotoFile(null);
+			setFormErrors([]);
+			setSaveStatus("idle");
+			setStatusMessage("");
+		}
+	}, [doctors, selectedId]);
+	useEffect(() => {
+		if (!photoFile) {
+			setPhotoPreview("");
+			return;
+		}
+		const objectUrl = URL.createObjectURL(photoFile);
+		setPhotoPreview(objectUrl);
+		return () => URL.revokeObjectURL(objectUrl);
+	}, [photoFile]);
+	const currentPhoto = photoPreview || editor.photo;
+	async function handleLogin(event) {
+		event.preventDefault();
+		setLoginError("");
+		try {
+			const result = await login({ password });
+			if (!result.ok) {
+				setLoginError(result.error);
+				return;
+			}
+			if (typeof localStorage !== "undefined") localStorage.setItem(ADMIN_TOKEN_KEY, result.token);
+			setToken(result.token);
+			setPassword("");
+		} catch (error) {
+			setLoginError(getErrorMessage(error));
+		}
+	}
+	async function handleLogout() {
+		try {
+			if (token) await logout({ token });
+		} finally {
+			if (typeof localStorage !== "undefined") localStorage.removeItem(ADMIN_TOKEN_KEY);
+			setToken("");
+			setSelectedId(null);
+		}
+	}
+	function handleAddDoctor() {
+		loadedEditorKey.current = "new";
+		setSelectedId("new");
+		setEditor(createBlankDoctor(doctors.length));
+		setPhotoFile(null);
+		setFormErrors([]);
+		setSaveStatus("idle");
+		setStatusMessage("");
+	}
+	function handleSelectDoctor(doctor) {
+		loadedEditorKey.current = doctor._id;
+		setSelectedId(doctor._id);
+		setEditor(toEditorState(doctor));
+		setPhotoFile(null);
+		setFormErrors([]);
+		setSaveStatus("idle");
+		setStatusMessage("");
+	}
+	function handlePhotoSelection(event) {
+		const file = event.currentTarget.files?.[0] ?? null;
+		if (!file) {
+			setPhotoFile(null);
+			return;
+		}
+		if (!isSupportedImageFile(file)) {
+			event.currentTarget.value = "";
+			setPhotoFile(null);
+			setSaveStatus("error");
+			setFormErrors(["Выберите изображение в формате JPG, PNG или WEBP."]);
+			return;
+		}
+		setPhotoFile(file);
+		setFormErrors([]);
+		setSaveStatus("idle");
+		setStatusMessage("");
+	}
+	async function handleSave(event) {
+		event.preventDefault();
+		const errors = validateEditor(editor);
+		if (errors.length > 0) {
+			setFormErrors(errors);
+			setSaveStatus("error");
+			setStatusMessage("Проверьте обязательные поля.");
+			return;
+		}
+		setSaveStatus("saving");
+		setStatusMessage("");
+		setFormErrors([]);
+		try {
+			const finalSlug = editor.slug.trim() || slugify(editor.name.ru);
+			const editorWithSlug = {
+				...editor,
+				slug: finalSlug
+			};
+			const photoStorageId = photoFile ? await uploadPhoto(photoFile, token, generateDoctorPhotoUploadUrl) : editor.photoStorageId;
+			const doctorPayload = buildDoctorPayload(editorWithSlug, photoStorageId);
+			if (editor.recordId) await updateDoctor({
+				token,
+				doctorId: editor.recordId,
+				doctor: doctorPayload
+			});
+			else {
+				const newDoctorId = await createDoctor({
+					token,
+					doctor: doctorPayload
+				});
+				setEditor((current) => ({
+					...current,
+					recordId: newDoctorId,
+					photoStorageId: photoStorageId ?? void 0
+				}));
+				loadedEditorKey.current = null;
+				setSelectedId(newDoctorId);
+			}
+			setPhotoFile(null);
+			setSaveStatus("saved");
+			setStatusMessage("Изменения сохранены.");
+		} catch (error) {
+			setSaveStatus("error");
+			setStatusMessage(getErrorMessage(error));
+		}
+	}
+	async function handleVisibility(doctor) {
+		await hideDoctor({
+			token,
+			doctorId: doctor._id,
+			visible: !doctor.visible
+		});
+	}
+	async function handleDelete(doctor) {
+		if (!window.confirm(`Удалить врача «${doctor.name.ru}»?`)) return;
+		await deleteDoctor({
+			token,
+			doctorId: doctor._id
+		});
+		if (selectedId === doctor._id) setSelectedId(null);
+	}
+	async function handleMove(doctor, direction) {
+		const currentIndex = doctors.findIndex((item) => item._id === doctor._id);
+		const nextIndex = currentIndex + direction;
+		if (currentIndex < 0 || nextIndex < 0 || nextIndex >= doctors.length) return;
+		const nextDoctors = doctors.slice();
+		const [movingDoctor] = nextDoctors.splice(currentIndex, 1);
+		nextDoctors.splice(nextIndex, 0, movingDoctor);
+		await reorderDoctors({
+			token,
+			orderedIds: nextDoctors.map((item) => item._id)
+		});
+	}
+	if (!isConvexConfigured) return /* @__PURE__ */ jsx(AdminShell, { children: /* @__PURE__ */ jsxs("div", {
+		className: "rounded-[1.5rem] border border-[#D8E2EA] bg-white p-6 shadow-sm",
+		children: [/* @__PURE__ */ jsx("h1", {
+			className: "text-2xl font-bold text-[#15233A]",
+			children: "Convex не настроен"
+		}), /* @__PURE__ */ jsx("p", {
+			className: "mt-3 max-w-2xl text-sm leading-7 text-[#52657B]",
+			children: "Добавьте переменную `VITE_CONVEX_URL` и настройте Convex-проект, чтобы использовать редактор врачей."
+		})]
+	}) });
+	if (!token || isSessionInvalid) return /* @__PURE__ */ jsx(AdminShell, { children: /* @__PURE__ */ jsxs("form", {
+		onSubmit: handleLogin,
+		className: "mx-auto max-w-md rounded-[1.5rem] border border-[#D8E2EA] bg-white p-6 shadow-[0_20px_70px_rgba(39,64,95,0.08)]",
+		children: [
+			/* @__PURE__ */ jsx("h1", {
+				className: "text-2xl font-bold text-[#15233A]",
+				children: "Вход в панель управления"
+			}),
+			/* @__PURE__ */ jsx("p", {
+				className: "mt-2 text-sm leading-6 text-[#52657B]",
+				children: "Введите пароль администратора клиники для редактирования врачей."
+			}),
+			/* @__PURE__ */ jsxs("label", {
+				className: "mt-6 flex flex-col gap-2 text-sm font-bold text-[#15233A]",
+				children: ["Пароль", /* @__PURE__ */ jsx(Input, {
+					value: password,
+					onChange: (event) => setPassword(event.target.value),
+					type: "password",
+					autoComplete: "current-password",
+					className: "h-12 rounded-xl border-[#DDE3E7] bg-[#FAFBFC]"
+				})]
+			}),
+			loginError && /* @__PURE__ */ jsx("p", {
+				className: "mt-3 rounded-xl border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm font-semibold text-destructive",
+				children: loginError
+			}),
+			/* @__PURE__ */ jsx(Button, {
+				type: "submit",
+				className: "mt-5 h-12 w-full rounded-xl bg-primary font-bold text-white",
+				children: "Войти"
+			})
+		]
+	}) });
+	return /* @__PURE__ */ jsxs(AdminShell, { children: [
+		/* @__PURE__ */ jsxs("div", {
+			className: "mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between",
+			children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h1", {
+				className: "text-3xl font-bold tracking-tight text-[#15233A]",
+				children: "Управление врачами"
+			}), /* @__PURE__ */ jsx("p", {
+				className: "mt-2 text-sm text-[#52657B]",
+				children: "Фото, локализация, порядок и видимость профилей врачей."
+			})] }), /* @__PURE__ */ jsxs("div", {
+				className: "flex flex-wrap gap-2",
+				children: [/* @__PURE__ */ jsxs(Button, {
+					type: "button",
+					onClick: handleAddDoctor,
+					className: "rounded-xl bg-primary font-bold text-white",
+					children: [/* @__PURE__ */ jsx(Plus, {
+						weight: "bold",
+						className: "size-4"
+					}), "Добавить врача"]
+				}), /* @__PURE__ */ jsxs(Button, {
+					type: "button",
+					variant: "outline",
+					onClick: handleLogout,
+					className: "rounded-xl",
+					children: [/* @__PURE__ */ jsx(SignOut, { className: "size-4" }), "Выйти"]
+				})]
+			})]
+		}),
+		doctorsResult.status === "error" && /* @__PURE__ */ jsx("div", {
+			className: "mb-5 rounded-2xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm font-semibold text-destructive",
+			children: doctorsResult.error.message
+		}),
+		/* @__PURE__ */ jsxs("div", {
+			className: "grid gap-6 xl:grid-cols-[0.95fr_1.35fr]",
+			children: [/* @__PURE__ */ jsxs("section", {
+				className: "min-w-0",
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "mb-3 flex items-center justify-between",
+					children: [/* @__PURE__ */ jsx("h2", {
+						className: "text-lg font-bold text-[#15233A]",
+						children: "Врачи"
+					}), /* @__PURE__ */ jsx(Badge, {
+						variant: "secondary",
+						className: "rounded-full px-3 py-1",
+						children: doctors.length
+					})]
+				}), isAdminLoading ? /* @__PURE__ */ jsx(AdminDoctorListSkeleton, {}) : doctors.length > 0 ? /* @__PURE__ */ jsx("div", {
+					className: "grid gap-3",
+					children: doctors.map((doctor, index) => /* @__PURE__ */ jsx(DoctorListRow, {
+						doctor,
+						isSelected: selectedId === doctor._id,
+						canMoveUp: index > 0,
+						canMoveDown: index < doctors.length - 1,
+						onSelect: () => handleSelectDoctor(doctor),
+						onMoveUp: () => handleMove(doctor, -1),
+						onMoveDown: () => handleMove(doctor, 1),
+						onVisibility: () => handleVisibility(doctor),
+						onDelete: () => handleDelete(doctor)
+					}, doctor._id))
+				}) : /* @__PURE__ */ jsxs("div", {
+					className: "rounded-[1.5rem] border border-dashed border-[#C3D2DF] bg-white p-6 text-center",
+					children: [/* @__PURE__ */ jsx("p", {
+						className: "font-bold text-[#15233A]",
+						children: "Врачей пока нет"
+					}), /* @__PURE__ */ jsx("p", {
+						className: "mt-2 text-sm text-[#52657B]",
+						children: "Добавьте врача, чтобы создать первый профиль."
+					})]
+				})]
+			}), /* @__PURE__ */ jsx("section", {
+				className: "min-w-0 rounded-[1.5rem] border border-[#D8E2EA] bg-white p-5 shadow-[0_20px_70px_rgba(39,64,95,0.07)] md:p-6",
+				children: /* @__PURE__ */ jsxs("form", {
+					onSubmit: handleSave,
+					className: "grid gap-6",
+					children: [
+						/* @__PURE__ */ jsxs("div", {
+							className: "flex flex-col gap-3 md:flex-row md:items-start md:justify-between",
+							children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h2", {
+								className: "text-xl font-bold text-[#15233A]",
+								children: editor.recordId ? "Редактирование" : "Новый врач"
+							}), /* @__PURE__ */ jsx("p", {
+								className: "mt-1 text-sm text-[#52657B]",
+								children: "Все поля необходимо заполнить на русском и казахском языках."
+							})] }), /* @__PURE__ */ jsxs("label", {
+								className: "flex items-center gap-2 text-sm font-bold text-[#15233A]",
+								children: [/* @__PURE__ */ jsx("input", {
+									checked: editor.visible,
+									onChange: (event) => setEditor((current) => ({
+										...current,
+										visible: event.target.checked
+									})),
+									type: "checkbox",
+									className: "size-4 accent-primary"
+								}), "Видимый"]
+							})]
+						}),
+						/* @__PURE__ */ jsxs("div", {
+							className: "grid gap-5 lg:grid-cols-[0.72fr_1.28fr]",
+							children: [/* @__PURE__ */ jsxs("div", {
+								className: "grid content-start gap-4",
+								children: [
+									/* @__PURE__ */ jsx("div", {
+										className: "overflow-hidden rounded-[1.25rem] border border-[#D8E2EA] bg-[#F4F8FB]",
+										children: /* @__PURE__ */ jsx("div", {
+											className: "flex aspect-[4/3.5] items-center justify-center overflow-hidden",
+											children: currentPhoto ? /* @__PURE__ */ jsx("img", {
+												src: currentPhoto,
+												alt: "Фото врача",
+												className: "size-full object-cover"
+											}) : /* @__PURE__ */ jsxs("div", {
+												className: "flex flex-col items-center gap-3 text-[#6B7C90]",
+												children: [/* @__PURE__ */ jsx(ImageSquare, { className: "size-12" }), /* @__PURE__ */ jsx("span", {
+													className: "text-sm font-semibold",
+													children: "Нет фото"
+												})]
+											})
+										})
+									}),
+									/* @__PURE__ */ jsxs("label", {
+										className: "inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#D8E2EA] bg-white px-4 text-sm font-bold text-[#15233A] transition-colors hover:border-primary/30",
+										children: [
+											/* @__PURE__ */ jsx(UploadSimple, { className: "size-4" }),
+											"Выбрать фото",
+											/* @__PURE__ */ jsx("input", {
+												type: "file",
+												accept: "image/png,image/jpeg,image/jpg,image/webp,.png,.jpg,.jpeg,.webp",
+												className: "sr-only",
+												onChange: handlePhotoSelection
+											})
+										]
+									}),
+									photoFile && /* @__PURE__ */ jsx("p", {
+										className: "rounded-xl border border-primary/15 bg-primary/5 px-3 py-2 text-xs font-semibold leading-5 text-primary",
+										children: "Фото выбрано. Оно будет оптимизировано и загружено при сохранении."
+									}),
+									/* @__PURE__ */ jsx(Button, {
+										type: "button",
+										variant: "outline",
+										onClick: () => {
+											setPhotoFile(null);
+											setEditor((current) => ({
+												...current,
+												photo: "",
+												photoStorageId: void 0
+											}));
+										},
+										className: "rounded-xl",
+										children: "Удалить фото"
+									})
+								]
+							}), /* @__PURE__ */ jsxs("div", {
+								className: "grid gap-4",
+								children: [
+									/* @__PURE__ */ jsxs("div", {
+										className: "grid gap-4 sm:grid-cols-2",
+										children: [/* @__PURE__ */ jsx(Field, {
+											label: "Стаж (лет)",
+											children: /* @__PURE__ */ jsx(Input, {
+												value: editor.experienceYears,
+												onChange: (event) => setEditor((current) => ({
+													...current,
+													experienceYears: Number(event.target.value)
+												})),
+												type: "number",
+												min: 0,
+												className: inputClassName
+											})
+										}), /* @__PURE__ */ jsx(Field, {
+											label: "Порядок",
+											children: /* @__PURE__ */ jsx(Input, {
+												value: editor.sortOrder,
+												onChange: (event) => setEditor((current) => ({
+													...current,
+													sortOrder: Number(event.target.value)
+												})),
+												type: "number",
+												min: 0,
+												className: inputClassName
+											})
+										})]
+									}),
+									/* @__PURE__ */ jsx(Tabs, {
+										value: activeLanguage,
+										onValueChange: (value) => setActiveLanguage(value),
+										children: /* @__PURE__ */ jsxs(TabsList, {
+											className: "grid w-full grid-cols-2 rounded-xl bg-[#F4F8FB]",
+											children: [/* @__PURE__ */ jsx(TabsTrigger, {
+												value: "ru",
+												className: "rounded-lg font-bold",
+												children: "Русский"
+											}), /* @__PURE__ */ jsx(TabsTrigger, {
+												value: "kk",
+												className: "rounded-lg font-bold",
+												children: "Қазақша"
+											})]
+										})
+									}),
+									/* @__PURE__ */ jsx(LocalizedFields, {
+										language: activeLanguage,
+										editor,
+										onChange: setEditor
+									}),
+									/* @__PURE__ */ jsx(Field, {
+										label: "Услуги",
+										children: /* @__PURE__ */ jsx("div", {
+											className: "grid gap-2 sm:grid-cols-2",
+											children: services.map((service) => /* @__PURE__ */ jsxs("label", {
+												className: cn("flex cursor-pointer items-start gap-2 rounded-xl border px-3 py-3 text-sm font-semibold transition-colors", editor.serviceIds.includes(service.id) ? "border-primary/35 bg-[#F4E7E4]/55 text-[#15233A]" : "border-[#D8E2EA] bg-[#FAFBFC] text-[#52657B] hover:border-[#C3D2DF]"),
+												children: [/* @__PURE__ */ jsx("input", {
+													type: "checkbox",
+													checked: editor.serviceIds.includes(service.id),
+													onChange: () => {
+														setEditor((current) => ({
+															...current,
+															serviceIds: toggleService(current.serviceIds, service.id)
+														}));
+													},
+													className: "mt-1 size-4 accent-primary"
+												}), /* @__PURE__ */ jsx("span", { children: service.title.ru })]
+											}, service.id))
+										})
+									})
+								]
+							})]
+						}),
+						formErrors.length > 0 && /* @__PURE__ */ jsx("div", {
+							className: "rounded-2xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm font-semibold text-destructive",
+							children: formErrors.join(" ")
+						}),
+						statusMessage && /* @__PURE__ */ jsx("div", {
+							className: cn("rounded-2xl border px-4 py-3 text-sm font-semibold", saveStatus === "error" ? "border-destructive/20 bg-destructive/5 text-destructive" : "border-primary/20 bg-primary/5 text-primary"),
+							children: statusMessage
+						}),
+						/* @__PURE__ */ jsxs(Button, {
+							type: "submit",
+							disabled: saveStatus === "saving",
+							className: "h-12 rounded-xl bg-primary font-bold text-white",
+							children: [/* @__PURE__ */ jsx(FloppyDisk, {
+								weight: "bold",
+								className: "size-4"
+							}), saveStatus === "saving" ? "Сохранение..." : "Сохранить врача"]
+						})
+					]
+				})
+			})]
+		})
+	] });
+}
+function AdminShell({ children }) {
+	return /* @__PURE__ */ jsx("main", {
+		className: "min-h-screen bg-[#F4F8FB] px-4 py-8 text-[#15233A] md:px-8",
+		children: /* @__PURE__ */ jsx("div", {
+			className: "mx-auto max-w-[1360px]",
+			children
+		})
+	});
+}
+function DoctorListRow({ doctor, isSelected, canMoveUp, canMoveDown, onSelect, onMoveUp, onMoveDown, onVisibility, onDelete }) {
+	return /* @__PURE__ */ jsxs("article", {
+		className: cn("grid gap-3 rounded-2xl border bg-white p-4 shadow-sm transition-colors sm:grid-cols-[4rem_1fr_auto] sm:items-center", isSelected ? "border-primary/45" : "border-[#D8E2EA]"),
+		children: [
+			/* @__PURE__ */ jsx("button", {
+				type: "button",
+				onClick: onSelect,
+				className: "size-16 overflow-hidden rounded-2xl bg-[#F4F8FB] text-[#6B7C90]",
+				children: doctor.photo ? /* @__PURE__ */ jsx("img", {
+					src: doctor.photo,
+					alt: "",
+					className: "size-full object-cover"
+				}) : /* @__PURE__ */ jsx("span", {
+					className: "flex size-full items-center justify-center text-sm font-bold",
+					children: doctor.name.ru.slice(0, 1)
+				})
+			}),
+			/* @__PURE__ */ jsxs("button", {
+				type: "button",
+				onClick: onSelect,
+				className: "min-w-0 text-left",
+				children: [
+					/* @__PURE__ */ jsx("span", {
+						className: "block truncate text-sm font-bold text-[#15233A]",
+						children: doctor.name.ru
+					}),
+					/* @__PURE__ */ jsx("span", {
+						className: "mt-1 block truncate text-xs font-semibold text-[#52657B]",
+						children: doctor.specialty.ru
+					}),
+					/* @__PURE__ */ jsx("span", {
+						className: "mt-2 inline-flex rounded-full bg-[#F4F8FB] px-2.5 py-1 text-[11px] font-bold text-[#52657B]",
+						children: doctor.visible ? "Виден" : "Скрыт"
+					})
+				]
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				className: "flex flex-wrap gap-2 sm:justify-end",
+				children: [
+					/* @__PURE__ */ jsx(IconButton, {
+						label: "Переместить вверх",
+						onClick: onMoveUp,
+						disabled: !canMoveUp,
+						children: /* @__PURE__ */ jsx(ArrowUp, { className: "size-4" })
+					}),
+					/* @__PURE__ */ jsx(IconButton, {
+						label: "Переместить вниз",
+						onClick: onMoveDown,
+						disabled: !canMoveDown,
+						children: /* @__PURE__ */ jsx(ArrowDown, { className: "size-4" })
+					}),
+					/* @__PURE__ */ jsx(IconButton, {
+						label: doctor.visible ? "Скрыть" : "Показать",
+						onClick: onVisibility,
+						children: doctor.visible ? /* @__PURE__ */ jsx(EyeSlash, { className: "size-4" }) : /* @__PURE__ */ jsx(Eye, { className: "size-4" })
+					}),
+					/* @__PURE__ */ jsx(IconButton, {
+						label: "Удалить",
+						onClick: onDelete,
+						children: /* @__PURE__ */ jsx(Trash, { className: "size-4" })
+					})
+				]
+			})
+		]
+	});
+}
+function IconButton({ label, disabled, onClick, children }) {
+	return /* @__PURE__ */ jsx("button", {
+		type: "button",
+		disabled,
+		onClick,
+		title: label,
+		"aria-label": label,
+		className: "flex size-9 items-center justify-center rounded-xl border border-[#D8E2EA] bg-white text-[#52657B] transition-colors hover:border-primary/30 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40",
+		children
+	});
+}
+function Field({ label, children }) {
+	return /* @__PURE__ */ jsxs("label", {
+		className: "flex flex-col gap-2 text-sm font-bold text-[#15233A]",
+		children: [label, children]
+	});
+}
+function LocalizedFields({ language, editor, onChange }) {
+	return /* @__PURE__ */ jsxs("div", {
+		className: "grid gap-4",
+		children: [
+			/* @__PURE__ */ jsx(Field, {
+				label: language === "ru" ? "Имя (рус)" : "Аты (қаз)",
+				children: /* @__PURE__ */ jsx(Input, {
+					value: editor.name[language],
+					onChange: (event) => updateLocalized(onChange, "name", language, event.target.value),
+					className: inputClassName
+				})
+			}),
+			/* @__PURE__ */ jsx(Field, {
+				label: language === "ru" ? "Специальность (рус)" : "Мамандығы (қаз)",
+				children: /* @__PURE__ */ jsx(Input, {
+					value: editor.specialty[language],
+					onChange: (event) => updateLocalized(onChange, "specialty", language, event.target.value),
+					className: inputClassName
+				})
+			}),
+			/* @__PURE__ */ jsx(Field, {
+				label: language === "ru" ? "Описание (рус)" : "Сипаттама (қаз)",
+				children: /* @__PURE__ */ jsx(Textarea, {
+					value: editor.description[language],
+					onChange: (event) => updateLocalized(onChange, "description", language, event.target.value),
+					className: "min-h-32 resize-none rounded-xl border-[#DDE3E7] bg-[#FAFBFC]"
+				})
+			})
+		]
+	});
+}
+var inputClassName = "h-12 rounded-xl border-[#DDE3E7] bg-[#FAFBFC]";
+function updateLocalized(onChange, field, language, value) {
+	onChange((current) => ({
+		...current,
+		[field]: {
+			...current[field],
+			[language]: value
+		}
+	}));
+}
+function createBlankDoctor(sortOrder = 0) {
+	return {
+		slug: "",
+		name: {
+			ru: "",
+			kk: ""
+		},
+		specialty: {
+			ru: "",
+			kk: ""
+		},
+		description: {
+			ru: "",
+			kk: ""
+		},
+		experienceYears: 0,
+		serviceIds: [],
+		photo: "",
+		visible: true,
+		sortOrder
+	};
+}
+function toEditorState(doctor) {
+	return {
+		recordId: doctor._id,
+		slug: doctor.id,
+		name: doctor.name,
+		specialty: doctor.specialty,
+		description: doctor.description,
+		experienceYears: doctor.experienceYears ?? 0,
+		serviceIds: doctor.serviceIds,
+		photo: doctor.photo,
+		photoStorageId: doctor.photoStorageId,
+		visible: doctor.visible,
+		sortOrder: doctor.sortOrder
+	};
+}
+function validateEditor(editor) {
+	const errors = [];
+	if (!editor.name.ru.trim() || !editor.name.kk.trim()) errors.push("Имя обязательно на обоих языках.");
+	if (!editor.specialty.ru.trim() || !editor.specialty.kk.trim()) errors.push("Специальность обязательна на обоих языках.");
+	if (!editor.description.ru.trim() || !editor.description.kk.trim()) errors.push("Описание обязательно на обоих языках.");
+	if (editor.serviceIds.length === 0) errors.push("Выберите хотя бы одну услугу.");
+	return errors;
+}
+function buildDoctorPayload(editor, photoStorageId) {
+	return {
+		slug: editor.slug.trim(),
+		name: trimLocalized(editor.name),
+		specialty: trimLocalized(editor.specialty),
+		description: trimLocalized(editor.description),
+		experienceYears: Number.isFinite(editor.experienceYears) ? editor.experienceYears : 0,
+		serviceIds: editor.serviceIds,
+		photoStorageId: photoStorageId ?? null,
+		visible: editor.visible,
+		sortOrder: Number.isFinite(editor.sortOrder) ? editor.sortOrder : 0
+	};
+}
+function trimLocalized(text) {
+	return {
+		ru: text.ru.trim(),
+		kk: text.kk.trim()
+	};
+}
+function toggleService(serviceIds, serviceId) {
+	return serviceIds.includes(serviceId) ? serviceIds.filter((item) => item !== serviceId) : [...serviceIds, serviceId];
+}
+var cyrillicToLatin = {
+	а: "a",
+	б: "b",
+	в: "v",
+	г: "g",
+	д: "d",
+	е: "e",
+	ё: "yo",
+	ж: "zh",
+	з: "z",
+	и: "i",
+	й: "y",
+	к: "k",
+	л: "l",
+	м: "m",
+	н: "n",
+	о: "o",
+	п: "p",
+	р: "r",
+	с: "s",
+	т: "t",
+	у: "u",
+	ф: "f",
+	х: "kh",
+	ц: "ts",
+	ч: "ch",
+	ш: "sh",
+	щ: "shch",
+	ъ: "",
+	ы: "y",
+	ь: "",
+	э: "e",
+	ю: "yu",
+	я: "ya",
+	ә: "a",
+	ғ: "g",
+	қ: "q",
+	ң: "n",
+	ө: "o",
+	ұ: "u",
+	ү: "u",
+	і: "i",
+	һ: "h"
+};
+function slugify(value) {
+	return value.toLowerCase().split("").map((char) => cyrillicToLatin[char] ?? char).join("").replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
+}
+async function uploadPhoto(file, token, generateUploadUrl) {
+	const preparedFile = await prepareImageForUpload(file);
+	const uploadUrl = await generateUploadUrl({ token });
+	const response = await fetch(uploadUrl, {
+		method: "POST",
+		headers: { "Content-Type": preparedFile.type || "image/jpeg" },
+		body: preparedFile
+	});
+	if (!response.ok) throw new Error(`Photo upload failed with status ${response.status}`);
+	return (await response.json()).storageId;
+}
+function isSupportedImageFile(file) {
+	return supportedImageTypes.has(file.type) || /\.(jpe?g|png|webp)$/i.test(file.name);
+}
+async function prepareImageForUpload(file) {
+	if (!isSupportedImageFile(file)) throw new Error("Выберите изображение в формате JPG, PNG или WEBP.");
+	const image = await loadImage(file);
+	const largestEdge = Math.max(image.naturalWidth, image.naturalHeight);
+	const scale = Math.min(1, MAX_UPLOAD_IMAGE_EDGE / largestEdge);
+	const width = Math.max(1, Math.round(image.naturalWidth * scale));
+	const height = Math.max(1, Math.round(image.naturalHeight * scale));
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	if (!context) throw new Error("Не удалось подготовить фото для загрузки.");
+	canvas.width = width;
+	canvas.height = height;
+	context.fillStyle = "#ffffff";
+	context.fillRect(0, 0, width, height);
+	context.drawImage(image, 0, 0, width, height);
+	return await new Promise((resolve, reject) => {
+		canvas.toBlob((blob) => {
+			if (blob) {
+				resolve(blob);
+				return;
+			}
+			reject(/* @__PURE__ */ new Error("Не удалось подготовить фото для загрузки."));
+		}, "image/jpeg", UPLOAD_JPEG_QUALITY);
+	});
+}
+async function loadImage(file) {
+	const objectUrl = URL.createObjectURL(file);
+	const image = new Image();
+	try {
+		return await new Promise((resolve, reject) => {
+			image.onload = () => resolve(image);
+			image.onerror = () => reject(/* @__PURE__ */ new Error("Не удалось прочитать файл изображения."));
+			image.src = objectUrl;
+		});
+	} finally {
+		URL.revokeObjectURL(objectUrl);
+	}
+}
+function getErrorMessage(error) {
+	return error instanceof Error ? error.message : "Непредвиденная ошибка";
+}
+//#endregion
+//#region src/pages/Visitka/components/ActionLink.tsx
+function ActionLink$1({ label, href, external, icon: Icon }) {
+	return /* @__PURE__ */ jsx(Button, {
+		asChild: true,
+		variant: "outline",
+		className: "group h-[4.9rem] w-full justify-start rounded-full border-white/75 bg-[#fffaf3]/72 px-4 text-left text-[1.05rem] font-semibold text-[#3f3531] shadow-[inset_0_1px_0_rgba(255,255,255,0.88),0_20px_42px_rgba(76,50,36,0.12)] backdrop-blur-xl transition-[background-color,border-color,box-shadow,transform] hover:-translate-y-0.5 hover:border-white hover:bg-white/88 hover:text-[#342b28] active:translate-y-[1px] sm:h-[5.4rem] sm:px-5 sm:text-[1.18rem] [&_svg]:size-7",
+		children: /* @__PURE__ */ jsxs("a", {
+			href,
+			target: external ? "_blank" : void 0,
+			rel: external ? "noreferrer" : void 0,
+			children: [/* @__PURE__ */ jsx("span", {
+				className: "flex size-14 shrink-0 items-center justify-center rounded-full bg-[#a83d2b] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.24),0_10px_24px_rgba(142,47,35,0.22)] transition-transform duration-300 group-hover:scale-[1.04] sm:size-16",
+				children: /* @__PURE__ */ jsx(Icon, {
+					"data-icon": "inline-start",
+					weight: "bold",
+					"aria-hidden": "true"
+				})
+			}), /* @__PURE__ */ jsx("span", {
+				className: "min-w-0 flex-1 whitespace-normal leading-tight",
+				children: label
+			})]
+		})
+	});
+}
+//#endregion
+//#region src/pages/Visitka/components/FloatingAsset.tsx
+function FloatingAsset$1({ src, alt, className, delay = 0, duration = 10, floatY = 18, floatX = 8, rotate = 5 }) {
+	const shouldReduceMotion = useReducedMotion();
+	return /* @__PURE__ */ jsx(motion.img, {
+		src,
+		alt,
+		"aria-hidden": alt ? void 0 : "true",
+		draggable: false,
+		className: cn("pointer-events-none absolute z-[1] h-auto select-none will-change-transform [filter:drop-shadow(0_22px_34px_rgba(70,47,37,0.24))]", className),
+		animate: shouldReduceMotion ? void 0 : {
+			y: [
+				0,
+				-floatY,
+				-floatY * .45,
+				0
+			],
+			x: [
+				0,
+				floatX,
+				-floatX * .35,
+				0
+			],
+			rotate: [
+				-rotate,
+				rotate * .6,
+				rotate,
+				-rotate
+			],
+			scale: [
+				1,
+				1.025,
+				1.01,
+				1
+			]
+		},
+		transition: shouldReduceMotion ? void 0 : {
+			duration,
+			delay,
+			repeat: Infinity,
+			ease: [
+				.42,
+				0,
+				.58,
+				1
+			]
+		}
+	});
+}
+//#endregion
+//#region src/components/ui/toggle.tsx
+var toggleVariants = cva("inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-[background-color,border-color,color,box-shadow,transform] hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground motion-reduce:transition-none [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0", {
+	variants: {
+		variant: {
+			default: "bg-transparent",
+			outline: "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground"
+		},
+		size: {
+			default: "h-10 min-w-10 px-3",
+			sm: "h-9 min-w-9 px-2.5",
+			lg: "h-11 min-w-11 px-5"
+		}
+	},
+	defaultVariants: {
+		variant: "default",
+		size: "default"
+	}
+});
+var Toggle = React.forwardRef(({ className, variant, size, ...props }, ref) => /* @__PURE__ */ jsx(TogglePrimitive.Root, {
+	ref,
+	className: cn(toggleVariants({
+		variant,
+		size,
+		className
+	})),
+	...props
+}));
+Toggle.displayName = TogglePrimitive.Root.displayName;
+//#endregion
+//#region src/components/ui/toggle-group.tsx
+var ToggleGroupContext = React.createContext({
+	size: "default",
+	variant: "default"
+});
+var ToggleGroup = React.forwardRef(({ className, variant, size, children, ...props }, ref) => /* @__PURE__ */ jsx(ToggleGroupPrimitive.Root, {
+	ref,
+	className: cn("flex items-center justify-center gap-1", className),
+	...props,
+	children: /* @__PURE__ */ jsx(ToggleGroupContext.Provider, {
+		value: {
+			variant,
+			size
+		},
+		children
+	})
+}));
+ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
+var ToggleGroupItem = React.forwardRef(({ className, children, variant, size, ...props }, ref) => {
+	const context = React.useContext(ToggleGroupContext);
+	return /* @__PURE__ */ jsx(ToggleGroupPrimitive.Item, {
+		ref,
+		className: cn(toggleVariants({
+			variant: context.variant || variant,
+			size: context.size || size
+		}), className),
+		...props,
+		children
+	});
+});
+ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
+//#endregion
+//#region src/pages/Visitka/components/LanguageToggle.tsx
+function LanguageToggle$1({ value, onChange }) {
+	return /* @__PURE__ */ jsxs(ToggleGroup, {
+		type: "single",
+		value,
+		onValueChange: (next) => {
+			if (next === "kk" || next === "ru") onChange(next);
+		},
+		variant: "outline",
+		size: "sm",
+		"aria-label": "Language",
+		className: "rounded-full border border-white/70 bg-white/58 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_12px_24px_rgba(78,54,39,0.09)] backdrop-blur-xl",
+		children: [/* @__PURE__ */ jsx(ToggleGroupItem, {
+			value: "kk",
+			"aria-label": "Қазақша",
+			className: "h-9 min-w-11 rounded-full border-0 px-3 text-xs font-bold tracking-normal text-[#6f5f59] data-[state=on]:bg-[#a83d2b] data-[state=on]:text-white",
+			children: "KZ"
+		}), /* @__PURE__ */ jsx(ToggleGroupItem, {
+			value: "ru",
+			"aria-label": "Русский",
+			className: "h-9 min-w-11 rounded-full border-0 px-3 text-xs font-bold tracking-normal text-[#6f5f59] data-[state=on]:bg-[#a83d2b] data-[state=on]:text-white",
+			children: "RU"
+		})]
+	});
+}
+//#endregion
+//#region src/pages/Visitka/content.ts
+var links$1 = {
+	phone: "tel:+77027133939",
+	whatsapp: `https://wa.me/77027133939?text=${encodeURIComponent("Здравствуйте! Хочу записаться на прием")}`,
+	location: "https://2gis.kz/aktau/firm/70000001038002984/tab/reviews",
+	instagram: "https://www.instagram.com/implantium.aktau",
+	website: "https://implantium.kz"
+};
+var content$1 = {
+	kk: {
+		metaTitle: "IMPLANTIUM | Ақтаудағы стоматологиялық клиника",
+		kicker: "Dental clinic",
+		titleLines: [
+			"Ақтаудағы",
+			"стоматологиялық",
+			"клиника"
+		],
+		mission: "Біздің миссия — мүлтіксіз ем, үздіксіз дамуда.",
+		actions: {
+			call: {
+				label: "Қоңырау шалу",
+				href: links$1.phone
+			},
+			whatsapp: {
+				label: "WhatsApp-қа жазу",
+				href: links$1.whatsapp,
+				external: true
+			},
+			location: {
+				label: "Біз қайдамыз",
+				href: links$1.location,
+				external: true
+			},
+			instagram: {
+				label: "Instagram",
+				href: links$1.instagram,
+				external: true
+			},
+			website: {
+				label: "Сайтымыз",
+				href: links$1.website,
+				external: true
+			}
+		}
+	},
+	ru: {
+		metaTitle: "IMPLANTIUM | Стоматологическая клиника в Актау",
+		kicker: "Dental clinic",
+		titleLines: [
+			"Стоматологическая",
+			"клиника в городе",
+			"Актау"
+		],
+		mission: "Наша миссия — безупречное лечение и постоянное развитие.",
+		actions: {
+			call: {
+				label: "Позвонить нам",
+				href: links$1.phone
+			},
+			whatsapp: {
+				label: "Написать в WhatsApp",
+				href: links$1.whatsapp,
+				external: true
+			},
+			location: {
+				label: "Где мы находимся",
+				href: links$1.location,
+				external: true
+			},
+			instagram: {
+				label: "Наш Instagram",
+				href: links$1.instagram,
+				external: true
+			},
+			website: {
+				label: "Наш сайт",
+				href: links$1.website,
+				external: true
+			}
+		}
+	}
+};
+//#endregion
+//#region src/assets/generated/cream-dental-background.png
+var cream_dental_background_default = "/assets/cream-dental-background-BbLai_LG.png";
+//#endregion
+//#region src/assets/generated/implant.png
+var implant_default = "/assets/implant-CCSJ1HCq.png";
+//#endregion
+//#region src/assets/generated/implantium-logo-transparent.png
+var implantium_logo_transparent_default = "/assets/implantium-logo-transparent-Dkgf2SCs.png";
+//#endregion
+//#region src/assets/generated/pearls.png
+var pearls_default = "/assets/pearls-C3d2xeKT.png";
+//#endregion
+//#region src/assets/generated/tooth.png
+var tooth_default = "/assets/tooth-D0bBLhgf.png";
+//#endregion
+//#region src/pages/Visitka/index.tsx
+var STORAGE_KEY$1 = "implantium-link-page-language";
+function getInitialLanguage$1() {
+	if (typeof window === "undefined") return "kk";
+	const saved = window.localStorage.getItem(STORAGE_KEY$1);
+	return saved === "ru" || saved === "kk" ? saved : "kk";
+}
+function Visitka() {
+	const [language, setLanguage] = useState(getInitialLanguage$1);
+	const shouldReduceMotion = useReducedMotion();
+	const copy = content$1[language];
+	const actions = useMemo(() => [
+		{
+			...copy.actions.call,
+			icon: Phone
+		},
+		{
+			...copy.actions.whatsapp,
+			icon: WhatsappLogo
+		},
+		{
+			...copy.actions.location,
+			icon: MapPin
+		},
+		{
+			...copy.actions.instagram,
+			icon: InstagramLogo
+		},
+		{
+			...copy.actions.website,
+			icon: GlobeHemisphereWest
+		}
+	], [copy]);
+	useEffect(() => {
+		window.localStorage.setItem(STORAGE_KEY$1, language);
+		document.documentElement.lang = language === "kk" ? "kk" : "ru";
+		document.title = copy.metaTitle;
+	}, [copy.metaTitle, language]);
+	return /* @__PURE__ */ jsxs("main", {
+		className: "relative isolate min-h-[100dvh] overflow-hidden bg-[#f5eee6] text-[#322927]",
+		children: [
+			/* @__PURE__ */ jsx("img", {
+				src: cream_dental_background_default,
+				alt: "",
+				className: "absolute inset-0 -z-20 size-full object-cover object-center",
+				loading: "eager",
+				decoding: "async"
+			}),
+			/* @__PURE__ */ jsx("div", { className: "absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(255,250,244,0.38),rgba(247,237,226,0.08)_48%,rgba(226,205,187,0.2))]" }),
+			/* @__PURE__ */ jsx(FloatingAsset$1, {
+				src: implant_default,
+				alt: "",
+				className: "right-[-6.2rem] top-[8.6rem] hidden w-[13rem] rotate-[14deg] opacity-90 sm:block sm:right-[calc(50%-25rem)] sm:top-[7.4rem] sm:w-[15rem] lg:right-[calc(50%-31rem)]",
+				delay: .25,
+				duration: 9,
+				floatY: 22,
+				floatX: 10,
+				rotate: 7
+			}),
+			/* @__PURE__ */ jsx(FloatingAsset$1, {
+				src: tooth_default,
+				alt: "",
+				className: "left-[-6.8rem] top-[15rem] w-[12rem] -rotate-[18deg] opacity-70 sm:left-[calc(50%-27rem)] sm:top-[17rem] sm:w-[14rem] lg:left-[calc(50%-34rem)]",
+				delay: .8,
+				duration: 10.5,
+				floatY: 18,
+				floatX: 8,
+				rotate: 6
+			}),
+			/* @__PURE__ */ jsx(FloatingAsset$1, {
+				src: pearls_default,
+				alt: "",
+				className: "bottom-[1.5rem] right-[-5.8rem] w-[13.5rem] opacity-85 sm:bottom-[2.5rem] sm:right-[calc(50%-27rem)] sm:w-[15rem] lg:right-[calc(50%-35rem)]",
+				delay: 1.1,
+				duration: 11,
+				floatY: 20,
+				floatX: 12,
+				rotate: 5
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-[42rem] flex-col px-4 py-6 sm:px-8 sm:py-9",
+				children: [/* @__PURE__ */ jsxs(motion.header, {
+					className: "flex items-start justify-between gap-4",
+					initial: shouldReduceMotion ? { opacity: 0 } : {
+						opacity: 0,
+						y: -14
+					},
+					animate: {
+						opacity: 1,
+						y: 0
+					},
+					transition: {
+						duration: shouldReduceMotion ? .1 : .55,
+						ease: [
+							.16,
+							1,
+							.3,
+							1
+						]
+					},
+					children: [/* @__PURE__ */ jsx("img", {
+						src: implantium_logo_transparent_default,
+						alt: "IMPLANTIUM Dental Clinic",
+						className: "h-auto w-[13rem] mix-blend-multiply sm:w-[15rem]",
+						loading: "eager",
+						decoding: "async"
+					}), /* @__PURE__ */ jsx(LanguageToggle$1, {
+						value: language,
+						onChange: setLanguage
+					})]
+				}), /* @__PURE__ */ jsxs(motion.div, {
+					className: "mx-auto mt-16 flex w-full max-w-[32rem] flex-1 flex-col items-center text-center sm:mt-20",
+					initial: shouldReduceMotion ? { opacity: 0 } : {
+						opacity: 0,
+						y: 18
+					},
+					animate: {
+						opacity: 1,
+						y: 0
+					},
+					transition: {
+						delay: shouldReduceMotion ? 0 : .12,
+						duration: shouldReduceMotion ? .1 : .65,
+						ease: [
+							.16,
+							1,
+							.3,
+							1
+						]
+					},
+					children: [/* @__PURE__ */ jsxs("div", {
+						className: "flex flex-col items-center gap-4",
+						children: [
+							/* @__PURE__ */ jsx("p", {
+								className: "text-sm font-semibold uppercase tracking-[0.26em] text-[#a34431]",
+								children: copy.kicker
+							}),
+							/* @__PURE__ */ jsx("h1", {
+								className: "w-full text-center text-[2.05rem] font-extrabold leading-[1.08] tracking-normal text-[#342c2a] sm:text-[2.9rem]",
+								children: copy.titleLines.map((line) => /* @__PURE__ */ jsx("span", {
+									className: "block",
+									children: line
+								}, line))
+							}),
+							/* @__PURE__ */ jsx("p", {
+								className: "max-w-[24rem] text-balance text-[1.02rem] font-medium leading-relaxed text-[#4f4642] sm:text-[1.12rem]",
+								children: copy.mission
+							})
+						]
+					}), /* @__PURE__ */ jsx(motion.ul, {
+						className: "mt-10 flex w-full flex-col gap-4 pb-5 sm:mt-12 sm:gap-5",
+						initial: "hidden",
+						animate: "visible",
+						variants: {
+							hidden: {},
+							visible: { transition: {
+								staggerChildren: shouldReduceMotion ? 0 : .08,
+								delayChildren: shouldReduceMotion ? 0 : .28
+							} }
+						},
+						children: actions.map((action) => /* @__PURE__ */ jsx(motion.li, {
+							variants: {
+								hidden: shouldReduceMotion ? { opacity: 0 } : {
+									opacity: 0,
+									y: 18
+								},
+								visible: {
+									opacity: 1,
+									y: 0
+								}
+							},
+							transition: {
+								duration: shouldReduceMotion ? .1 : .48,
+								ease: [
+									.16,
+									1,
+									.3,
+									1
+								]
+							},
+							children: /* @__PURE__ */ jsx(ActionLink$1, { ...action })
+						}, action.href))
+					})]
+				})]
+			})
+		]
+	});
+}
+//#endregion
+//#region src/pages/Visitka2/components/ActionLink.tsx
+function ActionLink({ label, href, external, icon: Icon }) {
+	return /* @__PURE__ */ jsx(Button, {
+		asChild: true,
+		variant: "outline",
+		className: "group h-[4.9rem] w-full justify-start rounded-full border-white/20 bg-white/5 px-4 text-left text-[1.05rem] font-semibold text-white shadow-[0_4px_14px_rgba(0,0,0,0.15)] backdrop-blur-md transition-all hover:scale-[1.02] hover:border-white/40 hover:bg-white/10 active:scale-[0.98] sm:h-[5.4rem] sm:px-5 sm:text-[1.18rem] [&_svg]:size-7",
+		children: /* @__PURE__ */ jsxs("a", {
+			href,
+			target: external ? "_blank" : void 0,
+			rel: external ? "noreferrer" : void 0,
+			children: [/* @__PURE__ */ jsx("span", {
+				className: "flex size-14 shrink-0 items-center justify-center rounded-full bg-white/10 text-white shadow-sm transition-transform duration-300 group-hover:scale-[1.04] group-hover:bg-white group-hover:text-[#4c4b4b] sm:size-16",
+				children: /* @__PURE__ */ jsx(Icon, {
+					"data-icon": "inline-start",
+					weight: "bold",
+					"aria-hidden": "true"
+				})
+			}), /* @__PURE__ */ jsx("span", {
+				className: "ml-4 min-w-0 flex-1 whitespace-normal leading-tight tracking-wide",
+				children: label
+			})]
+		})
+	});
+}
+//#endregion
+//#region src/pages/Visitka2/components/FloatingAsset.tsx
+function FloatingAsset({ src, alt, className, delay = 0, duration = 10, floatY = 18, floatX = 8, rotate = 5 }) {
+	const shouldReduceMotion = useReducedMotion();
+	return /* @__PURE__ */ jsx(motion.img, {
+		src,
+		alt,
+		"aria-hidden": alt ? void 0 : "true",
+		draggable: false,
+		className: cn("pointer-events-none absolute z-[1] h-auto select-none will-change-transform [filter:drop-shadow(0_22px_34px_rgba(70,47,37,0.24))]", className),
+		animate: shouldReduceMotion ? void 0 : {
+			y: [
+				0,
+				-floatY,
+				-floatY * .45,
+				0
+			],
+			x: [
+				0,
+				floatX,
+				-floatX * .35,
+				0
+			],
+			rotate: [
+				-rotate,
+				rotate * .6,
+				rotate,
+				-rotate
+			],
+			scale: [
+				1,
+				1.025,
+				1.01,
+				1
+			]
+		},
+		transition: shouldReduceMotion ? void 0 : {
+			duration,
+			delay,
+			repeat: Infinity,
+			ease: [
+				.42,
+				0,
+				.58,
+				1
+			]
+		}
+	});
+}
+//#endregion
+//#region src/pages/Visitka2/components/LanguageToggle.tsx
+function LanguageToggle({ value, onChange }) {
+	return /* @__PURE__ */ jsxs(ToggleGroup, {
+		type: "single",
+		value,
+		onValueChange: (next) => {
+			if (next === "kk" || next === "ru") onChange(next);
+		},
+		variant: "outline",
+		size: "sm",
+		"aria-label": "Language",
+		className: "rounded-full border border-white/20 bg-white/5 p-1 shadow-md backdrop-blur-md",
+		children: [/* @__PURE__ */ jsx(ToggleGroupItem, {
+			value: "kk",
+			"aria-label": "Қазақша",
+			className: "h-9 min-w-11 rounded-full border-0 px-3 text-xs font-bold tracking-normal text-white/70 data-[state=on]:bg-white data-[state=on]:text-[#4c4b4b]",
+			children: "KZ"
+		}), /* @__PURE__ */ jsx(ToggleGroupItem, {
+			value: "ru",
+			"aria-label": "Русский",
+			className: "h-9 min-w-11 rounded-full border-0 px-3 text-xs font-bold tracking-normal text-white/70 data-[state=on]:bg-white data-[state=on]:text-[#4c4b4b]",
+			children: "RU"
+		})]
+	});
+}
+//#endregion
+//#region src/pages/Visitka2/content.ts
+var links = {
+	phone: "tel:+77475000506",
+	whatsapp: `https://wa.me/77475000506?text=${encodeURIComponent("Здравствуйте! Хочу записаться на прием")}`,
+	location: "https://go.2gis.com/wfAzo",
+	instagram: "https://www.instagram.com/inventa_dental.clinic/",
+	website: "https://implantium.kz"
+};
+var content = {
+	kk: {
+		metaTitle: "INVENTA | Ақтаудағы стоматологиялық клиника",
+		kicker: "Dental clinic",
+		titleLines: [
+			"INVENTA",
+			"стоматологиялық",
+			"клиникасы"
+		],
+		mission: "Біздің миссия - мүлтіксіз ем, үздіксіз дамуда.",
+		actions: {
+			call: {
+				label: "Қоңырау шалу",
+				href: links.phone
+			},
+			whatsapp: {
+				label: "WhatsApp-қа жазу",
+				href: links.whatsapp,
+				external: true
+			},
+			website: {
+				label: "Біздің сайт",
+				href: links.website,
+				external: true
+			},
+			location: {
+				label: "Біз қайдамыз",
+				href: links.location,
+				external: true
+			},
+			instagram: {
+				label: "Instagram",
+				href: links.instagram,
+				external: true
+			}
+		}
+	},
+	ru: {
+		metaTitle: "INVENTA | Стоматологическая клиника в Актау",
+		kicker: "Dental clinic",
+		titleLines: ["Стоматологическая", "клиника INVENTA"],
+		mission: "Наша миссия - безупречное лечение и постоянное развитие.",
+		actions: {
+			call: {
+				label: "Позвонить нам",
+				href: links.phone
+			},
+			whatsapp: {
+				label: "Написать в WhatsApp",
+				href: links.whatsapp,
+				external: true
+			},
+			website: {
+				label: "Наш сайт",
+				href: links.website,
+				external: true
+			},
+			location: {
+				label: "Где мы находимся",
+				href: links.location,
+				external: true
+			},
+			instagram: {
+				label: "Наш Instagram",
+				href: links.instagram,
+				external: true
+			}
+		}
+	}
+};
+//#endregion
+//#region src/assets/generated/inventa-logo.png
+var inventa_logo_default = "/assets/inventa-logo-Bt_NeMqZ.png";
+//#endregion
+//#region src/assets/generated/inventa_tooth.png
+var inventa_tooth_default = "/assets/inventa_tooth-BLalBtz1.png";
+//#endregion
+//#region src/assets/generated/inventa_sphere.png
+var inventa_sphere_default = "/assets/inventa_sphere-eWkxzRDA.png";
+//#endregion
+//#region src/assets/generated/inventa_abstract.png
+var inventa_abstract_default = "/assets/inventa_abstract-DppitXms.png";
+//#endregion
+//#region src/pages/Visitka2/index.tsx
+var STORAGE_KEY = "inventa-link-page-language";
+function getInitialLanguage() {
+	if (typeof window === "undefined") return "kk";
+	const saved = window.localStorage.getItem(STORAGE_KEY);
+	return saved === "ru" || saved === "kk" ? saved : "kk";
+}
+function Visitka2() {
+	const [language, setLanguage] = useState(() => {
+		if (typeof window === "undefined") return "kk";
+		return getInitialLanguage();
+	});
+	const shouldReduceMotion = useReducedMotion();
+	const copy = content[language];
+	const actions = useMemo(() => [
+		{
+			...copy.actions.call,
+			icon: Phone
+		},
+		{
+			...copy.actions.whatsapp,
+			icon: WhatsappLogo
+		},
+		{
+			...copy.actions.location,
+			icon: MapPin
+		},
+		{
+			...copy.actions.instagram,
+			icon: InstagramLogo
+		},
+		{
+			...copy.actions.website,
+			icon: GlobeHemisphereWest
+		}
+	], [copy]);
+	useEffect(() => {
+		window.localStorage.setItem(STORAGE_KEY, language);
+		document.documentElement.lang = language === "kk" ? "kk" : "ru";
+		document.title = copy.metaTitle;
+	}, [copy.metaTitle, language]);
+	return /* @__PURE__ */ jsxs("main", {
+		className: "relative isolate min-h-[100dvh] overflow-hidden bg-[#525252] text-white",
+		children: [
+			/* @__PURE__ */ jsx(FloatingAsset, {
+				src: inventa_abstract_default,
+				alt: "",
+				className: "right-[-6.2rem] top-[8.6rem] hidden w-[13rem] rotate-[14deg] opacity-60 mix-blend-lighten sm:block sm:right-[calc(50%-25rem)] sm:top-[7.4rem] sm:w-[15rem] lg:right-[calc(50%-31rem)]",
+				delay: .25,
+				duration: 9,
+				floatY: 22,
+				floatX: 10,
+				rotate: 7
+			}),
+			/* @__PURE__ */ jsx(FloatingAsset, {
+				src: inventa_tooth_default,
+				alt: "",
+				className: "left-[-6.8rem] top-[15rem] w-[12rem] -rotate-[18deg] opacity-70 mix-blend-lighten sm:left-[calc(50%-27rem)] sm:top-[17rem] sm:w-[14rem] lg:left-[calc(50%-34rem)]",
+				delay: .8,
+				duration: 10.5,
+				floatY: 18,
+				floatX: 8,
+				rotate: 6
+			}),
+			/* @__PURE__ */ jsx(FloatingAsset, {
+				src: inventa_sphere_default,
+				alt: "",
+				className: "bottom-[1.5rem] right-[-5.8rem] w-[13.5rem] opacity-75 mix-blend-lighten sm:bottom-[2.5rem] sm:right-[calc(50%-27rem)] sm:w-[15rem] lg:right-[calc(50%-35rem)]",
+				delay: 1.1,
+				duration: 11,
+				floatY: 20,
+				floatX: 12,
+				rotate: 5
+			}),
+			/* @__PURE__ */ jsxs("section", {
+				className: "relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-[42rem] flex-col px-4 py-6 sm:px-8 sm:py-9",
+				children: [/* @__PURE__ */ jsxs(motion.header, {
+					className: "flex items-center justify-between gap-4",
+					initial: shouldReduceMotion ? { opacity: 0 } : {
+						opacity: 0,
+						y: -14
+					},
+					animate: {
+						opacity: 1,
+						y: 0
+					},
+					transition: {
+						duration: shouldReduceMotion ? .1 : .55,
+						ease: [
+							.16,
+							1,
+							.3,
+							1
+						]
+					},
+					children: [/* @__PURE__ */ jsx("img", {
+						src: inventa_logo_default,
+						alt: "INVENTA Dental Clinic",
+						className: "h-auto w-[13rem] mix-blend-lighten sm:w-[15rem]",
+						loading: "eager",
+						decoding: "async"
+					}), /* @__PURE__ */ jsx(LanguageToggle, {
+						value: language,
+						onChange: setLanguage
+					})]
+				}), /* @__PURE__ */ jsxs(motion.div, {
+					className: "mx-auto mt-8 flex w-full max-w-[32rem] flex-1 flex-col items-center text-center sm:mt-10",
+					initial: shouldReduceMotion ? { opacity: 0 } : {
+						opacity: 0,
+						y: 18
+					},
+					animate: {
+						opacity: 1,
+						y: 0
+					},
+					transition: {
+						delay: shouldReduceMotion ? 0 : .12,
+						duration: shouldReduceMotion ? .1 : .65,
+						ease: [
+							.16,
+							1,
+							.3,
+							1
+						]
+					},
+					children: [/* @__PURE__ */ jsxs("div", {
+						className: "flex flex-col items-center gap-4",
+						children: [
+							/* @__PURE__ */ jsx("p", {
+								className: "text-sm font-semibold uppercase tracking-[0.26em] text-white/60",
+								children: copy.kicker
+							}),
+							/* @__PURE__ */ jsx("h1", {
+								className: "w-full text-center text-[2.05rem] font-extrabold leading-[1.08] tracking-normal text-white sm:text-[2.9rem]",
+								children: copy.titleLines.map((line) => /* @__PURE__ */ jsx("span", {
+									className: "block",
+									children: line
+								}, line))
+							}),
+							/* @__PURE__ */ jsx("p", {
+								className: "max-w-[24rem] text-balance text-[1.02rem] font-medium leading-relaxed text-white/80 sm:text-[1.12rem]",
+								children: copy.mission
+							})
+						]
+					}), /* @__PURE__ */ jsx(motion.ul, {
+						className: "mt-10 flex w-full flex-col gap-4 pb-5 sm:mt-12 sm:gap-5",
+						initial: "hidden",
+						animate: "visible",
+						variants: {
+							hidden: {},
+							visible: { transition: {
+								staggerChildren: shouldReduceMotion ? 0 : .08,
+								delayChildren: shouldReduceMotion ? 0 : .28
+							} }
+						},
+						children: actions.map((action) => /* @__PURE__ */ jsx(motion.li, {
+							variants: {
+								hidden: shouldReduceMotion ? { opacity: 0 } : {
+									opacity: 0,
+									y: 18
+								},
+								visible: {
+									opacity: 1,
+									y: 0
+								}
+							},
+							transition: {
+								duration: shouldReduceMotion ? .1 : .48,
+								ease: [
+									.16,
+									1,
+									.3,
+									1
+								]
+							},
+							children: /* @__PURE__ */ jsx(ActionLink, { ...action })
+						}, action.href))
+					})]
+				})]
+			})
+		]
+	});
+}
+//#endregion
 //#region src/entry-server.tsx
 function render(url) {
 	return renderToString(/* @__PURE__ */ jsx(StrictMode, { children: /* @__PURE__ */ jsx(AppConvexProvider, { children: /* @__PURE__ */ jsx(StaticRouter, {
 		location: url,
-		children: /* @__PURE__ */ jsx(App, {})
+		children: /* @__PURE__ */ jsx(AppRouter, { pages: {
+			Home,
+			Doctors,
+			ServiceDetail,
+			NotFound,
+			Admin,
+			Visitka,
+			Visitka2
+		} })
 	}) }) }));
 }
 //#endregion
-export { landingCopy as _, StaggerItem as a, clinicContact as c, Dialog as d, DialogContent as f, Button as g, DialogTitle as h, Stagger as i, getWhatsAppUrl as l, DialogHeader as m, MotionListItem as n, TextReveal as o, DialogDescription as p, Reveal as r, render, BookingModal as s, isConvexConfigured as t, hasContactValue as u, landingServices as v, content as y };
+export { MotionListItem as a, BookingModal as c, content$2 as d, usePublicDoctors as i, Button as l, HomeDoctorCardSkeleton as n, Reveal as o, DoctorPhoto as r, render, TextReveal as s, DentalParallaxBackground as t, landingCopy as u };
