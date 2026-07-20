@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-
-const FALLBACK_SITE_URL = "https://implantium.kz";
+import { PRODUCTION_ORIGIN } from "@/seo/registry";
 
 type SeoConfig = {
   title: string;
@@ -21,11 +20,7 @@ export function getSiteOrigin() {
     return normalizedConfiguredUrl;
   }
 
-  if (typeof window !== "undefined" && window.location.origin) {
-    return normalizeOrigin(window.location.origin) ?? FALLBACK_SITE_URL;
-  }
-
-  return FALLBACK_SITE_URL;
+  return PRODUCTION_ORIGIN;
 }
 
 export function useSeo({

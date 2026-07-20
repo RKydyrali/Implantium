@@ -1,5 +1,5 @@
-import type { Language, ServiceData } from "@/types";
-import { clinicContact, hasContactValue } from "@/data/clinicContact";
+import type { Language, ServiceData } from "../types/index.ts";
+import { clinicContact, hasContactValue } from "./clinicContact.ts";
 
 type LocalizedSeoText = Record<Language, string>;
 

@@ -22,130 +22,18 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { fileURLToPath } from 'url';
+import { PRODUCTION_ORIGIN, SEO_ROUTES } from '../src/seo/registry.ts';
 
 const rootDir = resolve(fileURLToPath(import.meta.url), '..', '..');
 
-// ---------------------------------------------------------------------------
-// Site URL
-// ---------------------------------------------------------------------------
-function resolveSiteUrl() {
-  // Read .env.local first, then .env
-  for (const envFile of ['.env.local', '.env']) {
-    const path = resolve(rootDir, envFile);
-    if (existsSync(path)) {
-      const content = readFileSync(path, 'utf-8');
-      const match = content.match(/^VITE_SITE_URL\s*=\s*(.+)$/m);
-      if (match) return match[1].trim().replace(/\/$/, '');
-    }
-  }
-  return process.env.VITE_SITE_URL?.replace(/\/$/, '') ?? 'https://implantium.kz';
-}
-
-const SITE = resolveSiteUrl();
-
-// ---------------------------------------------------------------------------
-// Route SEO data (mirrors src/data/seo.ts — keep in sync when titles change)
-// ---------------------------------------------------------------------------
-const ROUTES = [
-  {
-    path: '/',
-    title: 'Имплантация зубов в Актау | Стоматология IMPLANTIUM',
-    description:
-      'Зубная клиника IMPLANTIUM — стоматология в Актау: имплантация зубов, брекеты, лечение зубов, удаление, чистка и коронки. Запись на консультацию.',
-    keywords:
-      'стоматология Актау, зубная клиника Актау, имплантация зубов Актау, брекеты Актау, лечение зубов Актау, Ақтау стоматология, тіс емдеу Ақтау',
-    ogImage: `${SITE}/og-image.png`,
-  },
-  {
-    path: '/doctors',
-    title: 'Стоматологи в Актау | Врачи IMPLANTIUM',
-    description:
-      'Врачи стоматологической клиники IMPLANTIUM в Актау: имплантолог, ортодонт, терапевт, хирург и специалисты по протезированию.',
-    keywords:
-      'стоматолог Актау, врач стоматолог Актау, ортодонт Актау, имплантолог Актау, детальный план лечения зубов Актау, Ақтауда стоматолог',
-    ogImage: `${SITE}/og-image.png`,
-  },
-  {
-    path: '/services/implants',
-    title: 'Имплантация зубов в Актау | IMPLANTIUM',
-    description:
-      'Имплантация зубов в Актау в клинике IMPLANTIUM: подбор импланта, 3D-диагностика, коронки на имплантах и понятный план лечения.',
-    keywords: 'имплантация зубов Актау, импланты Актау, имплантолог Актау, зубной имплант Актау, Ақтауда тіс имплантациясы',
-    ogImage: `${SITE}/og/implants.jpg`,
-  },
-  {
-    path: '/services/bone-augmentation',
-    title: 'Костная пластика в Актау | IMPLANTIUM',
-    description:
-      'Костная пластика в Актау перед имплантацией: диагностика, подбор материала и подготовка надежной основы для импланта.',
-    keywords: 'костная пластика Актау, наращивание костной ткани Актау, подготовка к имплантации Актау, сүйек пластикасы Ақтау',
-    ogImage: `${SITE}/og/bone-augmentation.jpg`,
-  },
-  {
-    path: '/services/frenectomy',
-    title: 'Пластика уздечки в Актау | IMPLANTIUM',
-    description:
-      'Пластика уздечки в Актау: аккуратная стоматологическая процедура под анестезией с понятными рекомендациями по восстановлению.',
-    keywords: 'пластика уздечки Актау, подрезание уздечки Актау, френэктомия Актау, жүгеншені кесу Ақтау',
-    ogImage: `${SITE}/og/frenectomy.jpg`,
-  },
-  {
-    path: '/services/tooth-extraction',
-    title: 'Удаление зуба в Актау | IMPLANTIUM',
-    description:
-      'Удаление зуба в Актау под анестезией: бережная хирургия, диагностика перед процедурой и рекомендации для спокойного восстановления.',
-    keywords: 'удаление зуба Актау, удалить зуб Актау, хирург стоматолог Актау, тіс жұлу Ақтау',
-    ogImage: `${SITE}/og/tooth-extraction.jpg`,
-  },
-  {
-    path: '/services/wisdom-tooth-removal',
-    title: 'Удаление зуба мудрости в Актау | IMPLANTIUM',
-    description:
-      'Удаление зуба мудрости в Актау: оценка положения зуба, анестезия, бережное удаление и рекомендации после процедуры.',
-    keywords: 'удаление зуба мудрости Актау, зуб мудрости Актау, сложное удаление зуба Актау, ақыл тісін жұлу Ақтау',
-    ogImage: `${SITE}/og/wisdom-tooth-removal.jpg`,
-  },
-  {
-    path: '/services/crowns',
-    title: 'Коронки на зубы в Актау | IMPLANTIUM',
-    description:
-      'Коронки на зубы в Актау: металлокерамика, циркон, коронки на импланты и восстановление эстетики улыбки.',
-    keywords: 'коронки Актау, коронки на зубы Актау, цирконовые коронки Актау, металлокерамика Актау, тіс қаптамасы Ақтау',
-    ogImage: `${SITE}/og/crowns.jpg`,
-  },
-  {
-    path: '/services/dentures',
-    title: 'Протезирование зубов в Актау | IMPLANTIUM',
-    description:
-      'Протезирование зубов в Актау: съемные и несъемные решения, восстановление жевания, дикции и уверенной улыбки.',
-    keywords: 'протезирование зубов Актау, протезы Актау, съемные протезы Актау, несъемные протезы Актау, тіс протездері Ақтау',
-    ogImage: `${SITE}/og/dentures.jpg`,
-  },
-  {
-    path: '/services/braces',
-    title: 'Брекеты в Актау | IMPLANTIUM',
-    description:
-      'Брекеты в Актау: консультация ортодонта, металлические и самолигирующие системы, план коррекции прикуса и зубного ряда.',
-    keywords: 'брекеты Актау, ортодонт Актау, исправление прикуса Актау, металлические брекеты Актау, Ақтауда брекет',
-    ogImage: `${SITE}/og/braces.jpg`,
-  },
-  {
-    path: '/services/treatment',
-    title: 'Лечение зубов в Актау | IMPLANTIUM',
-    description:
-      'Лечение зубов в Актау: кариес, пульпит, периодонтит, диагностика и восстановление зуба с комфортной анестезией.',
-    keywords: 'лечение зубов Актау, кариес Актау, пульпит Актау, пломба Актау, стоматолог терапевт Актау, Ақтауда тіс емдеу',
-    ogImage: `${SITE}/og/treatment.jpg`,
-  },
-  {
-    path: '/services/cleaning',
-    title: 'Чистка зубов в Актау | IMPLANTIUM',
-    description:
-      'Профессиональная чистка зубов в Актау: снятие налета и зубного камня, Air Flow, полировка и профилактика здоровья десен.',
-    keywords: 'чистка зубов Актау, профессиональная гигиена Актау, Air Flow Актау, зубной камень Актау, Ақтауда тіс тазалау',
-    ogImage: `${SITE}/og/cleaning.jpg`,
-  },
-];
+const SITE = PRODUCTION_ORIGIN;
+const ROUTES = SEO_ROUTES.map((route) => ({
+  path: route.localePaths.ru,
+  title: route.seo.title.ru,
+  description: route.seo.description.ru,
+  keywords: route.seo.keywords.join(', '),
+  ogImage: `${SITE}${route.ogImagePath}`,
+}));
 
 // ---------------------------------------------------------------------------
 // HTML generation helpers

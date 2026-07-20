@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-Sitemap: https://implantium.kz/sitemap.xml
+Sitemap: https://www.implantium.kz/sitemap.xml
